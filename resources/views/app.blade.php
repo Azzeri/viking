@@ -15,6 +15,10 @@
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
+
+        <!-- Icons -->
+        <script src="https://kit.fontawesome.com/093e387b29.js" crossorigin="anonymous"></script>
+        
     </head>
     <body class="font-sans antialiased">
         @inertia
