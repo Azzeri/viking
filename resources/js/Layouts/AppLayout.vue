@@ -2,7 +2,7 @@
     <Head :title="title" />
     <div class="background min-h-screen bg-cover bg-center flex items-center justify-center py-4">
         <div class="card-glass-main">
-            <nav class="">
+            <nav>
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:pt-8">
                     <div class="flex justify-between h-16">
@@ -38,8 +38,8 @@
                             </jet-nav-link>
                         </div>
 
+                        <!-- Right Panel -->
                         <div class="hidden lg:flex lg:items-center lg:ml-6 lg:space-x-3">
-                            <!-- <i class="fas fa-language text-white fa-2x"></i> -->
                             <!-- Settings Dropdown -->
                             <div class="relative">
                                 <jet-dropdown align="right" width="48">
@@ -162,10 +162,6 @@
                                 </form>
                             </template>
                         </div>
-
-                        <div class="mt-4 space-x-4 ml-4">
-                            <!-- <i class="fas fa-language fa-3x"></i> -->
-                        </div>
                     </div>
                 </div>
             </nav>
@@ -176,6 +172,8 @@
             </main>
         </div>
     </div>
+
+    <!-- Footer -->
     <footer class="bg-gray-600 text-gray-200 p-4">
         <div class="border-b-2 space-y-4 sm:flex sm:pb-4 sm:justify-between sm:px-8 max-w-6xl mx-auto">
             <div class="pt-4">
