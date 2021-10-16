@@ -176,8 +176,50 @@
             </main>
         </div>
     </div>
-    <footer class="bg-white">
-        Stoopki 
+    <footer class="bg-gray-600 text-gray-200 p-4">
+        <div class="border-b-2 space-y-4 sm:flex sm:pb-4 sm:justify-between sm:px-8 max-w-6xl mx-auto">
+            <div class="pt-4">
+                <Link :href="route('about')">
+                    <jet-application-mark class="block h-9 w-auto" />
+                </Link>
+            </div>
+            <div>
+                <h1><strong>Linki</strong></h1>
+                <div><Link>Aktualności</Link></div>
+                <div><Link>Galeria</Link></div>
+                <div><Link>Materiały</Link></div>
+                <div><Link>O nas</Link></div>
+                <div><Link>Sklep</Link></div>
+                <div><Link>Wydarzenia</Link></div>
+            </div>
+            <div>
+                <h1><strong>Kontakt</strong></h1>
+                <div>Nysa jakas tm</div>
+                <div>48-300 Nysa</div>
+                <div>123123123</div>
+                <div>email@email.email</div>
+            </div>
+            <div>
+                <h1><strong>Inne</strong></h1>
+                <div><Link>Wilki</Link></div>
+                <div><Link>Bobry</Link></div>
+                <div><Link>Zające</Link></div>
+            </div>
+            <div class="pb-4">
+                <h1><strong>Social Medias</strong></h1>
+                <div class="flex gap-3 pt-2">
+                    <i class="fab fa-facebook fa-lg"></i>
+                    <i class="fab fa-instagram fa-lg"></i>
+                    <i class="fab fa-youtube fa-lg"></i>
+                    <i class="fab fa-twitter fa-lg"></i>
+                </div>
+            </div>
+        </div>
+        <div class="pt-3 text-center">
+            <h1 class="sm:hidden">© 2021 Mariusz Waloszczyk</h1> 
+            <h1 class="sm:hidden">Wszelkie prawa zastrzeżone</h1>
+            <h1 class="hidden sm:inline">© 2021 Mariusz Waloszczyk | Wszelkie prawa zastrzeżone</h1>
+        </div>
     </footer>
 </template>
 
