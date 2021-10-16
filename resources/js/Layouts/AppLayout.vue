@@ -1,6 +1,6 @@
 <template>
     <Head :title="title" />
-    <div class="background min-h-screen bg-cover bg-center flex items-center justify-center">
+    <div class="background min-h-screen bg-cover bg-center flex items-center justify-center py-4">
         <div class="card-glass-main">
             <nav class="">
                 <!-- Primary Navigation Menu -->
@@ -13,7 +13,7 @@
                                     <jet-application-mark class="block h-9 w-auto" />
                                 </Link>
                             </div>
-                            <h1 class="ml-4 text-2xl font-bold flex items-center">Barbarian</h1>
+                            <h1 class="ml-4 text-2xl font-bold flex items-center text-white">Barbarian</h1>
                         </div>
 
                         <!-- Navigation Links -->
@@ -39,8 +39,7 @@
                         </div>
 
                         <div class="hidden lg:flex lg:items-center lg:ml-6 lg:space-x-3">
-                            <i class="fas fa-adjust fa-2x"></i>
-                            <i class="fas fa-language fa-2x"></i>
+                            <!-- <i class="fas fa-language text-white fa-2x"></i> -->
                             <!-- Settings Dropdown -->
                             <div class="relative">
                                 <jet-dropdown align="right" width="48">
@@ -48,7 +47,7 @@
                                         <button v-if="$page.props.jetstream.managesProfilePhotos && $page.props.user != null" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                             <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                                         </button>
-                                        <button v-else class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                                        <button v-else class="flex text-white text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                             <div class="rounded-full p-1" ><i class="fas fa-user fa-2x"></i></div>
                                         </button>
                                     </template>
@@ -165,8 +164,7 @@
                         </div>
 
                         <div class="mt-4 space-x-4 ml-4">
-                            <i class="fas fa-adjust fa-3x"></i>
-                            <i class="fas fa-language fa-3x"></i>
+                            <!-- <i class="fas fa-language fa-3x"></i> -->
                         </div>
                     </div>
                 </div>
@@ -226,15 +224,22 @@
     .card-glass-main {
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
-        background-color: rgba(255, 255, 255, 0);
-        border-radius: 40px;
+        background-color: rgba(255, 255,255, 0.2);
+        border-radius: 20px;
         border: 1px solid rgba(209, 213, 219, 0.3);
-        height: 95vh;
+        min-height: 95vh;
         width: 95vw;
     }
 
     .background {
-        background-color:teal;
-        /* background-image: url("https://images.pexels.com/photos/1933319/pexels-photo-1933319.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
+        /* background-color:#F7B535; */
+        /* background-image: url("https://images.pexels.com/photos/693434/pexels-photo-693434.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
+        /* background-image: linear-gradient(to right bottom, #f7b535, #f8806d, #bd6c91, #716484, #4b4f54); */
+        background-image: url("https://images.pexels.com/photos/1933319/pexels-photo-1933319.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+        /* background-image: url("https://images.pexels.com/photos/6985265/pexels-photo-6985265.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
+        /* background-image: url("https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
+        /* background: linear-gradient(to left, #181818, #BA8B02);  */
+
+
     }
 </style>
