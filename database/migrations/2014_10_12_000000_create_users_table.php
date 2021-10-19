@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->text('description')->nullable();
             $table->date('date_birth');
-            $table->string('role', 32)->nullable();
+            $table->string('role', 64)->nullable();
             $table->boolean('is_reported')->default(false);
             $table->foreignId('privilege_id')->constrained();
             $table->timestamp('email_verified_at')->nullable();
