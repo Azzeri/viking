@@ -25,7 +25,14 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
+        'nickname',
         'email',
+        'description',
+        'date_birth',
+        'role',
+        'is_reported',
+        'privilege_id',
         'password',
     ];
 
@@ -58,4 +65,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function privilege(){
+        return $this->belongsTo(Privilege::class);
+    }
 }
