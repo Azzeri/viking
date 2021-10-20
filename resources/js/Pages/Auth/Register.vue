@@ -1,5 +1,5 @@
 <template>
-    <Head title="Register" />
+    <Head title="Rejestracja" />
 
     <jet-authentication-card>
         <template #logo>
@@ -10,23 +10,38 @@
 
         <form @submit.prevent="submit">
             <div>
-                <jet-label for="name" value="Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+                <jet-label for="name" value="Imię" />
+                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Wprowadź imię" autocomplete="name" />
+            </div>
+
+            <div class="mt-4">
+                <jet-label for="surname" value="Nazwisko" />
+                <jet-input id="surname" type="text" class="mt-1 block w-full" v-model="form.surname" required placeholder="Wprowadź nazwisko" autocomplete="surname" />
+            </div>
+
+            <div class="mt-4">
+                <jet-label for="nickname" value="Nick" />
+                <jet-input id="nickname" type="text" class="mt-1 block w-full" v-model="form.nickname" placeholder="Wprowadź nick" autocomplete="nickname" />
+            </div>
+
+            <div class="mt-4">
+                <jet-label for="date_birth" value="Data urodzenia" />
+                <jet-input id="date_birth" type="date" class="mt-1 block w-full" v-model="form.date_birth" :max="currentDate()" min="1900-01-01" autocomplete="date_birth" />
             </div>
 
             <div class="mt-4">
                 <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
+                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required placeholder="Wprowadź email" />
             </div>
 
             <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
+                <jet-label for="password" value="Hasło" />
+                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required  placeholder="Wprowadź hasło" autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <jet-label for="password_confirmation" value="Confirm Password" />
-                <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
+                <jet-label for="password_confirmation" value="Powtórz hasło" />
+                <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" placeholder="Powtórz hasło" required autocomplete="new-password" />
             </div>
 
             <div class="mt-4" v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature">
@@ -43,11 +58,11 @@
 
             <div class="flex items-center justify-end mt-4">
                 <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Already registered?
+                    Logowanie
                 </Link>
 
                 <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
+                    Zarejestruj
                 </jet-button>
             </div>
         </form>
@@ -82,6 +97,9 @@
             return {
                 form: this.$inertia.form({
                     name: '',
+                    surname: '',
+                    nickname: '',
+                    date_birth: '',
                     email: '',
                     password: '',
                     password_confirmation: '',
@@ -91,6 +109,9 @@
         },
 
         methods: {
+            currentDate() {
+		        return new Date().toISOString().split('T')[0];
+	    },
             submit() {
                 this.form.post(this.route('register'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),

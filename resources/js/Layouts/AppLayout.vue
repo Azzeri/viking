@@ -80,7 +80,7 @@
                                             Logowanie
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('profile.show')">
+                                        <jet-dropdown-link :href="route('register')">
                                             Rejestracja
                                         </jet-dropdown-link>
                                     </template>
@@ -141,7 +141,7 @@
                                 <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
                                     Logowanie
                                 </jet-responsive-nav-link>
-                                <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
+                                <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('register')">
                                     Rejestracja
                                 </jet-responsive-nav-link>
                             </template>

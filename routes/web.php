@@ -4,6 +4,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +33,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::middleware('adminPanel')->prefix('admin')->group(function () {
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
 });
+
+
+// Route::get('/reg', function (Request $request) {
+//     if (! $request->hasValidSignature()) {
+//         abort(401);
+//     }
+//     else
+//     echo 'xd';
+// })->name('reg');
+
+
+// Route::get('/gen', function () {
+//     return URL::temporarySignedRoute('reg', now()->addMinutes(30));
+// });
