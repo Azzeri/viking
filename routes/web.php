@@ -31,19 +31,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::middleware('adminPanel')->prefix('admin')->group(function () {
+    Route::post('/generateRegistrationLink', [UserController::class, 'generateRegistrationLink'])->name('generateRegistrationLink');
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
 });
 
 
-// Route::get('/reg', function (Request $request) {
-//     if (! $request->hasValidSignature()) {
-//         abort(401);
-//     }
-//     else
-//     echo 'xd';
-// })->name('reg');
+Route::middleware('signed')->get('/registerMember', function (Request $request) {
+    echo $request->email;
+})->name('registerMember');
 
-
-// Route::get('/gen', function () {
-//     return URL::temporarySignedRoute('reg', now()->addMinutes(30));
-// });
