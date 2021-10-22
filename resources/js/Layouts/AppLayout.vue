@@ -62,6 +62,10 @@
                                             Profil
                                         </jet-dropdown-link>
 
+                                        <jet-dropdown-link v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" :href="route('admin.dashboard')">
+                                            Panel administratora
+                                        </jet-dropdown-link>
+
                                         <jet-dropdown-link :href="route('api-tokens.index')" v-if="$page.props.jetstream.hasApiFeatures">
                                             Tokeny API
                                         </jet-dropdown-link>
@@ -148,6 +152,10 @@
                             <template v-else>
                                 <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
                                     Profil
+                                </jet-responsive-nav-link>
+
+                                <jet-responsive-nav-link v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" :href="route('admin.dashboard')" :active="route().current('profile.show')">
+                                    Panel administratora
                                 </jet-responsive-nav-link>
 
                                 <jet-responsive-nav-link :href="route('api-tokens.index')" :active="route().current('api-tokens.index')" v-if="$page.props.jetstream.hasApiFeatures">

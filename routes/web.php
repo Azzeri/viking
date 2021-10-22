@@ -26,12 +26,16 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
+//TODELETE
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
 Route::middleware('adminPanel')->prefix('admin')->group(function () {
     Route::post('/generateRegistrationLink', [UserController::class, 'generateRegistrationLink'])->name('generateRegistrationLink');
+
+    Route::get('dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('admin.dashboard');
+
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
 });
 
@@ -39,4 +43,3 @@ Route::middleware('adminPanel')->prefix('admin')->group(function () {
 Route::middleware('signed')->get('/registerMember', function (Request $request) {
     echo $request->email;
 })->name('registerMember');
-

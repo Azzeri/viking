@@ -37,7 +37,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+            'privileges' => [
+                'IS_ADMIN' => 1,
+                'IS_COORDINATOR' => 2,
+                'IS_GROUP_MEMBER' => 3,
+                'IS_USER' => 4
+            ],
         ]);
     }
 }
