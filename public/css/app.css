@@ -2209,6 +2209,21 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(31, 41, 55, var(--tw-text-opacity));
 }
+.disabled\:bg-opacity-10:disabled {
+	--tw-bg-opacity: 0.1;
+}
+.disabled\:text-gray-500:disabled {
+	--tw-text-opacity: 1;
+	color: rgba(107, 114, 128, var(--tw-text-opacity));
+}
+.disabled\:text-gray-400:disabled {
+	--tw-text-opacity: 1;
+	color: rgba(156, 163, 175, var(--tw-text-opacity));
+}
+.disabled\:text-gray-200:disabled {
+	--tw-text-opacity: 1;
+	color: rgba(229, 231, 235, var(--tw-text-opacity));
+}
 .disabled\:opacity-25:disabled {
 	opacity: 0.25;
 }

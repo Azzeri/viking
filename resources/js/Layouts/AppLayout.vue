@@ -142,10 +142,10 @@
 
                         <div class="mt-3 space-y-1">
                             <template v-if="$page.props.user == null">
-                                <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
+                                <jet-responsive-nav-link :href="route('login')" :active="route().current('login')">
                                     Logowanie
                                 </jet-responsive-nav-link>
-                                <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('register')">
+                                <jet-responsive-nav-link :href="route('register')" :active="route().current('register')">
                                     Rejestracja
                                 </jet-responsive-nav-link>
                             </template>

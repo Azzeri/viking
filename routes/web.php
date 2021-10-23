@@ -23,23 +23,26 @@ Route::get('/', function () {
 });
 
 Route::get('/about', function () {
-    return Inertia::render('About');
+    return inertia('About');
 })->name('about');
 
 //TODELETE
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return inertia('Dashboard');
 })->name('dashboard');
 
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/generateRegistrationLink', [UserController::class, 'generateRegistrationLink'])->name('generateRegistrationLink');
 
-    Route::get('dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('dashboard');
+    Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
 });
 
 
-Route::middleware('signed')->get('/registerMember', function (Request $request) {
-    echo $request->email;
-})->name('registerMember');
+Route::middleware('signed', 'guest')->get('/registerMember', fn (Request $request) => inertia('Auth/RegisterMember', [
+    'email' => $request->email,
+    'role' => $request->role
+]))->name('registerMember');
+
+Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeMember']);

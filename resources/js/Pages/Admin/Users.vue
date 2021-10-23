@@ -1,11 +1,18 @@
 <template>
   <admin-panel-layout title="Użytkownicy">
     <div class="mx-auto max-w-6xl text-center">
+        <jet-validation-errors class="my-6" />
+
       <form @submit.prevent="submit">
 
             <div class="mt-4">
                 <jet-label for="email" value="Email" />
                 <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required placeholder="Wprowadź email" />
+            </div>
+
+            <div class="mt-4">
+                <jet-label for="role" value="Rola w grupie" />
+                <jet-input id="role" type="text" class="mt-1 block w-full" v-model="form.role" required placeholder="Wprowadź rolę" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
@@ -31,6 +38,7 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
     import JetInput from '@/Jetstream/Input.vue'
     import JetLabel from '@/Jetstream/Label.vue'
 import { reactive } from 'vue'
+    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 
 export default defineComponent({
   props: {
@@ -40,6 +48,7 @@ export default defineComponent({
   setup() {
     const form = reactive({
       email: null,
+      role: null
     })
 
     function submit() {
@@ -71,7 +80,8 @@ export default defineComponent({
     Link,
     JetButton,
     JetInput,
-    JetLabel
+    JetLabel,
+    JetValidationErrors
   },
 });
 </script>
