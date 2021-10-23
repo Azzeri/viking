@@ -31,10 +31,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::middleware('adminPanel')->prefix('admin')->group(function () {
+Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/generateRegistrationLink', [UserController::class, 'generateRegistrationLink'])->name('generateRegistrationLink');
 
-    Route::get('dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('admin.dashboard');
+    Route::get('dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('dashboard');
 
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
 });

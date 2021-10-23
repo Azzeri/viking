@@ -1,7 +1,7 @@
 <template>
     <Head :title="title" />
     <div class="background min-h-screen bg-cover bg-center flex items-center justify-center py-4">
-        <div class="card-glass-main">
+        <div class="glass-card-background">
             <nav>
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:pt-8">
@@ -269,25 +269,5 @@
     })
 </script>
 <style>
-    .card-glass-main {
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        background-color: rgba(255, 255,255, 0.2);
-        border-radius: 20px;
-        border: 1px solid rgba(209, 213, 219, 0.3);
-        min-height: 95vh;
-        width: 95vw;
-    }
 
-    .background {
-        /* background-color:#F7B535; */
-        /* background-image: url("https://images.pexels.com/photos/693434/pexels-photo-693434.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
-        /* background-image: linear-gradient(to right bottom, #f7b535, #f8806d, #bd6c91, #716484, #4b4f54); */
-        background-image: url("https://images.pexels.com/photos/1933319/pexels-photo-1933319.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-        /* background-image: url("https://images.pexels.com/photos/6985265/pexels-photo-6985265.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
-        /* background-image: url("https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); */
-        /* background: linear-gradient(to left, #181818, #BA8B02);  */
-
-
-    }
 </style>

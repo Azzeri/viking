@@ -72,7 +72,7 @@
                     <Link :href="route('admin.dashboard')">Panel</Link>
                 </div>
                 <div>
-                    <Link :href="route('users.index')">Użytkownicy</Link>
+                    <Link :href="route('admin.users.index')">Użytkownicy</Link>
                 </div>
             </aside>
         
