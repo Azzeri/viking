@@ -54,7 +54,7 @@
                     Zarejestruj
                 </jet-button>
 
-                <Link :href="route('login')" class=" text-sm font-semibold text-gray-800 hover:text-gray-900 mt-3">
+                <Link :href="route('login')" class="text-sm font-semibold text-gray-800 hover:text-gray-900 mt-3">
                     Logowanie
                 </Link>
                 
