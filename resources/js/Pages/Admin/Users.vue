@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-6xl text-center">
 		<jet-validation-errors class="my-6" />
 
-		<form @submit.prevent="form.post('generateRegistrationLink')">
+		<!-- <form @submit.prevent="form.post('generateRegistrationLink')">
 			<div class="mt-4">
 				<jet-label for="email" value="Email" />
 				<jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required placeholder="Wprowadź email" />
@@ -20,7 +20,8 @@
 					Wygeneruj link do rejestracji
 				</jet-button>
 			</div>
-		</form>
+		</form> -->
+		<DataTable :columns=columns :data=users :filters=filters />
     </div>
 	
   </admin-panel-layout>
@@ -34,11 +35,13 @@ import JetButton from '@/Jetstream/Button.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+import DataTable from '@/Components/DataTable.vue'
 
 export default defineComponent({
 
 	props: {
 		users: Object,
+		filters: Object
 	},
 
 	setup() {
@@ -47,7 +50,19 @@ export default defineComponent({
 			role: null
 		})
 
-		return { form }
+		const columns = [
+			{name:'id', label:'Id', searchable: true, filterable: true},
+			{name:'name', label:'Imię', searchable: true, filterable: true},
+			{name:'surname', label:'Nazwisko', searchable: true, filterable: true},
+			{name:'nickname', label:'Nick', searchable: true, filterable: true},
+			{name:'email', label:'Email', searchable: true, filterable: true},
+			{name:'date_birth', label:'Data urodzenia', searchable: true, filterable: true},
+			{name:'role', label:'Rola', searchable: true, filterable: true},
+			{name:'privilege_id', label:'Uprawnienie', filterable: true},
+			{name:'description', label:'Opis', filterable: true},
+		]
+
+		return { form, columns }
 	},
 
 	components: {
@@ -56,7 +71,8 @@ export default defineComponent({
 		JetButton,
 		JetInput,
 		JetLabel,
-		JetValidationErrors
+		JetValidationErrors,
+		DataTable
 	},
 
 });

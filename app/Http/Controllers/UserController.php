@@ -20,10 +20,82 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        request()->validate([
+            'direction' => ['in:asc,desc'],
+            // 'field' => ['in:id,name, privilege_id']
+        ]);
 
-        return inertia('Admin/Users', ['users' => $users]);
+        $query = User::with('privilege');
+
+        if (request('search')) {
+            $query->where(request('searchField'), 'LIKE', '%' . request('search') . '%');
+        }
+
+        if (request()->has(['field', 'direction'])) {
+            $query->orderBy(request('field'), request('direction'));
+        }
+
+        $users = $query->paginate()->withQueryString()
+            ->through(fn ($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'date_birth' => $user->date_birth,
+                'role' => $user->role,
+                'privilege_id' => $user->privilege->name,
+                'description' => $user->description
+            ]);
+
+        return inertia('Admin/Users', [
+            'users' => $users,
+            'filters' => request()->all(['search', 'searchField', 'field', 'direction'])
+        ]);
     }
+
+    // public function index()
+    // {
+    //     request()->validate([
+    //         'direction' => ['in:asc,desc'],
+    //         // 'field' => ['in:id,name, privilege_id']
+    //     ]);
+
+    //     $query = User::query()->with('privilege');
+    //     // $query = User::query();
+
+    //     if (request('search')) {
+    //         $query->where(request('searchField'), 'LIKE', '%'.request('search').'%');
+    //     }
+
+    //     if (request()->has(['field', 'direction'])) {
+    //         $query->orderBy(request('field'), request('direction'));
+    //     }
+
+    //     // $queryCollected = collect($query->paginate());
+    //     $queryCollected = $query->paginate()->withQueryString();
+
+    //     $users = $query->through();
+
+    //     // dd($queryCollected);
+    // $users = $queryCollected->map(function($user) {
+    //     return [
+    //         'id' => $user->id,
+    //         'name' => $user->name,
+    //         'privilege_id' => $user->privilege_id,
+    //         'links' => $queryCollected->links
+    //     ];
+    // });
+
+    //     // dd($users);
+
+    //     return inertia('Admin/Users', [
+    //         // 'users' => $query->paginate()->withQueryString(),
+    //         'users' => $users,
+
+    //         'filters' => request()->all(['search', 'searchField', 'field', 'direction'])
+    //     ]);
+    // }
 
     public function generateRegistrationLink(Request $request)
     {
