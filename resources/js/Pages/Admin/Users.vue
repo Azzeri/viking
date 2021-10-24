@@ -1,6 +1,6 @@
 <template>
   <admin-panel-layout title="Użytkownicy">
-
+    <template #page-title>Użytkownicy</template>
     <div class="mx-auto max-w-6xl text-center">
 		<jet-validation-errors class="my-6" />
 

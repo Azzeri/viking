@@ -1,5 +1,7 @@
 <template>
     <admin-panel-layout>
+      <template #page-title>Panel</template>
+      
     </admin-panel-layout>
 </template>
 
