@@ -1,24 +1,43 @@
 <template>
-  <table class="m-10 overflow-hidden">
-      <thead>
-          <tr>
-              <th v-for="column in columns" :key="column" @click="sort(column.name, column.filterable)" class="border-2 px-2 overflow-hidden w-10 h-5">{{ column.label }}
-                  <input v-if="column.searchable" type="search" v-model="params.search" @click.stop="params.searchField=column.name">
-                  <span v-if="params.field === column && params.direction === 'asc'">Rosnąco</span>
-                  <span v-if="params.field === column && params.direction === 'desc'">Malejąco</span>
-              </th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr v-for="row in data.data" :key="row">
-              <td class="border-2 px-2  overflow-hidden w-10 h-5" v-for="column in columns" :key="column.name">
-                  {{ row[column.name] }}
-              </td>
-          </tr>
-      </tbody>
-  </table>
-  Wyświetlam wyniki od {{data.from}} do {{data.to}} razem {{data.total}}
-  <pagination :links=data.links></pagination>
+
+    <!-- Table heading -->
+    <div class="w-full flex justify-between">
+        <slot name="buttons"></slot>
+        <input v-model="params.search" @click.stop="params.searchField='name'" type="search" class="text-sm p-1 rounded-md">
+    </div> 
+
+    <!-- Table content -->
+    <table class="w-full mx-auto whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden mt-4">
+        <thead class="bg-gray-900">
+            <tr class="text-white text-left">
+                <th v-for="column in columns" :key="column" @click="sort(column.name, column.sortable)" 
+                    class="font-bold text-sm uppercase">
+                    <div class="flex justify-between items-center px-6 py-4">
+                        <span>{{ column.label }}</span>
+                        <!-- <input v-if="column.searchable" type="search" v-model="params.search" @click.stop="params.searchField=column.name" 
+                            class="text-sm p-1 rounded-md"> -->
+                        <i v-if="params.field === column.name && params.direction === 'asc'" class="fas fa-sort-up"></i>
+                        <i v-else-if="params.field === column.name && params.direction === 'desc'" class="fas fa-sort-down"></i>
+                        <i v-else-if="column.sortable" class="fas fa-sort"></i>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            <tr v-for="row in data.data" :key="row">
+                <td class="px-6 py-2" v-for="column in columns" :key="column.name">
+                    {{ row[column.name] }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table footer -->
+    <div class="flex justify-between mt-4 px-4">
+        <span>Wyświetlam wyniki od {{data.from}} do {{data.to}} razem {{data.total}}</span>
+        <pagination :links=data.links></pagination>
+    </div>
+
 </template>
 
 <script>
@@ -34,16 +53,14 @@ export default {
     },
 
     setup(props) {
-
         const params = reactive({
             search: props.filters.search,
-            searchField: props.filters.searchField,
             field: props.filters.field,
             direction: props.filters.direction
         })
 
-        function sort(field, filterable) {
-            if (filterable){
+        function sort(field, sortable) {
+            if (sortable){
                 params.field = field
                 params.direction = params.direction === 'asc' ? 'desc' : 'asc'
             }

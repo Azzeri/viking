@@ -46,9 +46,9 @@
         </div>
 
         <!-- content -->
-        <div class="text-2xl font-bold flex-1">
+        <div class="flex-1">
             <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center z-0">
-                <div><slot name="page-title"></slot></div>
+                <div class="text-2xl font-bold"><slot name="page-title"></slot></div>
                 <div class="relative">
                     <jet-dropdown align="right" width="48">
                         <template #trigger>
