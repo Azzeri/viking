@@ -21,12 +21,17 @@
                         <i v-else-if="column.sortable" class="fas fa-sort"></i>
                     </div>
                 </th>
+                <th class="font-bold text-sm uppercase px-6 py-4">Działania</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
             <tr v-for="row in data.data" :key="row">
                 <td class="px-6 py-2" v-for="column in columns" :key="column.name">
                     {{ row[column.name] }}
+                </td>
+                <td class="flex justify-evenly px-6 py-2">
+                    <i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
+                    <i class="fas fa-trash cursor-pointer"></i>
                 </td>
             </tr>
         </tbody>
@@ -64,7 +69,6 @@ export default {
                 params.field = field
                 params.direction = params.direction === 'asc' ? 'desc' : 'asc'
             }
-            
         }
 
         return { params, sort }
@@ -79,6 +83,15 @@ export default {
             deep: true
         },
     },
+
+    methods: {
+        edit(row) {
+            this.$emit('edit', row)
+        }
+    },
+
+    emits : ['edit'],
+
 
     components: {
         Pagination

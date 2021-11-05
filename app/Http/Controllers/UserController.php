@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -20,6 +21,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         request()->validate([
             'direction' => ['in:asc,desc'],
             // 'field' => ['in:id,name, privilege_id']
@@ -29,17 +32,16 @@ class UserController extends Controller
 
         if (request('search')) {
             $query->where('name', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('surname', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('nickname', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('email', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('date_birth', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('role', 'ILIKE', '%' . request('search') . '%');
+                ->orWhere('surname', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('nickname', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('email', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('date_birth', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('role', 'ILIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
-        }
-        else
+        } else
             $query->orderBy('privilege_id');
 
 
@@ -64,6 +66,8 @@ class UserController extends Controller
 
     public function generateRegistrationLink(Request $request)
     {
+        $this->authorize('create', User::class);
+        
         $request->validate([
             'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
             'role' => ['required', 'string', 'min:3', 'max:128']
@@ -117,17 +121,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -136,7 +129,18 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->authorize('update', $user, User::class);
+        
+        $user->update($request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'role' => ['required', 'string', 'min:3', 'max:128'],
+            'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
+            'email' => ['required', 'string', 'email:filter', 'max:255', Rule::unique('users')->ignore(User::find($user->id))],
+        ]));
+
+        return redirect()->back();
     }
 
     /**
