@@ -28,7 +28,7 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->firstName(),
             'surname' => $this->faker->lastName(),
-            'nickname' => $this->faker->optional()->name(),
+            'nickname' => $this->faker->optional()->firstName(),
             'email' => $this->faker->unique()->safeEmail(),
             'description' => $this->faker->optional()->realText($maxNbChars = 255, $indexSize = 2),
             'date_birth' => $this->faker->date(),
