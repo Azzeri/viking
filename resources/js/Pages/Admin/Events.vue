@@ -1,18 +1,18 @@
 <template>
-  <admin-panel-layout title="Użytkownicy">
-    <template #page-title>Użytkownicy</template>
+  <admin-panel-layout title="Wydarzenia">
+    <template #page-title>Wydarzenia</template>
 
     <div class="mx-auto py-4 px-32">
 		<div class="p-4 glass-admin-content rounded-3xl mx-auto">
-			<DataTable :columns=columns :data=users :filters=filters sortRoute="admin.users.index" @edit=edit>
+			<DataTable :columns=columns :data=events :filters=filters sortRoute="admin.events.index" @edit=edit>
 				<template #buttons>
-            		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Nowy</button>
+            		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Nowe</button>
 				</template>
 			</DataTable>
 		</div>
     </div>
 
-	<CrudModal :show=modalOpened @close=close>
+	<!-- <CrudModal :show=modalOpened @close=close>
 		<template #title>Nowy użytkownik</template>
 		<template #content v-if="!modalEditMode">
 
@@ -71,7 +71,7 @@
 			</jet-button>
 
 		</template>
-	</CrudModal>
+	</CrudModal> -->
 	
   </admin-panel-layout>
 </template>
@@ -90,7 +90,7 @@ import CrudModal from '@/Components/CrudModal.vue'
 export default defineComponent({
 
 	props: {
-		users: Object,
+		events: Object,
 		filters: Object
 	},
 
@@ -152,16 +152,14 @@ export default defineComponent({
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
 		const columns = [
-			// {name:'id', label:'Id', searchable: true, sortable: true},
-			{name:'name', label:'Imię', searchable: true, sortable: true},
-			{name:'surname', label:'Nazwisko', searchable: true, sortable: true},
-			{name:'nickname', label:'Nick', searchable: true, sortable: true},
-			{name:'email', label:'Email', searchable: true, sortable: true},
-			{name:'date_birth', label:'Data urodzenia', searchable: true, sortable: true},
-			{name:'role', label:'Rola', searchable: true, sortable: true},
-			{name:'privilege_id', label:'Uprawnienie', sortable: true},
-			// {name:'description', label:'Opis', sortable: true},
-		]
+            //description
+			{name:'name', label:'Imię', sortable: true},
+			{name:'addrTown', label:'Miejscowość', sortable: true},
+			{name:'date_start', label:'Rozpoczęcie', sortable: true},
+			{name:'date_end', label:'Zakończenie', sortable: true},
+			{name:'time_start', label:'Rozpoczęcie', sortable: true},
+			{name:'time_end', label:'Zakończenie', sortable: true},
+        ]
 
 		return { form, formEdit, columns, modalOpened, modalEditMode, close, generateLink, edit, update, currentDate }
 	},

@@ -28,7 +28,7 @@ class CreateEventsTable extends Migration
             $table->date('date_start');
             $table->date('date_end');
             $table->time('time_start');
-            $table->time('time_end');
+            $table->time('time_end')->nullable();
 
             $table->boolean('is_finished')->default('false');
             $table->json('participants')->nullable();

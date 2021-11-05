@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
+    Route::resource('/events', EventController::class, ['names' => ['index' => 'events.index']]);
+
 });
 
 

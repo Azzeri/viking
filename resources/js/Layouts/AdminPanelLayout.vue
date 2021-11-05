@@ -41,6 +41,7 @@
 
                 <AdminNavButton class="pt-4" icon="fas fa-home fa-lg" :href="route('admin.dashboard')">Panel</AdminNavButton>
                 <AdminNavButton icon="fas fa-users fa-lg" :href="route('admin.users.index')">Użytkownicy</AdminNavButton>
+                <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')">Wydarzenia</AdminNavButton>
                 
             </nav>
         </div>

@@ -54,7 +54,8 @@ export default {
     props: {
         columns: Array,
         data: Object,
-        filters: Object
+        filters: Object,
+        sortRoute: String
     },
 
     setup(props) {
@@ -78,7 +79,7 @@ export default {
         params: {
             handler: throttle(function () {
                 let params = pickBy(this.params);
-                this.$inertia.get(this.route('admin.users.index'), params, { replace: true, preserveState: true });
+                this.$inertia.get(this.route(this.sortRoute), params, { replace: true, preserveState: true });
             }, 150),
             deep: true
         },
