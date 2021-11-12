@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             UserSeeder::class,
             InventoryCategorySeeder::class,
+            InventoryItemSeeder::class,
         ]);
     }
 }
