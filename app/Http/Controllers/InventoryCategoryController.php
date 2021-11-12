@@ -91,7 +91,7 @@ class InventoryCategoryController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'alpha_dash', 
                         Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventoryCategory->id))],
-            'parentCategoryId' => ['nullable', 'integer']
+            'parentCategoryId' => ['nullable', 'integer', Rule::notIn([$request->id])]
         ]);
 
         $parentCategory = $request->parentCategoryId == -1 ? null : $request->parentCategoryId;
