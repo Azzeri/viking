@@ -25,7 +25,8 @@
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-            <tr v-for="row in data.data" :key="row">
+            <slot name="content"></slot>
+            <!-- <tr v-for="row in data.data" :key="row">
                 <td class="px-6 py-2" v-for="column in columns" :key="column.name">
                     {{ row[column.name] }}
                 </td>
@@ -33,7 +34,7 @@
                     <i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
                     <i class="fas fa-trash cursor-pointer"></i>
                 </td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
 
@@ -55,7 +56,7 @@ export default {
         columns: Array,
         data: Object,
         filters: Object,
-        sortRoute: String
+        sortRoute: String,
     },
 
     setup(props) {

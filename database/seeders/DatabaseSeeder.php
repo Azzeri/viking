@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PrivilegeSeeder::class,
             EventSeeder::class,
             UserSeeder::class,
+            InventoryCategorySeeder::class,
         ]);
     }
 }
