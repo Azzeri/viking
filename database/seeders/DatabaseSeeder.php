@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             InventoryCategorySeeder::class,
             InventoryItemSeeder::class,
+            InventoryServiceSeeder::class,
         ]);
     }
 }

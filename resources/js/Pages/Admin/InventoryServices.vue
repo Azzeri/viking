@@ -1,44 +1,24 @@
 <template>
 
-  <admin-panel-layout v-if="!items.data.length" title="Sprzęt">
-	<template #page-title>Sprzęt</template>
+  <admin-panel-layout v-if="!services.data.length" title="Serwisy sprzętu">
+	<template #page-title>Serwisy sprzętu</template>
 	<div class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
         <h1>Brak danych</h1>
-        	<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj przedmiot</button>
-            <Link as=button :href="route('admin.inventory.category.index')">Zobacz kategorie</Link>
+        <Link as=button :href="route('admin.inventory.items.index')">Powrót</Link>
     </div>
   </admin-panel-layout>
 
-  <admin-panel-layout v-else title="Kategorie sprzętu">
-    <template #page-title>Sprzęt</template>
+  <admin-panel-layout v-else title="Serwisy sprzętu">
+    <template #page-title>Serwisy sprzętu</template>
     <div class="mx-auto py-4 px-32">
 		<div class="p-4 glass-admin-content rounded-3xl mx-auto">
-			<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.inventory.items.index" >
-				<template #buttons>
-            		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj przedmiot</button>
-                    <Link as=button :href="route('admin.inventory.category.index')">Zobacz kategorie</Link>
-                    <Link as=button :href="route('admin.inventory.services.index')">Zobacz serwisy</Link>
-				</template>
-                <template #content>
-                    <tr v-for="row in items.data" :key="row">
-
-                        <td class="px-6 py-2"><img class="w-14 h-14" :src=row.photo_path :alt=row.name></td>
-                        <td class="px-6 py-2">{{ row.category_name }}</td>
-                        <td class="px-6 py-2">{{ row.name }}</td>
-                        <td class="px-6 py-2">{{ row.quantity }}</td>
-
-                        <td class="flex justify-evenly px-6 py-2">
-                            <i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-                            <i @click="deleteRow(row)" class="fas fa-trash cursor-pointer"></i>
-                        </td>
-                    </tr>
-                </template>
-			</DataTable>
+			<ServicesDisplay :columns=columns :data=services :filters=filters sortRoute="admin.inventory.services.index" @edit=edit>
+			</ServicesDisplay>
 		</div>
     </div>
 </admin-panel-layout>
 
-<CrudModal :show=modalOpened @close=close>
+<!-- <CrudModal :show=modalOpened @close=close>
 	<template #title>Nowy kategoria sprzętu</template>
 
 	<template #content>
@@ -76,7 +56,7 @@
 		</jet-button>
 
 	</template>
-</CrudModal>
+</CrudModal> -->
 </template>
 
 <script>
@@ -87,15 +67,14 @@ import JetButton from '@/Jetstream/Button.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-import DataTable from '@/Components/DataTable.vue'
+import ServicesDisplay from '@/Components/ServicesDisplay.vue'
 import CrudModal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
 
 export default defineComponent({
 
 	props: {
-		categories: Object,
-        items: Object,
+		services: Object,
 		filters: Object
 	},
 
@@ -109,7 +88,6 @@ export default defineComponent({
 			photo: null,
             description: null,
             quantity: null,
-            inventory_category_id: props.categories[0].id
 		})
 
 		const reset = _ => { 
@@ -152,10 +130,14 @@ export default defineComponent({
         }
 
 		const columns = [
-			{name:'photo_path', label:'Zdjęcie'},
-            {name:'inventory_category_id', label:'Kategoria', sortable: true},
 			{name:'name', label:'Nazwa', sortable: true},
-			{name:'quantity', label:'Ilość', sortable: true}
+			{name:'description', label:'Opis'},
+			{name:'created_at', label:'Data utworzenia', sortable: true},
+			{name:'date_due', label:'Termin', sortable: true},
+			{name:'notification', label:'Przypomnienie', sortable: true},
+			{name:'is_finished', label:'Zakończony', sortable: true},
+			{name:'inventory_item_name', label:'Przedmiot'}
+
         ]
 
 		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow }
@@ -168,9 +150,8 @@ export default defineComponent({
 		JetInput,
 		JetLabel,
 		JetValidationErrors,
-		DataTable,
 		CrudModal,
-		
+		ServicesDisplay
 	},
 
 });
