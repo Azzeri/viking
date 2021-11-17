@@ -1,46 +1,39 @@
 <template>
 
     <!-- Table heading -->
-    <div class="w-full flex justify-between">
-        <slot name="buttons"></slot>
-        <input v-model="params.search" @click.stop="params.searchField='name'" type="search" class="text-sm p-1 rounded-md">
+    <div class="w-full space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4">
+        <div class="flex justify-between items-center sm:space-x-3">
+            <slot name="buttons"></slot>
+        </div>
+        <div class="flex w-full sm:w-auto">
+            <div class="flex justify-center items-center px-2 rounded-l-full h-10 bg-white"><i class="fas fa-lg fa-search"></i></div>
+            <input v-model="params.search" @click="params.searchField='name'" type="search" class="border-none w-full h-10 px-2 py-1 rounded-r-full">
+        </div>
     </div> 
 
     <!-- Table content -->
-    <table class="w-full mx-auto whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden mt-4">
-        <thead class="bg-gray-900">
-            <tr class="text-white text-left">
-                <th v-for="column in columns" :key="column" @click="sort(column.name, column.sortable)" 
-                    class="font-bold text-sm uppercase">
-                    <div class="flex justify-between items-center px-6 py-4">
-                        <span>{{ column.label }}</span>
-                        <!-- <input v-if="column.searchable" type="search" v-model="params.search" @click.stop="params.searchField=column.name" 
-                            class="text-sm p-1 rounded-md"> -->
-                        <i v-if="params.field === column.name && params.direction === 'asc'" class="fas fa-sort-up"></i>
-                        <i v-else-if="params.field === column.name && params.direction === 'desc'" class="fas fa-sort-down"></i>
-                        <i v-else-if="column.sortable" class="fas fa-sort"></i>
-                    </div>
-                </th>
-                <th class="font-bold text-sm uppercase px-6 py-4">Działania</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            <slot name="content"></slot>
-            <!-- <tr v-for="row in data.data" :key="row">
-                <td class="px-6 py-2" v-for="column in columns" :key="column.name">
-                    {{ row[column.name] }}
-                </td>
-                <td class="flex justify-evenly px-6 py-2">
-                    <i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-                    <i class="fas fa-trash cursor-pointer"></i>
-                </td>
-            </tr> -->
-        </tbody>
-    </table>
+		<table class="w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white overflow-auto sm:shadow-lg my-5 sm:mt-2 sm:inline-table">
+			<thead class="text-white space-y-2">
+                <tr v-for="(index) in data.data" :key=index class="bg-gray-600 flex flex-col flex-no-wrap sm:hidden rounded-l-lg sm:mb-0 sm:last:table-row divide-y divide-gray-600 sm:divide-none">
+                    <th v-for="column in columns" :key="column" @click="sort(column.name, column.sortable)" 
+                        class="px-3 py-1 sm:py-2 text-left uppercase" :class=extraClass>
+                        <div class="flex justify-between items-center space-x-2">
+                            <span>{{ column.label }}</span>
+                            <i v-if="params.field === column.name && params.direction === 'asc'" class="fas fa-sort-up"></i>
+                            <i v-else-if="params.field === column.name && params.direction === 'desc'" class="fas fa-sort-down"></i>
+                            <i v-else-if="column.sortable" class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                </tr>
+            </thead> 
+            <tbody class="flex-1 sm:flex-none sm:divide-y sm:divide-gray-300 space-y-2">
+                <slot name="content"></slot>
+            </tbody>
+        </table>
 
     <!-- Table footer -->
-    <div class="flex justify-between mt-4 px-4">
-        <span>Wyświetlam wyniki od {{data.from}} do {{data.to}} razem {{data.total}}</span>
+    <div class="sm:flex justify-between py-3 rounded-lg bg-white text-center space-y-3 sm:space-y-0 px-3 items-center">
+        <span>Wyniki od {{data.from}} do {{data.to}}. Łącznie {{data.total}} wyników.</span>
         <pagination :links=data.links></pagination>
     </div>
 
@@ -57,6 +50,7 @@ export default {
         data: Object,
         filters: Object,
         sortRoute: String,
+        extraClass: String
     },
 
     setup(props) {
@@ -101,3 +95,24 @@ export default {
 
 }
 </script>
+<style>
+
+  @media (min-width: 640px) {
+    /* table {
+      display: inline-table !important;
+    } */
+
+    /* thead tr:not(:first-child) {
+      display: none;
+    } */
+  }
+
+  /* td:not(:last-child) {
+    border-bottom: 0;
+  } */
+
+  /* th:not(:last-child) {
+    border-bottom: 2px solid rgba(0, 0, 0, .1);
+  } */
+
+</style>

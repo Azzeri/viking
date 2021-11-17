@@ -49,7 +49,7 @@
 
         <!-- content -->
         <div class="flex-1">
-            <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center z-0">
+            <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center">
                 <div class="text-2xl font-bold"><slot name="page-title"></slot></div>
                 <div class="relative">
                     <jet-dropdown align="right" width="48">
@@ -101,7 +101,11 @@
                     </jet-dropdown>
                 </div>
             </div>
-            <slot></slot>
+            <main class="p-2">
+                <div class="container mx-auto p-2 glass-admin-content rounded-3xl">
+                    <slot></slot>
+                </div>
+            </main>
         </div>
 
     </div>

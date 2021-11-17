@@ -20,7 +20,7 @@ class InventoryItemController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            // 'field' => ['in:id,name, privilege_id']
+            'field' => ['in:name,inventory_category_id,quantity']
         ]);
 
         $query = InventoryItem::query();
