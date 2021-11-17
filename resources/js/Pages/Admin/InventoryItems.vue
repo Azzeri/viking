@@ -1,6 +1,6 @@
 <template>
 
-<admin-panel-layout title="Kategorie sprzętu">
+<admin-panel-layout title="Sprzęt">
 	
 	<template #page-title>Sprzęt</template>
 

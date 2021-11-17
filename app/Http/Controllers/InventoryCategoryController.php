@@ -19,7 +19,7 @@ class InventoryCategoryController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            // 'field' => ['in:id,name, privilege_id']
+            'field' => ['in:name']
         ]);
 
         $query = InventoryCategory::query();

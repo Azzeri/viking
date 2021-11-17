@@ -1,40 +1,62 @@
 <template>
-  <admin-panel-layout v-if="!categories.data.length" title="Kategorie sprzętu">
-	<template #page-title>Sprzęt</template>
-	<div class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-        <h1>Brak danych</h1>
-        	<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj kategorię</button>
-      </div>
-  </admin-panel-layout>
-  <admin-panel-layout v-else title="Kategorie sprzętu">
-    <template #page-title>Sprzęt</template>
-    <div class="mx-auto py-4 px-32">
-		<div class="p-4 glass-admin-content rounded-3xl mx-auto">
-			<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.inventory.category.index" @edit=edit>
-				<template #buttons>
-            		<Link as=button :href="route('admin.inventory.items.index')">Powrót</Link>
-            		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj kategorię</button>
-				</template>
-                <template #content>
-                    <tr v-for="row in categories.data" :key="row">
+<admin-panel-layout title="Kategorie sprzętu">
+	
+	<template #page-title>Kategorie sprzętu</template>
 
-                        <td class="px-6 py-2"><img class="w-14 h-14" :src=row.photo_path :alt=row.name></td>
-                        <td class="px-6 py-2">{{ row.name }}<br>{{ row.parentCategoryName }}</td>
-                        <td class="px-6 py-2">
-                            <span v-for="subrow in row.subcategories" :key=subrow>
-                                {{subrow}} |
-                            </span>
-                        </td>
+	<div v-if="!categories.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
+		<h1>Brak danych</h1>
+		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj kategorię</button>
+	</div>
 
-                        <td class="flex justify-evenly px-6 py-2">
-                            <i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-                            <i @click="deleteRow(row)" class="fas fa-trash cursor-pointer"></i>
-                        </td>
-                    </tr>
-                </template>
-			</DataTable>
-		</div>
-    </div>
+	<div v-else>
+
+		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.inventory.category.index" extraClass="first:h-20 sm:first:h-auto flex sm:table-cell">
+
+			<template #buttons>
+				<div class="w-1/2 sm:w-auto flex justify-center">
+					<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+						<i class="fas fa-arrow-left fa-lg"></i>
+					</Link>
+				</div>
+				<div class="w-1/2 sm:w-auto flex justify-center">
+					<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+						<i class="fas fa-plus fa-lg"></i>
+					</button>
+					<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+						<i class="fas fa-plus fa-lg"></i>
+					</button>
+				</div>				
+			</template>
+
+			<template #content>
+				<tr v-for="row in categories.data" :key="row" 
+					class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
+					<td class="px-3 py-1 flex items-center space-x-3 h-20">
+						<img class="w-14 h-14" :src=row.photo_path :alt=row.name>
+						<div>
+							<div>{{ row.name }}</div>
+							<div class="text-sm text-gray-500">{{ row.parentCategoryName }}</div>
+							<div v-if="row.subcategories.length">
+								<button @click="showSubcategories(row.id)" class="px-1 rounded-lg bg-green-500 text-white">Podkategorie</button>		
+								<div class="absolute bg-red-500 p-3 h-32 w-64 mt-2 rounded-lg overflow-y-scroll hidden left-1" :id=row.id>
+									<div v-for="sub in row.subcategories" :key="sub">
+										{{sub}}
+									</div>
+								</div>	
+							</div>
+						</div>
+					</td>
+
+					<td class="px-3 py-1 space-x-3">
+						<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
+						<i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
+					</td>
+				</tr>
+			</template>
+
+		</DataTable>
+	</div>
+    
 </admin-panel-layout>
 
 <CrudModal :show=modalOpened @close=close>
@@ -140,13 +162,18 @@ export default defineComponent({
             Inertia.delete('inventorycategories/' + row.id)
         }
 
+		const showSubcategories = (id) => {
+			let element = document.getElementById(id)
+			element.classList.contains('hidden') ? element.classList.remove('hidden') : element.classList.add('hidden')
+		}
+
 		const columns = [
-			{name:'photo_path', label:'Zdjęcie'},
-			{name:'name', label:'Nazwa', sortable: true},
-			{name:'subcategories', label:'Podkategorie'}
+			{name:'name', label:'Kategoria', sortable: true},
+			// {name:'subcategories', label:'Podkategorie'},
+			{name:'actions', label:'Działania'}
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow }
+		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, showSubcategories }
 	},
 
 	components: {
