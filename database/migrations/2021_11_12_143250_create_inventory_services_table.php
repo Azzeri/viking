@@ -18,9 +18,12 @@ class CreateInventoryServicesTable extends Migration
             $table->string('name', 64);
             $table->text('description')->nullable();
             $table->date('date_due')->nullable();
+            $table->date('date_performed')->nullable();
             $table->boolean('notification')->default(false);
             $table->boolean('is_finished')->default(false);
             $table->foreignId('inventory_item_id')->constrained();
+            $table->foreignId('assigned_user')->nullable()->constrained('users');
+            $table->foreignId('performed_by')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

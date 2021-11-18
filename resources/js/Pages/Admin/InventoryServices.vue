@@ -1,6 +1,43 @@
 <template>
+	<admin-panel-layout title="Serwisy">
+	
+		<template #page-title>Serwisy</template>
+		<div v-if="!services.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
+			<h1>Brak danych</h1>
+			<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj serwis</button>
+			<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<i class="fas fa-arrow-left fa-lg"></i>
+			</Link>
+		</div>
 
-  <admin-panel-layout v-if="!services.data.length" title="Serwisy sprzętu">
+		<div v-else>
+			<ServicesDisplay :columns=columns :data=services :filters=filters sortRoute="admin.inventory.services.index" @edit=edit>
+
+				<!-- <template #buttons>
+					<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+						<i class="fas fa-arrow-left fa-lg"></i>
+					</Link>
+					
+					<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+						<i class="fas fa-plus fa-lg"></i>
+					</button>
+					<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+						<i class="fas fa-plus fa-lg"></i>
+					</button>
+					
+				</template>
+
+				<template #content>
+					<div class="w-full rounded-lg bg-white p-4">
+
+					</div>
+				</template> -->
+				
+			</ServicesDisplay>
+		</div>
+
+	</admin-panel-layout>
+  <!-- <admin-panel-layout v-if="!services.data.length" title="Serwisy sprzętu">
 	<template #page-title>Serwisy sprzętu</template>
 	<div class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
         <h1>Brak danych</h1>
@@ -16,7 +53,7 @@
 			</ServicesDisplay>
 		</div>
     </div>
-</admin-panel-layout>
+</admin-panel-layout> -->
 
 <!-- <CrudModal :show=modalOpened @close=close>
 	<template #title>Nowy kategoria sprzętu</template>
@@ -135,7 +172,7 @@ export default defineComponent({
 			{name:'created_at', label:'Data utworzenia', sortable: true},
 			{name:'date_due', label:'Termin', sortable: true},
 			{name:'notification', label:'Przypomnienie', sortable: true},
-			{name:'is_finished', label:'Zakończony', sortable: true},
+			{name:'is_finished', label:'Zakończony'},
 			{name:'inventory_item_name', label:'Przedmiot'}
 
         ]
