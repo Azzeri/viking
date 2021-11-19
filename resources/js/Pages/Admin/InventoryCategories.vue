@@ -73,13 +73,13 @@
 				<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
 			</div>
 			<div class="mt-6">
-				<select v-model=form.parentCategoryId>
+				<span>Kategoria nadrzędna</span>
+				<select class="rounded-lg w-full" v-model=form.parentCategoryId>
 					<option value="-1">Brak</option>
 					<template v-for="row in categories.data" :key=row>
-						<option v-if="row.id != form.id" :value="row.id"> {{ row.name }} </option>
+						<option v-if="row.id != form.id && !form.subcategoriesIds.includes(row.id)" :value="row.id"> {{ row.name }} </option>
 					</template>
 				</select>
-					<!-- <span>Selected: {{ form.parentCategoryId }}</span> -->
 			</div>
 
 		</form>
@@ -142,6 +142,7 @@ export default defineComponent({
 			modalEditMode.value = true
 
 			form.id = row.id
+			form.subcategoriesIds = row.subcategoriesIds.map(id => id);
 			form.name = row.name
 			form.parentCategoryId = row.parentCategoryId ? row.parentCategoryId : -1
 

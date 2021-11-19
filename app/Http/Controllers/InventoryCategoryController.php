@@ -40,6 +40,7 @@ class InventoryCategoryController extends Controller
                 'photo_path' => $inventoryCategory->photo_path,
                 'inventory_category_id' => $inventoryCategory->inventory_category_id,
                 'subcategories' => array_column($inventoryCategory->subcategories->toArray(), 'name'),
+                'subcategoriesIds' => array_column($inventoryCategory->subcategories->toArray(), 'id'),
                 'parentCategoryName' => $inventoryCategory->parentCategory ? $inventoryCategory->parentCategory->name : null,
                 'parentCategoryId' => $inventoryCategory->parentCategory ? $inventoryCategory->parentCategory->id : null
             ]);
@@ -61,7 +62,7 @@ class InventoryCategoryController extends Controller
         $this->authorize('create', InventoryCategory::class);
 
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'alpha_dash', 'unique:inventory_categories'],
+            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_categories'],
             'parentCategoryId' => ['nullable', 'integer']
         ]);
 
@@ -87,11 +88,14 @@ class InventoryCategoryController extends Controller
         $this->authorize('update', $inventoryCategory, InventoryCategory::class);
 
         $inventoryCategory = InventoryCategory::find($request->id);
+        $subcats = array_column( $inventoryCategory->subcategories->toArray(), 'id');
 
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'alpha_dash', 
-                        Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventoryCategory->id))],
-            'parentCategoryId' => ['nullable', 'integer', Rule::notIn([$request->id])]
+            'name' => [
+                'required', 'string', 'min:3', 'max:64', 'alpha_dash',
+                Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventoryCategory->id))
+            ],
+            'parentCategoryId' => ['nullable', 'integer', Rule::notIn([$request->id]), Rule::notIn($subcats)]
         ]);
 
         $parentCategory = $request->parentCategoryId == -1 ? null : $request->parentCategoryId;
