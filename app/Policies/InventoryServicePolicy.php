@@ -53,6 +53,6 @@ class InventoryServicePolicy
      */
     public function delete(User $user, InventoryService $inventoryService)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN]);
     }
 }
