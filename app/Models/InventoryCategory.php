@@ -12,7 +12,7 @@ class InventoryCategory extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['name', 'photo_path', 'inventory_category_id'];
-    protected $cascadeDeletes = ['subcategories'];//ITEMS
+    protected $cascadeDeletes = ['subcategories', 'items'];
 
     public function subcategories()
     {

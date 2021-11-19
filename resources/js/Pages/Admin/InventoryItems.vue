@@ -63,16 +63,16 @@
             <div class="mt-6">
 				<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" required autofocus placeholder="Opis" autocomplete="description" />
 			</div>
-            <div class="mt-6" v-if="modalEditMode">
+            <div class="mt-6">
 				<jet-input id="quantity" type="number" class="mt-1 block w-full" v-model="form.quantity" required autofocus placeholder="Ilość" autocomplete="quantity" />
 			</div>
 			<div class="mt-6">
-				<select v-model=form.inventory_category_id>
+				<div>Kategoria</div>
+				<select class="w-full rounded-lg" v-model=form.inventory_category_id>
 					<template v-for="row in categories" :key=row>
 						<option :value="row.id"> {{ row.name }} </option>
 					</template>
 				</select>
-					<span>Selected: {{ form.inventory_category_id }}</span>
 			</div>
 
 		</form>

@@ -69,15 +69,17 @@ class InventoryItemController extends Controller
         $this->authorize('create', InventoryItem::class);
 
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'alpha_dash', 'unique:inventory_items'],
-            'category_id' => ['required', 'integer'],
+            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
+            'inventory_category_id' => ['required', 'integer'],
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'description' => ['nullable', 'min:3', 'max:255']
         ]);
 
         InventoryItem::create([
             'name' => $request->name,
             'description' => $request->description,
-            'inventory_category_id' => $request->category_id
+            'quantity' => $request->quantity,
+            'inventory_category_id' => $request->inventory_category_id
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano przedmiot');
@@ -98,10 +100,10 @@ class InventoryItemController extends Controller
 
         $inventoryItem->update($request->validate([
             'name' => [
-                'required', 'string', 'min:3', 'max:64', 'alpha_dash',
+                'required', 'string', 'min:3', 'max:64',
                 Rule::unique('inventory_items')->ignore(InventoryItem::find($inventoryItem->id))
             ],
-            'inventory_category_id' => ['required', 'integer', 'exists:inventory_categories'],
+            'inventory_category_id' => ['required', 'integer'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999']
         ]));
