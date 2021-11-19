@@ -68,10 +68,12 @@ class InventoryServiceController extends Controller
     public function finish(Request $request)
     {
         $service = InventoryService::find($request->id);
-        $service->is_finished = true;
-        $service->performed_by = Auth::user()->id;
-        $service->date_performed = Carbon::now();
-        $service->save();
+
+        $service->update([
+            'is_finished' => true,
+            'performed_by' => Auth::user()->id,
+            'date_performed' => Carbon::now(),
+        ]);
 
         return redirect()->back();
     }
