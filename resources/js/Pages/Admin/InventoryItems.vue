@@ -33,7 +33,7 @@
 			<template #content>
 				<tr v-for="row in items.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
 					<td class="px-3 py-1 flex items-center space-x-3">
-						<img class="w-14 h-14" :src=row.photo_path :alt=row.name>
+						<img @click=openPhotoModal(row) class="w-14 h-14 rounded-full" :src=row.photo_path :alt=row.name>
 						<span>{{ row.name }}</span>
 					</td>
 					<td class="px-3 py-1">{{ row.category_name }}</td>
@@ -89,6 +89,9 @@
 
 	</template>
 </CrudModal>
+
+<PhotoModal :item_id=itemForPhotoForm.id :show=photoModalOpened :src=itemForPhotoForm.photo_path path='inventoryItems' @closePhotoModal=closePhotoModal></PhotoModal>
+
 </template>
 
 <script>
@@ -102,6 +105,7 @@ import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
+import PhotoModal from '@/Components/PhotoModal.vue'
 
 export default defineComponent({
 
@@ -114,7 +118,9 @@ export default defineComponent({
 	setup(props) {
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
-
+		const photoModalOpened = ref(false)
+		const itemForPhotoForm = ref(props.items.data[0])
+		
 		const form = useForm({
             id: null,
 			name: null,
@@ -123,6 +129,13 @@ export default defineComponent({
             quantity: null,
             inventory_category_id: props.categories[0].id
 		})
+
+		const closePhotoModal = _ => photoModalOpened.value = false
+
+		const openPhotoModal = (row) => {
+			itemForPhotoForm.value = row
+			photoModalOpened.value = true
+		}
 
 		const reset = _ => { 
 			form.reset()
@@ -171,7 +184,8 @@ export default defineComponent({
 			{name:'actions', label:'Działania'}
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow }
+		return { form, columns, modalOpened, modalEditMode, itemForPhotoForm, 
+				 close, store, edit, update, deleteRow, photoModalOpened, closePhotoModal, openPhotoModal }
 	},
 
 	components: {
@@ -183,7 +197,7 @@ export default defineComponent({
 		JetValidationErrors,
 		DataTable,
 		CrudModal,
-		
+		PhotoModal
 	},
 
 });

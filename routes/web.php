@@ -47,6 +47,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/inventoryCategories/DeletePhoto/{id}', [InventoryCategoryController::class, 'deletePhoto']);
 
     Route::resource('/inventoryitems', InventoryItemController::class, ['names' => ['index' => 'inventory.items.index']]);
+    Route::post('/inventoryItems/StorePhoto/{id}', [InventoryItemController::class, 'storePhoto']);
+    Route::post('/inventoryItems/DeletePhoto/{id}', [InventoryItemController::class, 'deletePhoto']);
+
     Route::resource('/inventoryservices', InventoryServiceController::class, ['names' => ['index' => 'inventory.services.index']]);
     Route::post('/inventoryservicesfinish', [InventoryServiceController::class, 'finish']);
 

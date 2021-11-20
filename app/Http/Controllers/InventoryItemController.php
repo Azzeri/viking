@@ -122,9 +122,56 @@ class InventoryItemController extends Controller
     {
         $item = InventoryItem::find($inventoryItem);
         $this->authorize('delete', $item, InventoryItem::class);
+
+        $photoName = ltrim($item->photo_path, '/images/');
+        if ($photoName != 'default.png') 
+            unlink(public_path('images') . '/' . $photoName);     
         
         $item->delete();
 
+        $item->delete();
+
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
+    }
+
+    public function storePhoto(Request $request, $id) 
+    {
+        $item = InventoryItem::find($id);
+
+        $this->authorize('update', $item, InventoryItem::class);
+
+        $request->validate([
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+
+        $photoName = ltrim($item->photo_path, '/images/');
+        if ($photoName != 'default.png')
+            unlink(public_path('images') . '/' . $photoName);
+
+        $imageName = time() . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('images'), $imageName);
+
+        $item->photo_path = '/images/' . $imageName;
+        $item->save();
+
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano zdjęcie');
+    }
+
+    public function deletePhoto($id)
+    {
+        $item = InventoryItem::find($id);
+        
+        $this->authorize('update', $item, InventoryItem::class);
+
+        $photoName = ltrim($item->photo_path, '/images/');
+
+        if ($photoName != 'default.png') {
+            unlink(public_path('images') . '/' . $photoName);
+            $item->photo_path = '/images/default.png';
+            $item->save();
+        }
+
+        return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
+
     }
 }

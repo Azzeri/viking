@@ -20962,6 +20962,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_DataTable_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Components/DataTable.vue */ "./resources/js/Components/DataTable.vue");
 /* harmony import */ var _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/Components/CrudModal.vue */ "./resources/js/Components/CrudModal.vue");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _Components_PhotoModal_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/Components/PhotoModal.vue */ "./resources/js/Components/PhotoModal.vue");
+
 
 
 
@@ -20981,6 +20983,8 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup(props) {
     var modalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var modalEditMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+    var photoModalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+    var itemForPhotoForm = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.items.data[0]);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       id: null,
       name: null,
@@ -20989,6 +20993,15 @@ __webpack_require__.r(__webpack_exports__);
       quantity: null,
       inventory_category_id: props.categories[0].id
     });
+
+    var closePhotoModal = function closePhotoModal(_) {
+      return photoModalOpened.value = false;
+    };
+
+    var openPhotoModal = function openPhotoModal(row) {
+      itemForPhotoForm.value = row;
+      photoModalOpened.value = true;
+    };
 
     var reset = function reset(_) {
       form.reset();
@@ -21053,11 +21066,15 @@ __webpack_require__.r(__webpack_exports__);
       columns: columns,
       modalOpened: modalOpened,
       modalEditMode: modalEditMode,
+      itemForPhotoForm: itemForPhotoForm,
       close: close,
       store: store,
       edit: edit,
       update: update,
-      deleteRow: deleteRow
+      deleteRow: deleteRow,
+      photoModalOpened: photoModalOpened,
+      closePhotoModal: closePhotoModal,
+      openPhotoModal: openPhotoModal
     };
   },
   components: {
@@ -21068,7 +21085,8 @@ __webpack_require__.r(__webpack_exports__);
     JetLabel: _Jetstream_Label_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     JetValidationErrors: _Jetstream_ValidationErrors_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
     DataTable: _Components_DataTable_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-    CrudModal: _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+    CrudModal: _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+    PhotoModal: _Components_PhotoModal_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
   }
 }));
 
@@ -26514,7 +26532,7 @@ var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 var _hoisted_15 = {
   "class": "px-3 py-1 flex items-center space-x-3"
 };
-var _hoisted_16 = ["src", "alt"];
+var _hoisted_16 = ["onClick", "src", "alt"];
 var _hoisted_17 = {
   "class": "px-3 py-1"
 };
@@ -26566,6 +26584,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_jet_button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-button");
 
   var _component_CrudModal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CrudModal");
+
+  var _component_PhotoModal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PhotoModal");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_admin_panel_layout, {
     title: "Sprzęt"
@@ -26643,7 +26663,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: row,
               "class": "flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-              "class": "w-14 h-14",
+              onClick: function onClick($event) {
+                return _ctx.openPhotoModal(row);
+              },
+              "class": "w-14 h-14 rounded-full",
               src: row.photo_path,
               alt: row.name
             }, null, 8
@@ -26801,7 +26824,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["show", "onClose"])], 64
+  , ["show", "onClose"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PhotoModal, {
+    item_id: _ctx.itemForPhotoForm.id,
+    show: _ctx.photoModalOpened,
+    src: _ctx.itemForPhotoForm.photo_path,
+    path: "inventoryItems",
+    onClosePhotoModal: _ctx.closePhotoModal
+  }, null, 8
+  /* PROPS */
+  , ["item_id", "show", "src", "onClosePhotoModal"])], 64
   /* STABLE_FRAGMENT */
   );
 }
