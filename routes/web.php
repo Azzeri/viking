@@ -43,6 +43,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
     Route::resource('/events', EventController::class, ['names' => ['index' => 'events.index']]);
     Route::resource('/inventorycategories', InventoryCategoryController::class, ['names' => ['index' => 'inventory.category.index']]);
+    Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);
+    Route::post('/inventoryCategories/DeletePhoto/{id}', [InventoryCategoryController::class, 'deletePhoto']);
+
     Route::resource('/inventoryitems', InventoryItemController::class, ['names' => ['index' => 'inventory.items.index']]);
     Route::resource('/inventoryservices', InventoryServiceController::class, ['names' => ['index' => 'inventory.services.index']]);
     Route::post('/inventoryservicesfinish', [InventoryServiceController::class, 'finish']);

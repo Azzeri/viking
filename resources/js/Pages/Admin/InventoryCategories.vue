@@ -35,7 +35,7 @@
 				<tr v-for="row in categories.data" :key="row" 
 					class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
 					<td class="px-3 py-1 flex items-center space-x-3 h-20">
-						<img class="w-14 h-14" :src=row.photo_path :alt=row.name>
+						<img @click="openPhotoModal(row)" class="w-14 h-14 rounded-full" :src=row.photo_path :alt=row.name>
 						<div>
 							<div>{{ row.name }}</div>
 							<div class="text-sm text-gray-500">{{ row.parentCategoryName }}</div>
@@ -96,6 +96,8 @@
 
 	</template>
 </CrudModal>
+
+<PhotoModal :item_id=categoryForPhotoForm.id :show=photoModalOpened :src=categoryForPhotoForm.photo_path path='inventoryCategories' @closePhotoModal=closePhotoModal></PhotoModal>
 </template>
 
 <script>
@@ -108,6 +110,7 @@ import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
+import PhotoModal from '@/Components/PhotoModal.vue'
 import { Inertia } from '@inertiajs/inertia'
 
 export default defineComponent({
@@ -117,9 +120,11 @@ export default defineComponent({
 		filters: Object
 	},
 
-	setup() {
+	setup(props) {
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
+		const photoModalOpened = ref(false)
+		const categoryForPhotoForm = ref(props.categories.data[0])
 
 		const form = useForm({
             id: null,
@@ -128,7 +133,14 @@ export default defineComponent({
             parentCategoryId: -1
 		})
 
-		const reset = _ => { 
+		const closePhotoModal = _ => photoModalOpened.value = false
+
+		const openPhotoModal = (row) => {
+			categoryForPhotoForm.value = row
+			photoModalOpened.value = true
+		}
+
+		const reset = _ => {
 			form.reset()
 			modalEditMode.value = false 
 		}
@@ -177,7 +189,9 @@ export default defineComponent({
 			{name:'actions', label:'Działania'}
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, showSubcategories }
+		return { form, columns, modalOpened, modalEditMode, photoModalOpened, categoryForPhotoForm, 
+				 close, store, edit, update, deleteRow, showSubcategories, closePhotoModal, openPhotoModal 
+		}
 	},
 
 	components: {
@@ -189,7 +203,7 @@ export default defineComponent({
 		JetValidationErrors,
 		DataTable,
 		CrudModal,
-		
+		PhotoModal
 	},
 
 });
