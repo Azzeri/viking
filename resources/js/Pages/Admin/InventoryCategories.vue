@@ -2,7 +2,7 @@
 <admin-panel-layout title="Kategorie sprzętu">
 	
 	<template #page-title>Kategorie sprzętu</template>
-
+	
 	<div v-if="!categories.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 		<h1>Brak danych</h1>
 		<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
@@ -206,7 +206,7 @@ export default defineComponent({
 		DataTable,
 		CrudModal,
 		PhotoModal,
-		Label
+		Label,
 	},
 
 });

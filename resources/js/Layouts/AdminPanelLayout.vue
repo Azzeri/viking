@@ -50,6 +50,8 @@
         <!-- content -->
         <div class="flex-1">
             <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center">
+        	<FlashMessage></FlashMessage>
+
                 <div class="text-2xl font-bold"><slot name="page-title"></slot></div>
                 <div class="relative">
                     <jet-dropdown align="right" width="48">
@@ -122,6 +124,7 @@
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
     import AdminNavButton from '@/Components/AdminNavButton.vue'
+    import FlashMessage from '@/Components/FlashMessage.vue'
 
     export default defineComponent({
         props: {
@@ -138,6 +141,7 @@
             JetResponsiveNavLink,
             Link,
             AdminNavButton,
+            FlashMessage
         },
 
         data() {

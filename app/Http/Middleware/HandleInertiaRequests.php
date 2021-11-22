@@ -43,6 +43,10 @@ class HandleInertiaRequests extends Middleware
                 'IS_GROUP_MEMBER' => 3,
                 'IS_USER' => 4
             ],
+
+            'flash' => [
+                'message' => fn () => $request->session()->get('message')
+            ],
         ]);
     }
 }
