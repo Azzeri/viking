@@ -6,8 +6,16 @@
 
 	<div v-if="!items.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 		<h1>Brak danych</h1>
-		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj przedmiot</button>
-		<Link as=button :href="route('admin.inventory.category.index')">Kategorie</Link>
+		<div class="flex space-x-2">
+			<Link as=button :href="route('admin.inventory.category.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+			<button v-if="categories.length" @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
+			<button v-if="categories.length" @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
+		</div>
+		
 	</div>
 
 	<div v-else>
@@ -123,15 +131,15 @@ export default defineComponent({
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
-		const itemForPhotoForm = ref(props.items.data[0])
-
-const form = useForm({
+		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : 0
+		
+		const form = useForm({
             id: null,
 			name: null,
 			photo: null,
             description: null,
             quantity: null,
-            inventory_category_id: props.categories[0].id
+            inventory_category_id: props.categories.length ? props.categories[0].id : 0
 		})
 
 		const closePhotoModal = _ => photoModalOpened.value = false

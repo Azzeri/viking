@@ -5,10 +5,18 @@
 	
 	<div v-if="!categories.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 		<h1>Brak danych</h1>
-		<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+		
+		<div class="flex space-x-2">
+			<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 			<i class="fas fa-arrow-left fa-lg"></i>
-		</Link>
-		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj kategorię</button>
+			</Link>
+			<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
+			<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
+		</div>
 	</div>
 
 	<div v-else>
@@ -78,7 +86,12 @@
 				<select id=parent_category class="rounded-lg w-full" v-model=form.parentCategoryId>
 					<option value="-1">Brak</option>
 					<template v-for="row in categories.data" :key=row>
-						<option v-if="row.id != form.id && (modalEditMode && !form.subcategoriesIds.includes(row.id))" :value="row.id"> {{ row.name }} </option>
+						<template v-if=modalEditMode>
+							<option v-if="row.id != form.id && (modalEditMode && !form.subcategoriesIds.includes(row.id))" :value="row.id"> {{ row.name }} </option>
+						</template>
+						<template v-else>
+							<option :value="row.id"> {{ row.name }} </option>
+						</template>
 					</template>
 				</select>
 			</div>
@@ -126,7 +139,7 @@ export default defineComponent({
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
-		const categoryForPhotoForm = ref(props.categories.data[0])
+		const categoryForPhotoForm = props.categories.length ? ref(props.categories.data[0]) : 0
 
 		const form = useForm({
             id: null,

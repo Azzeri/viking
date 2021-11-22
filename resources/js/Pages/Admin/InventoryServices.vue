@@ -182,8 +182,8 @@ export default defineComponent({
 			name: null,
             description: null,
 			date_due: null,
-			inventory_item_id: props.items[0].id,
-			assigned_user: props.users[0].id,
+			inventory_item_id: props.items.length ? props.items[0].id : 0,
+			assigned_user: props.users.length ? props.users[0].id : 0,
 			notification: false
 		})
 
