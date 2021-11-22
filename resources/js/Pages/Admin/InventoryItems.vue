@@ -41,7 +41,7 @@
 			<template #content>
 				<tr v-for="row in items.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
 					<td class="px-3 py-1 flex items-center space-x-3">
-						<img @click=openPhotoModal(row) class="w-14 h-14 rounded-full" :src=row.photo_path :alt=row.name>
+						<img @click=openPhotoModal(row) class="w-14 h-14 rounded-full cursor-pointer" :src=row.photo_path :alt=row.name>
 						<span>{{ row.name }}</span>
 					</td>
 					<td class="px-3 py-1">{{ row.category_name }}</td>
@@ -131,7 +131,7 @@ export default defineComponent({
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
-		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : 0
+		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : ref(0)
 		
 		const form = useForm({
             id: null,

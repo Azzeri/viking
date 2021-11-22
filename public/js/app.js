@@ -20861,7 +20861,7 @@ __webpack_require__.r(__webpack_exports__);
     var modalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var modalEditMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var photoModalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    var categoryForPhotoForm = props.categories.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.categories.data[0]) : 0;
+    var categoryForPhotoForm = props.categories.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.categories.data[0]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       id: null,
       name: null,
@@ -21011,7 +21011,7 @@ __webpack_require__.r(__webpack_exports__);
     var modalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var modalEditMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var photoModalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    var itemForPhotoForm = props.items.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.items.data[0]) : 0;
+    var itemForPhotoForm = props.items.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.items.data[0]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       id: null,
       name: null,
@@ -21351,7 +21351,7 @@ __webpack_require__.r(__webpack_exports__);
     var modalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var modalEditMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var photoModalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    var categoryForPhotoForm = props.categories.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.categories.data[0]) : 0;
+    var categoryForPhotoForm = props.categories.length ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.categories.data[0]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       id: null,
       name: null,
@@ -26574,7 +26574,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: function onClick($event) {
                 return _ctx.openPhotoModal(row);
               },
-              "class": "w-14 h-14 rounded-full",
+              "class": "w-14 h-14 cursor-pointer rounded-full",
               src: row.photo_path,
               alt: row.name
             }, null, 8
@@ -26999,7 +26999,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: function onClick($event) {
                 return _ctx.openPhotoModal(row);
               },
-              "class": "w-14 h-14 rounded-full",
+              "class": "w-14 h-14 rounded-full cursor-pointer",
               src: row.photo_path,
               alt: row.name
             }, null, 8
@@ -27934,7 +27934,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: function onClick($event) {
                 return _ctx.openPhotoModal(row);
               },
-              "class": "w-14 h-14 rounded-full",
+              "class": "w-14 h-14 cursor-pointer rounded-full",
               src: row.photo_path,
               alt: row.name
             }, null, 8
@@ -28100,7 +28100,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     item_id: _ctx.categoryForPhotoForm.id,
     show: _ctx.photoModalOpened,
     src: _ctx.categoryForPhotoForm.photo_path,
-    path: "inventoryCategories",
+    path: "storeCategories",
     onClosePhotoModal: _ctx.closePhotoModal
   }, null, 8
   /* PROPS */

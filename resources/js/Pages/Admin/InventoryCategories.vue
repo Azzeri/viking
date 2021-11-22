@@ -43,7 +43,7 @@
 				<tr v-for="row in categories.data" :key="row" 
 					class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
 					<td class="px-3 py-1 flex items-center space-x-3 h-20">
-						<img @click="openPhotoModal(row)" class="w-14 h-14 rounded-full" :src=row.photo_path :alt=row.name>
+						<img @click="openPhotoModal(row)" class="w-14 h-14 cursor-pointer rounded-full" :src=row.photo_path :alt=row.name>
 						<div>
 							<div>{{ row.name }}</div>
 							<div class="text-sm text-gray-500">{{ row.parentCategoryName }}</div>
@@ -139,7 +139,7 @@ export default defineComponent({
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
-		const categoryForPhotoForm = props.categories.length ? ref(props.categories.data[0]) : 0
+		const categoryForPhotoForm = props.categories.length ? ref(props.categories.data[0]) : ref(0)
 
 		const form = useForm({
             id: null,
