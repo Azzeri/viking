@@ -58,17 +58,20 @@
 		<form @submit.prevent="store, update">
 
 			<div class="mt-6">
+				<label for=name>Nazwa</label>
 				<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
 			</div>
             <div class="mt-6">
+				<label for=description>Opis</label>
 				<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" required autofocus placeholder="Opis" autocomplete="description" />
 			</div>
             <div class="mt-6">
+				<label for=quantity>Ilość</label>
 				<jet-input id="quantity" type="number" class="mt-1 block w-full" v-model="form.quantity" required autofocus placeholder="Ilość" autocomplete="quantity" />
 			</div>
 			<div class="mt-6">
-				<div>Kategoria</div>
-				<select class="w-full rounded-lg" v-model=form.inventory_category_id>
+				<label for=category>Kategoria</label>
+				<select id=category class="w-full rounded-lg" v-model=form.inventory_category_id>
 					<template v-for="row in categories" :key=row>
 						<option :value="row.id"> {{ row.name }} </option>
 					</template>
@@ -106,6 +109,7 @@ import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
 import PhotoModal from '@/Components/PhotoModal.vue'
+import Label from '@/Jetstream/Label.vue'
 
 export default defineComponent({
 
@@ -120,8 +124,8 @@ export default defineComponent({
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
 		const itemForPhotoForm = ref(props.items.data[0])
-		
-		const form = useForm({
+
+const form = useForm({
             id: null,
 			name: null,
 			photo: null,
@@ -177,7 +181,6 @@ export default defineComponent({
         }
 
 		const columns = [
-			// {name:'photo_path', label:'Zdjęcie'},
 			{name:'name', label:'Przedmiot', sortable: true},
             {name:'inventory_category_id', label:'Kategoria', sortable: true},
 			{name:'quantity', label:'Ilość', sortable: true},
@@ -197,7 +200,8 @@ export default defineComponent({
 		JetValidationErrors,
 		DataTable,
 		CrudModal,
-		PhotoModal
+		PhotoModal,
+		Label
 	},
 
 });

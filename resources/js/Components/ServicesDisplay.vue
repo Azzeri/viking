@@ -18,6 +18,9 @@
                         <option value=1>
                             Wykonane
                         </option>
+                        <option value=2>
+                            Moje
+                        </option>
                     </select>
                 </div>
                 <div class="lg:flex items-center w-1/2 lg:w-auto">
@@ -76,13 +79,14 @@ export default {
 
     setup(props) {
 		const servicesState = ref(false)
-        const filter = ref(0)
+        const filter = props.filters.filter ? ref(props.filters.filter) : ref(0)
         const sortField = ref(props.columns[0])
 
         const params = reactive({
             search: props.filters.search,
             field: props.filters.field,
-            direction: props.filters.direction
+            direction: props.filters.direction,
+            filter: props.filters.filter
         })
 
         function sort(field, sortable) {

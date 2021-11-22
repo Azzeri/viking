@@ -3,12 +3,19 @@
 	
 		<template #page-title>Serwisy</template>
 		
-		<div v-if="!services.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
+		<div v-if="!services.data.length && filters.search == null && filters.filter == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 			<h1>Brak danych</h1>
-			<button @click="modalOpened = true" class="p-3 rounded-full border-2">Dodaj serwis</button>
-			<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-				<i class="fas fa-arrow-left fa-lg"></i>
-			</Link>
+			<div class="flex space-x-2">
+				<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<i class="fas fa-arrow-left fa-lg"></i>
+				</Link>
+				<button @click="modalOpened = true" class="lg:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+					<i class="fas fa-plus fa-lg"></i>
+				</button>
+				<button @click="modalOpened = true" class="hidden lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<i class="fas fa-plus fa-lg"></i>
+				</button>
+			</div>
 		</div>
 
 		<div v-else>
@@ -29,18 +36,18 @@
 
 				<template #content>
 					<div v-for="row in services.data" :key="row" class="w-full rounded-lg bg-white p-3 mt-3">
-						<div @click=showDetails(row.id) class="flex justify-between">
+						<div @click=showDetails(row.id) class="flex justify-between cursor-pointer">
 							<div class="font-semibold"> {{ row.name }} </div>
-							<div>
+							<div :id="'arrow-' + row.id">
 								<i class="fas fa-arrow-down"></i>
 							</div>
 						</div>
 						
 						<div class="text-sm text-gray-600"> {{ row.inventory_item_name }} </div>
-						<div class="hidden my-3" :id=row.id>
+						<div class="hidden my-3" :id="'details-' + row.id">
 							<ul>
 								<li><span class="font-semibold">Utworzono: </span>{{ row.created_at.split('T')[0] }}</li>
-								<li><span class="font-semibold">Termin: </span>{{ row.date_due }}</li>
+								<li v-if="row.date_due"><span class="font-semibold">Termin: </span><span :class="checkDateDue(row.date_due)">{{ row.date_due }}</span></li>
 								<li v-if="!row.is_finished && row.date_due"><span class="font-semibold">Przypomnienie: </span><span v-html="booleanIcon(row.notification)"></span></li>
 								<li v-if=row.assigned_user><span class="font-semibold">Przydzielone użytkownikowi: {{ row.assigned_user }}</span></li>
 								<li v-if=row.is_finished><span class="font-semibold">Wykonane przez: {{ row.performed_by }}</span></li>
@@ -70,8 +77,8 @@
 			<form @submit.prevent="store, update">
 
 				<div class="mt-6">
-					<div>Przedmiot</div>
-					<select class="w-full rounded-lg" v-model=form.inventory_item_id>
+					<label for=item>Przedmiot</label>
+					<select id=item class="w-full rounded-lg" v-model=form.inventory_item_id>
 						<template v-for="row in items" :key=row>
 							<option :value="row.id"> {{ row.name }} </option>
 						</template>
@@ -79,18 +86,21 @@
 				</div>
 
 				<div class="mt-6">
+					<label for=name>Nazwa</label>
 					<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
 				</div>
 				<div class="mt-6">
+					<label for=description>Opis</label>
 					<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" placeholder="Opis" autocomplete="description" />
 				</div>
 				<div class="mt-6">
-					<jet-input id="description" type="date" class="mt-1 block w-full" v-model="form.date_due" placeholder="Termin" autocomplete="date_due" :min=currentDate() />
+					<label for=date_due>Termin</label>
+					<jet-input id="date_due" type="date" class="mt-1 block w-full" v-model="form.date_due" placeholder="Termin" autocomplete="date_due" :min=currentDate() />
 				</div>								
 
 				<div v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" class="mt-6">
-					<div>Przydziel użytkownikowi</div>
-					<select class="w-full rounded-lg" v-model=form.assigned_user>
+					<label for=assigned_user>Przydziel użytkownikowi</label>
+					<select id=assigned_user class="w-full rounded-lg" v-model=form.assigned_user>
 						<template v-for="row in users" :key=row>
 							<option :value="row.id"> {{ row.name }} </option>
 						</template>
@@ -98,7 +108,7 @@
 				</div>
 
 				<div class="mt-6" v-if="form.date_due">
-					<checkbox v-model="form.notification" :checked="form.notification">asd</checkbox>
+					<checkbox id=notification v-model="form.notification" :checked="form.notification">asd</checkbox>
 					<span class="ml-2">Przypomnienie</span>
 				</div>
 
@@ -129,6 +139,7 @@ import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import ServicesDisplay from '@/Components/ServicesDisplay.vue'
 import CrudModal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
+import Label from '@/Jetstream/Label.vue'
 
 export default defineComponent({
 
@@ -151,13 +162,20 @@ export default defineComponent({
         }
 
 		const showDetails = (id) => {
-			let element = document.getElementById(id)
+			let element = document.getElementById('details-'+id)
+			let arrow = document.getElementById('arrow-'+id)
+
 			element.classList.contains('hidden') ? element.classList.remove('hidden') : element.classList.add('hidden')
+			arrow.innerHTML.indexOf('down') != -1 ? arrow.innerHTML = '<i class="fas fa-arrow-up"></i>' : arrow.innerHTML = '<i class="fas fa-arrow-down"></i>'
 		}
 
-        const booleanIcon = (notification) => {
-            return notification == true ? '<i class="fas fa-check text-green-500">' : '<i class="fas fa-times text-red-500">'
-        }
+        const booleanIcon = (notification) => notification == true ? '<i class="fas fa-check text-green-500">' : '<i class="fas fa-times text-red-500">'
+
+		const checkDateDue = (date_due) => {
+			if(date_due < currentDate()) return 'text-red-500';
+			else if (date_due == currentDate()) return 'text-yellow-500';
+			else return 'text-green-500'
+		}
 
 		const form = useForm({
             id: null,
@@ -217,11 +235,14 @@ export default defineComponent({
 			{name:'date_due', label:'Termin', sortable: true},
 			{name:'notification', label:'Przypomnienie', sortable: true},
 			{name:'is_finished', label:'Zakończony'},
-			{name:'inventory_item_name', label:'Przedmiot'}
+			{name:'inventory_item_name', label:'Przedmiot'},
+
+			{name:'inventory_item_id', label:'Przedmiot', sortable: true},
+			{name:'assigned_user', label:'Przypisany użytkownik', sortable: true}
 
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate }
+		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
 	},
 
 	components: {
@@ -233,7 +254,8 @@ export default defineComponent({
 		JetValidationErrors,
 		CrudModal,
 		ServicesDisplay,
-		Checkbox
+		Checkbox,
+		Label
 	},
 
 });

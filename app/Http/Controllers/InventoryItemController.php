@@ -46,7 +46,7 @@ class InventoryItemController extends Controller
                 'category_id' => $inventoryItem->category ? $inventoryItem->category->id : null,
             ]);
 
-        $categories = InventoryCategory::all()->map(fn ($category) => [
+        $categories = InventoryCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
         ]);
@@ -68,19 +68,14 @@ class InventoryItemController extends Controller
     {
         $this->authorize('create', InventoryItem::class);
 
-        $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
-            'inventory_category_id' => ['required', 'integer'],
-            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
-            'description' => ['nullable', 'min:3', 'max:255']
-        ]);
-
-        InventoryItem::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'quantity' => $request->quantity,
-            'inventory_category_id' => $request->inventory_category_id
-        ]);
+        InventoryItem::create(
+            $request->validate([
+                'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
+                'inventory_category_id' => ['required', 'integer'],
+                'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+                'description' => ['nullable', 'min:3', 'max:255']
+            ])
+        );
 
         return redirect()->back()->with('message', 'Pomyślnie dodano przedmiot');
     }
@@ -124,9 +119,9 @@ class InventoryItemController extends Controller
         $this->authorize('delete', $item, InventoryItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');
-        if ($photoName != 'default.png') 
-            unlink(public_path('images') . '/' . $photoName);     
-        
+        if ($photoName != 'default.png')
+            unlink(public_path('images') . '/' . $photoName);
+
         $item->delete();
 
         $item->delete();
@@ -134,7 +129,7 @@ class InventoryItemController extends Controller
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
     }
 
-    public function storePhoto(Request $request, $id) 
+    public function storePhoto(Request $request, $id)
     {
         $item = InventoryItem::find($id);
 
@@ -160,7 +155,7 @@ class InventoryItemController extends Controller
     public function deletePhoto($id)
     {
         $item = InventoryItem::find($id);
-        
+
         $this->authorize('update', $item, InventoryItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');
@@ -172,6 +167,5 @@ class InventoryItemController extends Controller
         }
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
-
     }
 }

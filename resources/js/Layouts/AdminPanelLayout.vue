@@ -1,6 +1,6 @@
 <template>
     <Head :title="title" />
-    <body  class="background bg-cover bg-center">
+    <body  class="background bg-cover bg-center bg-fixed">
     <div class="relative min-h-screen md:flex">
 
         <!-- mobile menu bar -->

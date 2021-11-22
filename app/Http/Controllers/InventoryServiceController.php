@@ -37,10 +37,13 @@ class InventoryServiceController extends Controller
                 ->orWhere('date_performed', 'ILIKE', '%' . request('search') . '%');
         }
 
-        if (request('filter')) {
+        if (request('filter') && request('filter') != 2) {
             $query->where('is_finished', request('filter'));
-        } else
+        } else if (request('filter') && request('filter') == 2)
+            $query->where('assigned_user', Auth::user()->id)->where('is_finished', 0);
+        else
             $query->where('is_finished', false);
+
 
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
@@ -64,12 +67,12 @@ class InventoryServiceController extends Controller
                 'inventory_item_name' => $inventoryItem->item->name
             ]);
 
-        $items = InventoryItem::all()->map(fn ($item) => [
+        $items = InventoryItem::orderBy('name')->get()->map(fn ($item) => [
             'id' => $item->id,
             'name' => $item->name,
         ]);
 
-        $users = User::all()->map(fn ($user) => [
+        $users = User::orderBy('name')->get()->map(fn ($user) => [
             'id' => $user->id,
             'name' => $user->name . ' ' . $user->surname,
         ]);
@@ -152,7 +155,7 @@ class InventoryServiceController extends Controller
     {
         $service = InventoryService::find($inventoryService);
         $this->authorize('delete', $service, InventoryService::class);
-        
+
         $service->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto serwis');
@@ -161,7 +164,7 @@ class InventoryServiceController extends Controller
     public function finish(Request $request)
     {
         $this->authorize('create', InventoryService::class); //tak wiem, pojde za to do piekła. Zmienić
-        
+
         $service = InventoryService::find($request->id);
 
         $service->update([

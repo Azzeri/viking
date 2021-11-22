@@ -12,7 +12,7 @@
     </div> 
 
     <!-- Table content -->
-		<table class="w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white overflow-auto sm:shadow-lg my-5 sm:mt-2 sm:inline-table">
+		<table class="w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white shadow-lg overflow-auto sm:shadow-lg my-5 sm:mt-2 sm:inline-table">
 			<thead class="text-white space-y-2">
                 <tr v-for="(index) in data.data" :key=index class="bg-gray-600 flex flex-col flex-no-wrap sm:hidden rounded-l-lg sm:mb-0 sm:last:table-row divide-y divide-gray-600 sm:divide-none">
                     <th v-for="column in columns" :key="column" @click="sort(column.name, column.sortable)" 
@@ -80,39 +80,9 @@ export default {
         },
     },
 
-    methods: {
-        edit(row) {
-            this.$emit('edit', row)
-        }
-    },
-
-    emits : ['edit'],
-
-
     components: {
         Pagination
     }
 
 }
 </script>
-<style>
-
-  @media (min-width: 640px) {
-    /* table {
-      display: inline-table !important;
-    } */
-
-    /* thead tr:not(:first-child) {
-      display: none;
-    } */
-  }
-
-  /* td:not(:last-child) {
-    border-bottom: 0;
-  } */
-
-  /* th:not(:last-child) {
-    border-bottom: 2px solid rgba(0, 0, 0, .1);
-  } */
-
-</style>

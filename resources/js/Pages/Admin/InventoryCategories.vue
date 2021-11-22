@@ -41,7 +41,7 @@
 							<div class="text-sm text-gray-500">{{ row.parentCategoryName }}</div>
 							<div v-if="row.subcategories.length">
 								<button @click="showSubcategories(row.id)" class="px-1 rounded-lg bg-green-500 text-white">Podkategorie</button>		
-								<div class="absolute bg-red-500 p-3 h-32 w-64 mt-2 rounded-lg overflow-y-scroll hidden left-1" :id=row.id>
+								<div :id="'category-'+row.id" class="absolute bg-red-500 p-3 h-32 w-64 mt-2 rounded-lg overflow-y-scroll hidden left-1">
 									<div v-for="sub in row.subcategories" :key="sub">
 										{{sub}}
 									</div>
@@ -70,14 +70,15 @@
 		<form @submit.prevent="store, update">
 
 			<div class="mt-6">
+				<label for=name>Nazwa</label>
 				<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
 			</div>
 			<div class="mt-6">
-				<span>Kategoria nadrzędna</span>
-				<select class="rounded-lg w-full" v-model=form.parentCategoryId>
+				<label for=parent_category>Kategoria nadrzędna</label>
+				<select id=parent_category class="rounded-lg w-full" v-model=form.parentCategoryId>
 					<option value="-1">Brak</option>
 					<template v-for="row in categories.data" :key=row>
-						<option v-if="row.id != form.id && !form.subcategoriesIds.includes(row.id)" :value="row.id"> {{ row.name }} </option>
+						<option v-if="row.id != form.id && (modalEditMode && !form.subcategoriesIds.includes(row.id))" :value="row.id"> {{ row.name }} </option>
 					</template>
 				</select>
 			</div>
@@ -108,6 +109,7 @@ import JetButton from '@/Jetstream/Button.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+import Label from '@/Jetstream/Label.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
 import PhotoModal from '@/Components/PhotoModal.vue'
@@ -179,7 +181,7 @@ export default defineComponent({
         }
 
 		const showSubcategories = (id) => {
-			let element = document.getElementById(id)
+			let element = document.getElementById('category-'+id)
 			element.classList.contains('hidden') ? element.classList.remove('hidden') : element.classList.add('hidden')
 		}
 
@@ -203,7 +205,8 @@ export default defineComponent({
 		JetValidationErrors,
 		DataTable,
 		CrudModal,
-		PhotoModal
+		PhotoModal,
+		Label
 	},
 
 });
