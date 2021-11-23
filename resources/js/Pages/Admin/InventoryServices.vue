@@ -19,7 +19,7 @@
 		</div>
 
 		<div v-else>
-			<ServicesDisplay :columns=columns :links=services.links :filters=filters sortRoute="admin.inventory.services.index">
+			<ServicesDisplay :columns=columns :links=services.links :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory.services.index">
 
 				<template #buttons>
 					<Link as=button :href="route('admin.inventory.items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
@@ -242,7 +242,13 @@ export default defineComponent({
 
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
+		const frontFilters = [
+			{ label: 'Niewykonane', value: 0 },
+			{ label: 'Wykonane', value: 1 },
+			{ label: 'Moje', value: 2 },
+		]
+
+		return { form, columns, frontFilters, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
 	},
 
 	components: {

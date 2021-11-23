@@ -12,7 +12,8 @@
                 <div class="lg:flex items-center w-1/2 lg:w-auto">
                     <span class="text-white">Filtruj</span>
                     <select class="lg:ml-2 rounded-lg w-full lg:w-auto" v-model=filter @change=filterServices(filter)>
-                        <option value=0>
+                        <option v-for="filter in frontFilters" :key=filter :value=filter.value>{{ filter.label }}</option>
+                        <!-- <option value=0>
                             Niewykonane
                         </option>
                         <option value=1>
@@ -20,7 +21,7 @@
                         </option>
                         <option value=2>
                             Moje
-                        </option>
+                        </option> -->
                     </select>
                 </div>
                 <div class="lg:flex items-center w-1/2 lg:w-auto">
@@ -72,6 +73,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 export default {
     props: {
         columns: Array,
+        frontFilters: Array,
         links: Object,
         filters: Object,
         sortRoute: String,
