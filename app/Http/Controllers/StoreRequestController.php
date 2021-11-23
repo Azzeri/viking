@@ -30,7 +30,7 @@ class StoreRequestController extends Controller
         }
 
         if (request('filter') && request('filter') != 2) {
-            $query->where('is_accepted', request('filter'));
+            $query->where('is_accepted', request('filter'))->where('is_finished', false);
         } else if (request('filter') && request('filter') == 2)
             $query->where('is_finished', true);
         else    
@@ -81,16 +81,35 @@ class StoreRequestController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $storeRequest = StoreRequest::find($id);
+        $this->authorize('delete', $storeRequest, StoreRequest::class);
+
+        $storeRequest->delete();
+
+        return redirect()->back()->with('message', 'Pomyślnie odrzucono zamówienie');
     }
 
-    public function accept(StoreRequest $storeRequest)
+    public function accept($id)
     {
-        //
+        $storeRequest = StoreRequest::find($id);
+
+        $this->authorize('update', $storeRequest, StoreRequest::class);
+
+        $storeRequest->is_accepted = true;
+        $storeRequest->save();
+
+        return redirect()->back()->with('message', 'Pomyślnie zaakceptowano zamówienie');
     }
 
-    public function finish(StoreRequest $storeRequest)
+    public function finish($id)
     {
-        //
+        $storeRequest = StoreRequest::find($id);
+
+        $this->authorize('update', $storeRequest, StoreRequest::class);
+
+        $storeRequest->is_finished = true;
+        $storeRequest->save();
+
+        return redirect()->back()->with('message', 'Pomyślnie zakończono zamówienie');
     }
 }

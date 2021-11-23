@@ -49,11 +49,11 @@
                             
                             <div v-if="!row.is_finished" class="mt-4">
                                 <div v-if="!row.is_accepted" class="flex justify-between space-x-2">
-                                    <button class="w-1/2 px-3 py-1 bg-green-500 text-white font-bold rounded-full">Zaakceptuj</button>
-                                    <button class="w-1/2 px-3 py-1 bg-red-500 text-white font-bold rounded-full">Odrzuć</button>
+                                    <button @click=acceptRow(row) class="w-1/2 px-3 py-1 bg-green-500 text-white font-bold rounded-full">Zaakceptuj</button>
+                                    <button @click=deleteRow(row) class="w-1/2 px-3 py-1 bg-red-500 text-white font-bold rounded-full">Odrzuć</button>
                                 </div>
                                 <div v-else>
-                                    <button class="w-1/2 px-3 py-1 bg-blue-500 text-white font-bold rounded-full">Zakończ</button>
+                                    <button @click=finishRow(row) class="w-1/2 px-3 py-1 bg-blue-500 text-white font-bold rounded-full">Zakończ</button>
                                 </div>
                             </div>
 
@@ -219,10 +219,19 @@ export default defineComponent({
 		// 	}) 
 		// }
 
-        // const deleteRow = (row) => {
-        //     if (!confirm('Na pewno?')) return;
-        //     Inertia.delete('storerequests/' + row.id)
-        // }
+        const deleteRow = (row) => {
+            if (!confirm('Na pewno?')) return;
+            Inertia.delete('storerequests/' + row.id)
+        }
+
+        const acceptRow = (row) => {
+            Inertia.post('storeRequests/accept/' + row.id)
+        }
+
+        const finishRow = (row) => {
+            if (!confirm('Na pewno?')) return;
+            Inertia.post('storeRequests/finish/' + row.id)
+        }
 
 		const columns = [
 			{ name:'store_item_id', label:'Przedmiot', sortable: true },
@@ -241,7 +250,7 @@ export default defineComponent({
 			{ label: 'Wykonane', value: 2 },
 		]
 
-		return { columns, frontFilters }
+		return { columns, frontFilters, deleteRow, acceptRow, finishRow }
 
 		// return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
 	},

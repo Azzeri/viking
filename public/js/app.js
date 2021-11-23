@@ -21723,10 +21723,20 @@ __webpack_require__.r(__webpack_exports__);
     // 		onSuccess: () => close()
     // 	}) 
     // }
-    // const deleteRow = (row) => {
-    //     if (!confirm('Na pewno?')) return;
-    //     Inertia.delete('storerequests/' + row.id)
-    // }
+    var deleteRow = function deleteRow(row) {
+      if (!confirm('Na pewno?')) return;
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_10__.Inertia["delete"]('storerequests/' + row.id);
+    };
+
+    var acceptRow = function acceptRow(row) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_10__.Inertia.post('storeRequests/accept/' + row.id);
+    };
+
+    var finishRow = function finishRow(row) {
+      if (!confirm('Na pewno?')) return;
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_10__.Inertia.post('storeRequests/finish/' + row.id);
+    };
+
     var columns = [{
       name: 'store_item_id',
       label: 'Przedmiot',
@@ -21769,7 +21779,10 @@ __webpack_require__.r(__webpack_exports__);
     }];
     return {
       columns: columns,
-      frontFilters: frontFilters
+      frontFilters: frontFilters,
+      deleteRow: deleteRow,
+      acceptRow: acceptRow,
+      finishRow: finishRow
     }; // return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
   },
   components: {
@@ -28984,31 +28997,12 @@ var _hoisted_21 = {
   key: 0,
   "class": "flex justify-between space-x-2"
 };
-
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "w-1/2 px-3 py-1 bg-green-500 text-white font-bold rounded-full"
-}, "Zaakceptuj", -1
-/* HOISTED */
-);
-
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "w-1/2 px-3 py-1 bg-red-500 text-white font-bold rounded-full"
-}, "Odrzuć", -1
-/* HOISTED */
-);
-
-var _hoisted_24 = [_hoisted_22, _hoisted_23];
-var _hoisted_25 = {
+var _hoisted_22 = ["onClick"];
+var _hoisted_23 = ["onClick"];
+var _hoisted_24 = {
   key: 1
 };
-
-var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "w-1/2 px-3 py-1 bg-blue-500 text-white font-bold rounded-full"
-}, "Zakończ", -1
-/* HOISTED */
-);
-
-var _hoisted_27 = [_hoisted_26];
+var _hoisted_25 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
@@ -29074,7 +29068,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.description), 1
             /* TEXT */
-            )]), !row.is_finished ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [!row.is_accepted ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, _hoisted_24)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, _hoisted_27))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+            )]), !row.is_finished ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [!row.is_accepted ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+              onClick: function onClick($event) {
+                return _ctx.acceptRow(row);
+              },
+              "class": "w-1/2 px-3 py-1 bg-green-500 text-white font-bold rounded-full"
+            }, "Zaakceptuj", 8
+            /* PROPS */
+            , _hoisted_22), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+              onClick: function onClick($event) {
+                return _ctx.deleteRow(row);
+              },
+              "class": "w-1/2 px-3 py-1 bg-red-500 text-white font-bold rounded-full"
+            }, "Odrzuć", 8
+            /* PROPS */
+            , _hoisted_23)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+              onClick: function onClick($event) {
+                return _ctx.finishRow(row);
+              },
+              "class": "w-1/2 px-3 py-1 bg-blue-500 text-white font-bold rounded-full"
+            }, "Zakończ", 8
+            /* PROPS */
+            , _hoisted_25)]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
           }), 128
           /* KEYED_FRAGMENT */
           ))])];
