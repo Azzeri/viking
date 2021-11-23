@@ -13,7 +13,7 @@
 		</div>
 
 		<div v-else>
-			<ServicesDisplay :columns=columns :links=requests.links :filters=filters sortRoute="admin.store.requests.index">
+			<ServicesDisplay :columns=columns :links=requests.links :filters=filters :frontFilters=frontFilters sortRoute="admin.store.requests.index">
 
 				<template #buttons>
 					<Link as=button :href="route('admin.store.items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
@@ -22,12 +22,12 @@
 				</template>
 
 				<template #content>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 my-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 my-4">
                         <div v-for="row in requests.data" :key="row" class="rounded-lg bg-white p-3 flex flex-col justify-between text-justify overflow-hidden">
                             <div>
                                 <div class="flex justify-between">
                                     <div class="font-bold text-lg">{{row.store_item_name}}</div>
-                                    <div><i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i></div>
+                                    <!-- <div><i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i></div> -->
                                 </div>
                                 <div class="my-2 text-gray-500 italic">
                                     <div class="flex space-x-2 items-center">
@@ -225,6 +225,7 @@ export default defineComponent({
         // }
 
 		const columns = [
+			{ name:'store_item_id', label:'Przedmiot', sortable: true },
 			{ name:'description', label:'Opis'},
 			{ name:'created_at', label:'Data utworzenia', sortable: true },
 			{ name:'client_name', label:'Klient', sortable: true },
@@ -232,12 +233,15 @@ export default defineComponent({
 			{ name:'client_email', label:'Email klienta', sortable: true },
 			{ name:'is_finished', label:'Zakończone'},
 			{ name:'is_accepted', label:'Zaakceptowane'},
-			{ name:'store_item_name', label:'Przedmiot'},
-
-			{ name:'store_item_id', label:'Przedmiot - id', sortable: true },
-
         ]
-		return { columns }
+
+        const frontFilters = [
+			{ label: 'Oczekujące', value: 0 },
+			{ label: 'Zaakceptowane', value: 1 },
+			{ label: 'Wykonane', value: 2 },
+		]
+
+		return { columns, frontFilters }
 
 		// return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
 	},

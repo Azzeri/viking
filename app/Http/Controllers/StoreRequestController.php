@@ -29,12 +29,12 @@ class StoreRequestController extends Controller
                 ->orWhere('client_phone', 'ILIKE', '%' . request('search') . '%');
         }
 
-        // if (request('filter') && request('filter') != 2) {
-        //     $query->where('is_accepted', request('filter'));
-        // } else if (request('filter') && request('filter') == 2)
-        //     $query->where('assigned_user', Auth::user()->id)->where('is_finished', 0);
-        // else
-        //     $query->where('is_finished', false);
+        if (request('filter') && request('filter') != 2) {
+            $query->where('is_accepted', request('filter'));
+        } else if (request('filter') && request('filter') == 2)
+            $query->where('is_finished', true);
+        else    
+            $query->where('is_accepted', false);
 
 
         if (request()->has(['field', 'direction'])) {
@@ -42,7 +42,7 @@ class StoreRequestController extends Controller
         } else
             $query->orderBy('created_at');
 
-        $requests = $query->paginate(16)->withQueryString()
+        $requests = $query->paginate()->withQueryString()
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,

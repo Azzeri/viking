@@ -3001,6 +3001,10 @@ select {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 
+	.xl\:grid-cols-5 {
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+
 	.xl\:px-64 {
 		padding-left: 16rem;
 		padding-right: 16rem;

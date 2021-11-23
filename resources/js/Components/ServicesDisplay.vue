@@ -13,15 +13,6 @@
                     <span class="text-white">Filtruj</span>
                     <select class="lg:ml-2 rounded-lg w-full lg:w-auto" v-model=filter @change=filterServices(filter)>
                         <option v-for="filter in frontFilters" :key=filter :value=filter.value>{{ filter.label }}</option>
-                        <!-- <option value=0>
-                            Niewykonane
-                        </option>
-                        <option value=1>
-                            Wykonane
-                        </option>
-                        <option value=2>
-                            Moje
-                        </option> -->
                     </select>
                 </div>
                 <div class="lg:flex items-center w-1/2 lg:w-auto">
