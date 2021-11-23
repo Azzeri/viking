@@ -33,6 +33,9 @@
 						<i class="fas fa-plus fa-lg"></i>
 					</button>
 				</div>
+				<div class="w-1/3 sm:w-auto flex justify-center">
+					<Link as=button :href="route('admin.store.requests.index')" class="bg-white bg-opacity-70 text-gray-800 font-semibold px-2 py-1 rounded-full border-2">Zamówienia</Link>
+				</div>
 			</template>
 
 			<template #content>

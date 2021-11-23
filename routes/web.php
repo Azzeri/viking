@@ -6,6 +6,7 @@ use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
 use App\Http\Controllers\StoreCategoryController;
 use App\Http\Controllers\StoreItemController;
+use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,11 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/storeitems', StoreItemController::class, ['names' => ['index' => 'store.items.index']]);
     Route::post('/storeItems/StorePhoto/{id}', [StoreItemController::class, 'storePhoto']);
     Route::post('/storeItems/DeletePhoto/{id}', [StoreItemController::class, 'deletePhoto']);
+
+    Route::resource('/storerequests', StoreRequestController::class, ['names' => ['index' => 'store.requests.index']]);
+    Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
+    Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
+
 
 });
 

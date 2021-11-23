@@ -12,15 +12,15 @@ class StoreItem extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['name', 'photo_path', 'description', 'quantity', 'price', 'store_category_id'];
-    protected $cascadeDeletes = []; //REQUESTS
+    protected $cascadeDeletes = ['requests'];
 
     public function category()
     {
         return $this->belongsTo(StoreCategory::class, 'store_category_id');
     }
     
-    // public function requests()
-    // {
-    //     return $this->hasMany(StoreRequest::class);
-    // }
+    public function requests()
+    {
+        return $this->hasMany(StoreRequest::class);
+    }
 }
