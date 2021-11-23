@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             InventoryItemSeeder::class,
             InventoryServiceSeeder::class,
             StoreCategorySeeder::class,
+            StoreItemSeeder::class,
 
         ]);
     }

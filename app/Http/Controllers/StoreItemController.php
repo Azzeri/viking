@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InventoryCategory;
-use App\Models\InventoryItem;
+use App\Models\StoreCategory;
+use App\Models\StoreItem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class InventoryItemController extends Controller
+class StoreItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +16,19 @@ class InventoryItemController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', InventoryItem::class);
+        $this->authorize('viewAny', StoreItem::class);
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name,inventory_category_id,quantity']
+            'field' => ['in:name,store_category_id,quantity,price']
         ]);
 
-        $query = InventoryItem::query();
+        $query = StoreItem::query();
 
         if (request('search')) {
-            $query->where('name', 'ILIKE', '%' . request('search') . '%');
+            $query->where('name', 'ILIKE', '%' . request('search') . '%')
+            ->orWhere('description', 'ILIKE', '%' . request('search') . '%')
+            ->orWhere('price', 'ILIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -35,23 +37,24 @@ class InventoryItemController extends Controller
             $query->orderBy('name');
 
         $items = $query->paginate()->withQueryString()
-            ->through(fn ($inventoryItem) => [
-                'id' => $inventoryItem->id,
-                'name' => $inventoryItem->name,
-                'photo_path' => $inventoryItem->photo_path,
-                'description' => $inventoryItem->description,
-                'quantity' => $inventoryItem->quantity,
-                'inventory_category_id' => $inventoryItem->inventory_category_id,
-                'category_name' => $inventoryItem->category ? $inventoryItem->category->name : null,
-                'category_id' => $inventoryItem->category ? $inventoryItem->category->id : null,
+            ->through(fn ($storeItem) => [
+                'id' => $storeItem->id,
+                'name' => $storeItem->name,
+                'photo_path' => $storeItem->photo_path,
+                'description' => $storeItem->description,
+                'quantity' => $storeItem->quantity,
+                'price' => $storeItem->price,
+                'store_category_id' => $storeItem->store_category_id,
+                'category_name' => $storeItem->category->name,
+                'category_id' => $storeItem->category->id,
             ]);
 
-        $categories = InventoryCategory::orderBy('name')->get()->map(fn ($category) => [
+        $categories = StoreCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
         ]);
 
-        return inertia('Admin/InventoryItems', [
+        return inertia('Admin/StoreItems', [
             'items' => $items,
             'categories' => $categories,
             'filters' => request()->all(['search', 'field', 'direction']),
@@ -66,13 +69,14 @@ class InventoryItemController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', InventoryItem::class);
+        $this->authorize('create', StoreItem::class);
 
-        InventoryItem::create(
+        StoreItem::create(
             $request->validate([
                 'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
-                'inventory_category_id' => ['required', 'integer'],
+                'store_category_id' => ['required', 'integer'],
                 'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+                'price' => ['required', 'numeric', 'min:0', 'max:999999'],
                 'description' => ['nullable', 'min:3', 'max:255']
             ])
         );
@@ -84,23 +88,24 @@ class InventoryItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\InventoryItem  $InventoryItem
+     * @param  \App\Models\StoreItem  $storeItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryItem $inventoryItem)
+    public function update(Request $request, StoreItem $storeItem)
     {
-        $this->authorize('update', $inventoryItem, InventoryItem::class);
+        $this->authorize('update', $storeItem, StoreItem::class);
 
-        $inventoryItem = InventoryItem::find($request->id);
+        $storeItem = StoreItem::find($request->id);
 
-        $inventoryItem->update($request->validate([
+        $storeItem->update($request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('inventory_items')->ignore(InventoryItem::find($inventoryItem->id))
+                Rule::unique('store_items')->ignore(StoreItem::find($storeItem->id))
             ],
-            'inventory_category_id' => ['required', 'integer'],
+            'store_category_id' => ['required', 'integer'],
             'description' => ['nullable', 'min:3', 'max:255'],
-            'quantity' => ['required', 'integer', 'min:0', 'max:9999']
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+            'price' => ['required', 'numeric', 'min:0', 'max:999999'],
         ]));
 
 
@@ -110,13 +115,13 @@ class InventoryItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\InventoryItem  $InventoryItem
+     * @param  \App\Models\StoreItem  $storeItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy($inventoryItem)
+    public function destroy($storeItem)
     {
-        $item = InventoryItem::find($inventoryItem);
-        $this->authorize('delete', $item, InventoryItem::class);
+        $item = StoreItem::find($storeItem);
+        $this->authorize('delete', $item, StoreItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');
         if ($photoName != 'default.png')
@@ -129,9 +134,9 @@ class InventoryItemController extends Controller
 
     public function storePhoto(Request $request, $id)
     {
-        $item = InventoryItem::find($id);
+        $item = StoreItem::find($id);
 
-        $this->authorize('update', $item, InventoryItem::class);
+        $this->authorize('update', $item, StoreItem::class);
 
         $request->validate([
             'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg'
@@ -152,9 +157,9 @@ class InventoryItemController extends Controller
 
     public function deletePhoto($id)
     {
-        $item = InventoryItem::find($id);
+        $item = StoreItem::find($id);
 
-        $this->authorize('update', $item, InventoryItem::class);
+        $this->authorize('update', $item, StoreItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');
 

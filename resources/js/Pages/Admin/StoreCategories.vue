@@ -7,8 +7,8 @@
 		<h1>Brak danych</h1>
 		
 		<div class="flex space-x-2">
-			<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-			<i class="fas fa-arrow-left fa-lg"></i>
+			<Link as=button :href="route('admin.store.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<i class="fas fa-arrow-left fa-lg"></i>
 			</Link>
 			<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
 				<i class="fas fa-plus fa-lg"></i>
@@ -21,11 +21,11 @@
 
 	<div v-else>
 
-		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.inventory.category.index" extraClass="first:h-20 sm:first:h-auto flex sm:table-cell">
+		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.store.category.index" extraClass="first:h-20 sm:first:h-auto flex sm:table-cell">
 
 			<template #buttons>
 				<div class="w-1/2 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<Link as=button :href="route('admin.store.items.index')" class="sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 						<i class="fas fa-arrow-left fa-lg"></i>
 					</Link>
 				</div>

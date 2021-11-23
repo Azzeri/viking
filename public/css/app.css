@@ -1142,9 +1142,6 @@ select {
 .left-1 {
 	left: 0.25rem;
 }
-.bottom-0 {
-	bottom: 0px;
-}
 .z-0 {
 	z-index: 0;
 }
@@ -1557,17 +1554,11 @@ select {
 .overflow-hidden {
 	overflow: hidden;
 }
-.overflow-x-auto {
-	overflow-x: auto;
-}
 .overflow-y-auto {
 	overflow-y: auto;
 }
 .overflow-y-hidden {
 	overflow-y: hidden;
-}
-.overflow-x-scroll {
-	overflow-x: scroll;
 }
 .overflow-y-scroll {
 	overflow-y: scroll;
@@ -1576,9 +1567,6 @@ select {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-.overflow-clip {
-	text-overflow: clip;
 }
 .break-all {
 	word-break: break-all;
@@ -1630,10 +1618,6 @@ select {
 	border-top-right-radius: 0.5rem;
 	border-bottom-right-radius: 0.5rem;
 }
-.rounded-t-lg {
-	border-top-left-radius: 0.5rem;
-	border-top-right-radius: 0.5rem;
-}
 .border {
 	border-width: 1px;
 }
@@ -1654,9 +1638,6 @@ select {
 }
 .border-r {
 	border-right-width: 1px;
-}
-.border-l-2 {
-	border-left-width: 2px;
 }
 .border-none {
 	border-style: none;
@@ -1684,13 +1665,13 @@ select {
 	--tw-border-opacity: 1;
 	border-color: rgba(156, 163, 175, var(--tw-border-opacity));
 }
-.border-gray-500 {
-	--tw-border-opacity: 1;
-	border-color: rgba(107, 114, 128, var(--tw-border-opacity));
-}
 .border-white {
 	--tw-border-opacity: 1;
 	border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+}
+.border-gray-500 {
+	--tw-border-opacity: 1;
+	border-color: rgba(107, 114, 128, var(--tw-border-opacity));
 }
 .border-opacity-5 {
 	--tw-border-opacity: 0.05;
@@ -1747,6 +1728,10 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
 }
+.bg-green-600 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
+}
 .bg-green-500 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(16, 185, 129, var(--tw-bg-opacity));
@@ -1754,14 +1739,6 @@ select {
 .bg-red-500 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
-}
-.bg-green-700 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(4, 120, 87, var(--tw-bg-opacity));
-}
-.bg-green-600 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
