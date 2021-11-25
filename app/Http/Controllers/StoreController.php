@@ -26,6 +26,10 @@ class StoreController extends Controller
         } else
             $query->orderBy('name');
 
+        if (request('filter')) 
+            $query->where('store_category_id', request('filter'));
+
+
         $items = $query->paginate(12)->withQueryString()
             ->through(fn ($storeItem) => [
                 'id' => $storeItem->id,
@@ -43,8 +47,11 @@ class StoreController extends Controller
             'id' => $category->id,
             'name' => $category->name,
             'subcategories' => $category->subcategories ? array_column($category->subcategories->toArray(), 'name') : null,
-            'subcategoriesIds' => $category->subcategories ? array_column($category->subcategories->toArray(), 'id') : null
+            // 'subcategoriesIds' => $category->subcategories ? array_column($category->subcategories->toArray(), 'id') : null,
+            'parent_category_id' => $category->parentCategory ? $category->parentCategory->id : null
         ]);
+
+        // dd($categories);
 
         return inertia('Store', [
             'items' => $items,

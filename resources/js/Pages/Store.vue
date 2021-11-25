@@ -1,11 +1,24 @@
 <template>
 
     <div v-if=showCategoriesOverlay>
-        <div class="w-screen fixed h-full p-4 bg-black bg-opacity-50"></div>
+        <div @click="showCategoriesOverlay = false" class="w-screen fixed h-full p-4 bg-black bg-opacity-50"></div>
         <div class="w-screen fixed h-screen p-4 bg-white mt-36 ">
             <div class="flex justify-between items-center">
                 <h1 class="text-lg font-bold">Kategorie</h1>
                 <i @click="showCategoriesOverlay = false" class="far fa-times-circle fa-lg"></i>
+            </div>
+            <div>
+                <template v-for="row in categories" :key=row>
+                    <div v-if="!row.parent_category_id">
+                        <div @click="filterServices(row.id)">{{ row.name }}</div>
+                        <div v-if="row.subcategories.length" class="text-red-600">
+                            {{row.subcategories}}
+                            <!-- <div v-for="subrow in row.subcategories" :key=subrow>
+                                <div @click="filterServices(subrow.id)">{{ subrow.name }}</div>
+                            </div> -->
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
     </div>
@@ -57,6 +70,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="sm:flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center">
                 <pagination :links=items.links></pagination>
                 <span>Wyniki od {{items.from}} do {{items.to}}. Łącznie {{items.total}} wyników.</span>
@@ -101,6 +115,7 @@ export default defineComponent({
         
         const filterServices = (option) => {
             params.filter = option
+            showCategoriesOverlay.value = false
         }
 
         return { params, sort, filter, filterServices, sortField, showCategoriesOverlay }
