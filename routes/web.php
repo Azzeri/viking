@@ -35,6 +35,8 @@ Route::get('/', function () {
 /* GENERAL ROUTES */
 Route::get('/about', fn () => inertia('About'))->name('about');
 Route::get('/store', [StoreController::class, 'index'])->name('store');
+Route::get('/storeItem/{id}', [StoreController::class, 'itemDetails'])->name('item.details');
+Route::post('/storeRequestCreate', [StoreRequestController::class, 'store']);
 
 
 //TODELETE

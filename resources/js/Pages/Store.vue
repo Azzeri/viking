@@ -51,9 +51,9 @@
             </div>        
 
             <div class="flex flex-wrap -mx-1 lg:-mx-4 sm:mt-5 mt-3">
-                <div v-for="row in items.data" :key="row" class=" my-1 px-1 w-full sm:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+                <div v-for="row in items.data" :key="row" class="my-1 px-1 w-full sm:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 
-                    <div class="overflow-hidden rounded-lg bg-white">
+                    <div @click="itemDetails(row.id)" class="overflow-hidden rounded-lg bg-white">
                         <img :alt=row.name class="block h-64 w-full object-fill" :src=row.photo_path>
 
                         <header class="leading-tight p-2 md:p-4">
@@ -88,6 +88,7 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import Pagination from "@/Components/Pagination.vue";
 import { pickBy, throttle } from 'lodash';
 import { Link } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
     props: {
@@ -118,7 +119,9 @@ export default defineComponent({
             showCategoriesOverlay.value = false
         }
 
-        return { params, sort, filter, filterServices, sortField, showCategoriesOverlay }
+        const itemDetails = (id) => Inertia.get('/storeItem/'+id)
+
+        return { params, sort, filter, filterServices, sortField, showCategoriesOverlay, itemDetails }
     },
 
     watch: {

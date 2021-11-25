@@ -70,7 +70,17 @@ class StoreRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        StoreRequest::create(
+            $request->validate([
+                'store_item_id' => ['required', 'integer', 'min:1',],
+                'description' => ['nullable', 'min:1', 'max:255'],
+                'client_name' => ['required', 'string'],
+                'client_phone' => ['nullable', 'string'],
+                'client_email' => ['required', 'email:filter']
+            ])
+        );
+
+        return redirect()->back()->with('message', 'Wysłano dane!');
     }
 
     /**

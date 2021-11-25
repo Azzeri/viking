@@ -59,4 +59,16 @@ class StoreController extends Controller
             'filters' => request()->all(['search', 'field', 'direction', 'filter']),
         ]);
     }
+
+    public function itemDetails($id)
+    {
+        $item = StoreItem::with('category')->where('id', $id)->first();
+
+        if($item == null)
+            return abort(404);
+
+        return inertia('ItemDetails', [
+            'item' => $item
+        ]);
+    }
 }
