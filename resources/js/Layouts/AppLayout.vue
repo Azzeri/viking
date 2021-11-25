@@ -1,6 +1,6 @@
 <template>
     <Head :title="title" />
-    <div class="background min-h-screen bg-cover bg-center flex items-center justify-center py-4">
+    <div class="background min-h-screen bg-cover bg-fixed bg-center flex items-center justify-center py-4">
         <div class="glass-card-background">
             <nav>
                 <!-- Primary Navigation Menu -->
@@ -27,7 +27,7 @@
                             <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                 Materiały
                             </jet-nav-link>
-                            <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                            <jet-nav-link :href="route('store')" :active="route().current('store')">
                                 Sklep
                             </jet-nav-link>
                             <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
@@ -116,7 +116,7 @@
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Materiały
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                        <jet-responsive-nav-link :href="route('store')" :active="route().current('store')">
                             Sklep
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">

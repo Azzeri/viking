@@ -5,9 +5,12 @@ use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
 use App\Http\Controllers\StoreCategoryController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
+use App\Models\StoreCategory;
+use App\Models\StoreItem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,9 +32,10 @@ Route::get('/', function () {
     return redirect(route('about'));
 });
 
-Route::get('/about', function () {
-    return inertia('About');
-})->name('about');
+/* GENERAL ROUTES */
+Route::get('/about', fn () => inertia('About'))->name('about');
+Route::get('/store', [StoreController::class, 'index'])->name('store');
+
 
 //TODELETE
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -68,8 +72,6 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/storerequests', StoreRequestController::class, ['names' => ['index' => 'store.requests.index']]);
     Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
-
-
 });
 
 

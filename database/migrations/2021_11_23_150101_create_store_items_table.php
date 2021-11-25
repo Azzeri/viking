@@ -16,7 +16,7 @@ class CreateStoreItemsTable extends Migration
         Schema::create('store_items', function (Blueprint $table) {
             $table->id();
             $table->string('name', 64);
-            $table->string('photo_path')->default('/images/default.png');
+            $table->string('photo_path')->default('https://picsum.photos/600/400/?random');
             $table->text('description')->nullable();
             $table->integer('quantity')->default(0);
             $table->float('price')->default(0);
