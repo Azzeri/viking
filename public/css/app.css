@@ -2305,6 +2305,13 @@ html {
 	place-items: start;
 	gap: .5rem;
 }
+.footer-center {
+	place-items: center;
+	text-align: center;
+}
+.footer-center>* {
+	place-items: center;
+}
 @media (min-width:48rem) {
 
 	.footer {
@@ -3858,6 +3865,11 @@ html {
 	--tw-space-y-reverse: 0;
 	margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+}
+.space-x-1 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+	margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .divide-y > :not([hidden]) ~ :not([hidden]) {
 	--tw-divide-y-reverse: 0;
