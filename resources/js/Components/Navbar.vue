@@ -57,7 +57,7 @@
                         <i class="fas fa-sign-out-alt fa-lg"></i>
                     </button>
                 </div>
-                <div data-tip="Profil" class="tooltip tooltip-bottom tooltip-primary">
+                <div data-tip="Profil" class="tooltip tooltip-bottom tooltip-primary flex items-center">
                     <Link :href="route('profile.show') " class="avatar mx-3">
                         <div class="rounded-full w-10 h-10 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
                             <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
