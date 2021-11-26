@@ -16,7 +16,7 @@
 	</div>
 
 	<div v-else>
-		<DataTable :columns=columns :data=users :filters=filters sortRoute="admin.users.index" extraClass="first:h-16 sm:first:h-auto flex sm:table-cell">
+		<DataTable :columns=columns :data=users :filters=filters sortRoute="admin.users.index" extraClass="first:h-14 sm:first:h-auto flex sm:table-cell">
 
 			<template #buttons>
 				<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
@@ -38,11 +38,16 @@
 					</td>
 					<td class="px-3 py-1">{{ row.email }}</td>
 					<td class="px-3 py-1">{{ row.date_birth }}</td>
-					<td class="px-3 py-1">{{ row.role }}</td>
+					<td v-if="row.role" class="px-3 py-1">{{ row.role }}</td>
+					<td v-else class="px-3 py-1">Nie podano</td>
 					<td class="px-3 py-1 space-x-3">
 						<template v-if="row.privilege_id != $page.props.privileges.IS_ADMIN">
 							<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
 							<i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
+						</template>
+						<template v-else>
+							<i class="fas fa-edit cursor-not-allowed text-gray-500"></i>
+							<i class="fas fa-trash cursor-not-allowed text-gray-500"></i>
 						</template>
 					</td>
 				</tr>
