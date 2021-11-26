@@ -39,7 +39,7 @@
                         </div>
 
                         <!-- Right Panel -->
-                        <div class="hidden lg:flex lg:items-center lg:ml-6 lg:space-x-3">
+                        <div v-if="$page.props.user != null && ($page.props.user.privilege_id == $page.props.privileges.IS_ADMIN || $page.props.user.privilege_id == $page.props.privileges.IS_COORDINATOR)" class="hidden lg:flex lg:items-center lg:ml-6 lg:space-x-3">
                             <!-- Settings Dropdown -->
                             <div class="relative">
                                 <jet-dropdown align="right" width="48">
@@ -128,7 +128,7 @@
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
+                    <div v-if="$page.props.user != null && ($page.props.user.privilege_id == $page.props.privileges.IS_ADMIN || $page.props.user.privilege_id == $page.props.privileges.IS_COORDINATOR)" class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos && $page.props.user != null" class="flex-shrink-0 mr-3" >
                                 <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />

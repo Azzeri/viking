@@ -54,7 +54,7 @@ class UserController extends Controller
                 'email' => $user->email,
                 'date_birth' => $user->date_birth,
                 'role' => $user->role,
-                'privilege_id' => $user->privilege->name,
+                'privilege_id' => $user->privilege_id,
                 'description' => $user->description
             ]);
 
@@ -149,8 +149,13 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $this->authorize('delete', $user, User::class);
+
+        $user->delete();
+
+        return redirect()->back()->with('message', 'Pomyślnie usunięto użytkownika');
     }
 }

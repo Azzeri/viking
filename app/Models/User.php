@@ -31,7 +31,6 @@ class User extends Authenticatable
         'description',
         'date_birth',
         'role',
-        'is_reported',
         'privilege_id',
         'password',
     ];

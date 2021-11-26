@@ -13,6 +13,4 @@ class Privilege extends Model
 
     public const IS_ADMIN = 1;
     public const IS_COORDINATOR = 2;
-    public const IS_GROUP_MEMBER = 3;
-    public const IS_USER = 4;
 }

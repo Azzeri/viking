@@ -18,7 +18,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN]);
     }
 
     /**
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN]);
     }
 
     /**
@@ -41,9 +41,10 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return $user->privilege_id == Privilege::IS_ADMIN ||
-               $user->id == $model->id ||
-              ($user->privilege_id == Privilege::IS_COORDINATOR && !in_array($model->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]));
+        // return $user->privilege_id == Privilege::IS_ADMIN ||
+        //     $user->id == $model->id ||
+        //     ($user->privilege_id == Privilege::IS_COORDINATOR && !in_array($model->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]));
+        return $user->privilege_id == Privilege::IS_ADMIN;
     }
 
     /**
@@ -55,6 +56,6 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        //
+        return $user->privilege_id == Privilege::IS_ADMIN;
     }
 }

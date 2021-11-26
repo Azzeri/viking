@@ -22,13 +22,12 @@ class CreateUsersTable extends Migration
             $table->text('description')->nullable();
             $table->date('date_birth');
             $table->string('role', 64)->nullable();
-            $table->boolean('is_reported')->default(false);
             $table->foreignId('privilege_id')->constrained();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('profile_photo_path', 2048)->default('/images/default.png');
             $table->softDeletes();
             $table->timestamps();
         });

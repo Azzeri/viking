@@ -16,7 +16,5 @@ class PrivilegeSeeder extends Seeder
     {
         Privilege::create(['name' => 'Administrator']);
         Privilege::create(['name' => 'Koordynator']);
-        Privilege::create(['name' => 'Członek grupy']);
-        Privilege::create(['name' => 'Użytkownik']);
     }
 }
