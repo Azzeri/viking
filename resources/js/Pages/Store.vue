@@ -86,8 +86,8 @@
                 </div>
             </div>
             
-            <div class="sm:flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center">
-                <pagination :links=items.links></pagination>
+            <div class="flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center">
+                <pagination :links=items.links class="mt-4 sm:mt-0"></pagination>
                 <span>Pozycje od {{items.from}} do {{items.to}} z {{items.total}} pozycji.</span>
             </div>
         </div>

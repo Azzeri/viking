@@ -32385,7 +32385,7 @@ var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_36 = {
-  "class": "sm:flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center"
+  "class": "flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
@@ -32494,7 +32494,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }), 128
       /* KEYED_FRAGMENT */
       ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
-        links: _ctx.items.links
+        links: _ctx.items.links,
+        "class": "mt-4 sm:mt-0"
       }, null, 8
       /* PROPS */
       , ["links"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Pozycje od " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.items.from) + " do " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.items.to) + " z " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.items.total) + " pozycji.", 1
