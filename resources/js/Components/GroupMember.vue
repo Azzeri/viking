@@ -1,18 +1,18 @@
 <template>
-  <div class="text-center">
-    <img class="h-20 w-20 rounded-full" :alt="name" :src="photo" />
-    <div class="font-semibold mt-2">{{ name + " " + surname }}</div>
-    <div>{{ role }}</div>
-  </div>
+    <div class="text-center">
+      <div class="flex justify-center items-center"><img class="h-20 w-20 rounded-full" :alt="user.name" 
+      src="http://daisyui.com/tailwind-css-component-profile-1@56w.png" /></div>
+      
+      <div class="font-semibold mt-2">{{ user.name + " \"" + user.nickname + "\" " + user.surname }}</div>
+      <div>{{ user.role }}</div>
+    </div>
+  
 </template>
 
 <script>
 export default {
   props: {
-    name: String,
-    surname: String,
-    role: String,
-    photo: String,
+    user: Object
   },
 };
 </script>

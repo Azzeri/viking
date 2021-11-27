@@ -25,7 +25,7 @@
         <!-- Right side -->
         <div class="navbar-end">
             <!-- Authenticated user options -->
-            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom tooltip-primary">
+            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
                 <button class="btn btn-square btn-ghost">
                     <i class="fas fa-moon fa-lg"></i>
                 </button>
@@ -108,7 +108,7 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
     setup() {
-        const showingNavigationDropdown = ref(true)
+        const showingNavigationDropdown = ref(false)
         const logout = _ => Inertia.post(route('logout'));
         
         return { showingNavigationDropdown, logout }

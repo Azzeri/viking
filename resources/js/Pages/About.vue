@@ -1,6 +1,49 @@
 <template>
     <app-layout title="O nas">
-        <div class="main mx-auto max-w-6xl text-center">
+
+        <div class="hero bg-base-200 lg:py-32 bg-opacity-0">
+            <div class="flex-col space-y-10 hero-content w-full">
+
+                <!-- Group description -->
+                <div class="hero-content flex-col lg:flex-row-reverse">
+                    <img class="w-11/12 sm:w-auto max-w-sm rounded-lg shadow-2xl" src="https://cdn.pixabay.com/photo/2020/08/17/08/45/axe-5494732_960_720.jpg"> 
+                    <div>
+                        <h1 class="text-5xl font-bold">
+                            {{ $page.props.groupInfo.name }}
+                        </h1> 
+                        <h2 class="mt-2 text-2xl font-bold text-gray-500">
+                            {{ $page.props.groupInfo.motto }}
+                        </h2> 
+                        <p class="mt-5">
+                            {{ $page.props.groupInfo.description }}                
+                        </p> 
+                    </div>
+                </div>
+
+
+                <!-- Group Members -->
+                <div class="hero-content w-full justify-start">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-500">
+                            Nasi członkowie
+                        </h1> 
+                        
+                        <div class="my-3 grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+                            <template v-for="row in users" :key="row">
+                                <GroupMember class="w-full" :user=row></GroupMember>
+                            </template>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        
+
+        <!-- <div class="main mx-auto max-w-6xl text-center">
                 <div class="pt-10 lg:pt-20">
                     <h1 class="text-3xl font-bold"> {{groupName}} </h1>
                     <h2 class="text-xl font-semibold">  {{groupSlogan}} </h2>
@@ -20,34 +63,7 @@
                     <ActionCard>Naucz się czegoś</ActionCard>
                     <ActionCard>Zapoznaj się z wydarzeniami</ActionCard>
                 </div>
-            
-        <!-- <div class="mx-auto px-4 mt-6 max-w-7xl md:px-20 lg:flex lg:mt-16 lg:justify-around border-2 h-32">
-            <section class="lg:w-1/2 ">
-                <div>
-                    <h1 class="text-3xl font-bold"> {{groupName}} </h1>
-                    <h2 class="text-xl font-semibold">  {{groupSlogan}} </h2>
-                    <p class="mt-4"> {{groupDescription}} </p>
-                </div>
-                <div>
-                    <h1 class="text-xl font-semibold mt-6">Nasi członkowie</h1>
-                    <div class="flex flex-wrap gap-3 mt-4">
-                        <template v-for="row in groupMembers" :key="row">
-                            <GroupMember :name=row.name :surname=row.surname :role=row.role :photo=row.photo></GroupMember>
-                        </template>
-                    </div>
-                </div>
-            </section>
-            <section class="lg:w-1/2">
-                <img class="rounded-lg hidden lg:block mt-20 w-96" src="http://graphics8.nytimes.com/images/2013/02/24/arts/24VIKINGS1_SPAN/24VIKINGS1-superJumbo.jpg"/>
-                <div class="flex lg:flex-wrap gap-3 py-4 lg:px-8 overflow-auto lg:overflow-hidden">
-                    <ActionCard>Dołącz do nas</ActionCard>
-                    <ActionCard>Zobacz sklep</ActionCard>
-                    <ActionCard>Naucz się czegoś</ActionCard>
-                    <ActionCard>Zapoznaj się z wydarzeniami</ActionCard>
-                </div>
-            </section>
         </div> -->
-        </div>
     </app-layout>
 </template>
 
@@ -58,6 +74,10 @@ import GroupMember from '@/Components/GroupMember.vue'
 import ActionCard from '@/Components/ActionCard.vue'  
 
 export default defineComponent({
+    props: {
+        users: Object
+    },
+
     setup() {
         const groupName = 'Kuźnia Barbarian'
         const groupSlogan = 'Wykuj z nami swoje marzenia'
@@ -83,7 +103,13 @@ export default defineComponent({
 </script>
 
 <style>
-.main {
-    min-height: 75vh
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 </style>

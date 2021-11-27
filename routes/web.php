@@ -11,6 +11,7 @@ use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
 use App\Models\StoreCategory;
 use App\Models\StoreItem;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,7 +34,18 @@ Route::get('/', function () {
 });
 
 /* GENERAL ROUTES */
-Route::get('/about', fn () => inertia('About'))->name('about');
+Route::get('/about', function () {
+    return inertia('About', [
+        'users' => User::where('role', '!=', 'null')->orderBy('name')->limit(6)->get()->map(fn ($user) => [
+            'name' => $user->name,
+            'surname' => $user->surname,
+            'nickname' => $user->nickname,
+            'role' => $user->role,
+            'photo_path' => $user->profile_photo_path
+        ])
+    ]);
+})->name('about');
+
 Route::get('/store', [StoreController::class, 'index'])->name('store');
 Route::get('/storeItem/{id}', [StoreController::class, 'itemDetails'])->name('item.details');
 Route::post('/storeRequestCreate', [StoreRequestController::class, 'store']);
