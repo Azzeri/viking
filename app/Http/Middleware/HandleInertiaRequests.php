@@ -39,13 +39,47 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'privileges' => [
                 'IS_ADMIN' => 1,
-                'IS_COORDINATOR' => 2,
-                'IS_GROUP_MEMBER' => 3,
-                'IS_USER' => 4
+                'IS_COORDINATOR' => 2
             ],
 
             'flash' => [
                 'message' => fn () => $request->session()->get('message')
+            ],
+
+            'navigation' => [
+                ['label' => 'Aktualności', 'link' => 'dashboard', 'icon' => 'fas fa-newspaper'],
+                ['label' => 'Galeria', 'link' => 'dashboard', 'icon' => 'far fa-images'],
+                ['label' => 'Sklep', 'link' => 'store', 'icon' => 'fas fa-shopping-basket'],
+                ['label' => 'Wydarzenia', 'link' => 'dashboard', 'icon' => 'far fa-calendar-alt'],
+                ['label' => 'O nas', 'link' => 'about', 'icon' => 'far fa-address-card']
+            ],
+
+            'groupInfo' => [
+                'name' => 'Barbarian',
+                'motto' => '',
+                'description' => '',
+
+                'full_name' => 'Kuźnia Barbarian',
+                'street' => 'Sezamkowa',
+                'building' => '56',
+                'appartment' => '3',
+                'postal' => '48-330',
+                'city' => 'Nysa',
+
+                'phone' => '661 661 661',
+                'email' => 'jkowalski@gmail.com'
+            ],
+
+            'footerOthers' => [
+                ['label' => 'Wilki', 'link' => 'dashboard'],
+                ['label' => 'Bobry', 'link' => 'dashboard'],
+                ['label' => 'Zające', 'link' => 'dashboard'],
+            ],
+
+            'footerSocials' => [
+                ['icon' => 'fab fa-instagram-square fa-2x', 'link' => 'dashboard'],
+                ['icon' => 'fab fa-facebook-f fa-2x', 'link' => 'dashboard'],
+                ['icon' => 'fab fa-twitter fa-2x', 'link' => 'dashboard'],
             ],
         ]);
     }

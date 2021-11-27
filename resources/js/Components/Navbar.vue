@@ -8,32 +8,16 @@
                 <jet-application-mark class="block h-9 w-auto" />
             </Link>
             <span class="text-lg font-bold">
-                Barbarian
+                {{ $page.props.groupInfo.name }}
             </span>
         </div> 
 
         <!-- Center links -->
         <div class="hidden px-2 mx-2 navbar-center lg:flex">
             <div class="flex items-stretch">
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    <i class="fas fa-newspaper"></i>
-                    <div class="ml-2">Aktualności</div>
-                </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    <i class="far fa-images"></i>
-                    <div class="ml-2">Galeria</div>
-                </NavLink>
-                <NavLink :href="route('store')" :active="route().current('store')">
-                    <i class="fas fa-shopping-basket"></i>
-                    <div class="ml-2">Sklep</div>
-                </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    <i class="far fa-calendar-alt"></i>
-                    <div class="ml-2">Wydarzenia</div>
-                </NavLink>
-                <NavLink :href="route('about')" :active="route().current('about')">
-                    <i class="far fa-address-card"></i>
-                    <div class="ml-2">O nas</div>
+                <NavLink v-for="row in $page.props.navigation" :key=row :href="route(row.link)" :active="route().current(row.link)">
+                    <i :class=row.icon></i>
+                    <div class="ml-2">{{ row.label }}</div>
                 </NavLink>
             </div>
         </div> 
@@ -82,25 +66,9 @@
     <!-- Responsive navigation menu -->
     <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
         <ul class="menu py-4 bg-base-100">
-            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                <i class="fas fa-newspaper"></i>
-                <div class="ml-2">Aktualności</div>
-            </ResponsiveNavLink>
-            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                <i class="far fa-images"></i>
-                <div class="ml-2">Galeria</div>
-            </ResponsiveNavLink>
-            <ResponsiveNavLink :href="route('store')" :active="route().current('store')">
-                <i class="fas fa-shopping-basket"></i>
-                <div class="ml-2">Sklep</div>
-            </ResponsiveNavLink>
-            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                <i class="far fa-calendar-alt"></i>
-                <div class="ml-2">Wydarzenia</div>
-            </ResponsiveNavLink>
-            <ResponsiveNavLink :href="route('about')" :active="route().current('about')">
-                <i class="far fa-address-card"></i>
-                <div class="ml-2">O nas</div>
+            <ResponsiveNavLink v-for="row in $page.props.navigation" :key="row" :href="route(row.link)" :active="route().current(row.link)">
+                <i :class=row.icon></i>
+                <div class="ml-2">{{ row.label }}</div>
             </ResponsiveNavLink>
         </ul>
 
@@ -128,7 +96,6 @@
             </ResponsiveNavLink>
         </ul>
     </div>
-
 </template>
 
 <script>
@@ -141,9 +108,9 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
     setup() {
-        const showingNavigationDropdown = ref(false)
+        const showingNavigationDropdown = ref(true)
         const logout = _ => Inertia.post(route('logout'));
-
+        
         return { showingNavigationDropdown, logout }
     },
 
