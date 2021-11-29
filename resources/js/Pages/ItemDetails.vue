@@ -1,63 +1,83 @@
 <template>
     <app-layout>
         <FlashMessage></FlashMessage>
-        <div class="main mx-auto max-w-6xl py-10 px-2 lg:pt-16">
+        <div class="hero min-h-screen bg-base-200 place-content-start justify-center">
+            <div class="flex-col hero-content w-full">    
 
-            <div class="w-full rounded-lg bg-white">
-                <img :alt=item.name class="rounded-t-lg w-full object-fill" :src=item.photo_path>
-                <header class="p-2 md:p-4">
-                    <div class="flex justify-between" items-center>
-                        <div>
-                            <h1 class="text-lg capitalize">
-                                {{ item.name }}
-                            </h1>
-                            <p class="text-gray-700 text-sm">
-                                {{ item.category.name }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-lg">{{ item.price }} zł</p>
-                            <p>{{ item.quantity }} szt.</p>
-                        </div>
+                <div class="hero-content flex-col w-full">
+                    <div class="lg:mt-10 ml-2 flex self-start space-x-2 items-center">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                        <Link :href="route('store')" class="link-hover">Powrót</Link>
                     </div>
-                    <p class="mt-4">{{ item.description }}</p>
-                </header>
-            </div>
+                    <div class="card lg:card-side">
+                        <figure>
+                            <img :src=item.photo_path class="rounded-3xl" :alt=item.name>
+                        </figure> 
+                        <div class="card-body justify-between py-3 px-2 lg:px-6">
+                            <div>
+                                <h1 class="card-title capitalize">
+                                <div>{{ item.name }}</div>
+                                <div class="text-gray-500 text-sm">{{ item.category.name }}</div>
+                                </h1> 
+                                <p>{{ item.description }}</p>
+                            </div>
+                            <div>
+                                <h2 class="mt-8 card-title">{{ item.price }} zł</h2>
+                                <h3 class="">{{ item.quantity }} szt.</h3>
+                            </div>
+                        </div>
+                    </div> 
+                </div>  
 
-            <div class="w-full rounded-lg bg-white p-3 mt-4">
-			    <jet-validation-errors class="my-6" />
-                <h1 class='font-semibold'>Zainteresowany? Zostaw nam swoje dane, a skontaktujemy się z Tobą!</h1>
-                <form @submit.prevent="store">
-                    <div class="mt-6">
-					    <label for=name>Imię</label>
-					    <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.client_name"  autofocus placeholder="Imię" autocomplete="name" />
-				    </div>
-                    <div class="mt-6">
-					    <label for=name>Nr telefonu</label>
-					    <jet-input id="phone" type="tel" class="mt-1 block w-full" v-model="form.client_phone" placeholder="Nr telefonu" autocomplete="phone" />
-				    </div>
-                    <div class="mt-6">
-					    <label for=name>Email</label>
-					    <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.client_email"  placeholder="Email" autocomplete="email" />
-				    </div>
-                    <div class="mt-6">
-					    <label for=name>Opis</label>
-					    <jet-input id="desc" type="text" class="mt-1 block w-full" v-model="form.description" placeholder="Napisz kilka słów" autocomplete="desc" />
-				    </div>
-                    <div class="mt-6">
-					    <jet-input id="desc" type="submit" class="mt-1 block w-full" v-model="form.description"/>
-				    </div>
-                </form>
+                <div class="hero-content flex-col w-full">
+                    <div class="ml-1 self-start">
+                        <h1 class="card-title">
+                            Zainteresowany? Zostaw nam swoje dane, a skontaktujemy się z Tobą!
+                        </h1>
+                    </div>
+                    <div class="rounded-lg self-start w-full">
+                        <jet-validation-errors class="my-6" />
+                        <form class="form-control space-y-2" @submit.prevent="store">
+                            <div class="lg:flex lg:space-x-3 lg:w-1/2">
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">Imię</span>
+                                    </label> 
+                                    <input v-model="form.client_name" type="text" placeholder="Imię" autocomplete="name" class="input input-info input-bordered w-full" autofocus required/> 
+                                </div>
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">Nr telefonu</span>
+                                    </label> 
+                                    <input v-model="form.client_phone" type="tel" placeholder="Nr telefonu" autocomplete="phone" class="input input-info input-bordered w-full"/> 
+                                </div>
+                                <div>
+                                    <label class="label">
+                                        <span class="label-text">Email</span>
+                                    </label> 
+                                    <input v-model="form.client_email" type="email" placeholder="Email" autocomplete="email" class="input input-info input-bordered w-full" required/> 
+                                </div>
+                            </div>
+                            <div class="lg:w-1/2">
+                                <label class="label">
+                                    <span class="label-text">Opis</span>
+                                </label> 
+                                <textarea class="textarea h-24  textarea-bordered textarea-info w-full" placeholder="Możesz podać krótki opis zamówienia" v-model="form.description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-info w-full lg:w-1/2">Wyślij</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
-       </div>
+        </div> 
     </app-layout>
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
-import JetInput from '@/Jetstream/Input.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 
@@ -75,16 +95,16 @@ export default defineComponent({
 			client_email: null
 		})
 
-        const store = _ => form.post('/storeRequestCreate')
+        const store = _ => form.post('/storeRequestCreate', { onSuccess: () => form.reset() }) 
 
         return { form, store }
   },
 
   components: {
     AppLayout,
-    JetInput,
     JetValidationErrors,
-    FlashMessage
+    FlashMessage,
+    Link
   },
 });
 </script>

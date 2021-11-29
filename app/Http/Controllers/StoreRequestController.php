@@ -74,7 +74,7 @@ class StoreRequestController extends Controller
             $request->validate([
                 'store_item_id' => ['required', 'integer', 'min:1',],
                 'description' => ['nullable', 'min:1', 'max:255'],
-                'client_name' => ['required', 'string'],
+                'client_name' => ['required', 'string', 'min:3', 'max:64'],
                 'client_phone' => ['nullable', 'string'],
                 'client_email' => ['required', 'email:filter']
             ])

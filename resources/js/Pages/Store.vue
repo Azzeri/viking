@@ -102,7 +102,6 @@ import { defineComponent, ref, reactive } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'  
 import Pagination from "@/Components/Pagination.vue";
 import { pickBy, throttle } from 'lodash';
-import { Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({

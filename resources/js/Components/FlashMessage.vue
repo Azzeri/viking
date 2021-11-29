@@ -1,6 +1,9 @@
 <template>
-    <div v-if="$page.props.flash.message" class="bg-green-600 fixed left-100 text-white font-bold p-3 border-l-4 border-white rounded-lg flex">
-        <div>{{ $page.props.flash.message }}</div>
+    <div v-if="$page.props.flash.message" class="m-2 alert alert-success">
+        <div class="flex-1 space-x-2 items-center">
+            <i class="fas fa-check"></i>
+            <label>{{ $page.props.flash.message }}</label>
+        </div>
     </div>
 </template>
 
