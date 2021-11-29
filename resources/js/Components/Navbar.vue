@@ -108,7 +108,7 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
     setup() {
-        const showingNavigationDropdown = ref(true)
+        const showingNavigationDropdown = ref(false)
         const logout = _ => Inertia.post(route('logout'));
         
         return { showingNavigationDropdown, logout }

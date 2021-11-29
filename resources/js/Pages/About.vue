@@ -40,30 +40,6 @@
                 
             </div>
         </div>
-
-        
-
-        <!-- <div class="main mx-auto max-w-6xl text-center">
-                <div class="pt-10 lg:pt-20">
-                    <h1 class="text-3xl font-bold"> {{groupName}} </h1>
-                    <h2 class="text-xl font-semibold">  {{groupSlogan}} </h2>
-                    <p class="mt-4 text-justify px-4 lg:px-40 lg:text-center"> {{groupDescription}} </p>
-                </div>
-                <div class="pt-20">
-                    <h1 class="text-xl font-semibold">Nasi członkowie</h1>
-                    <div class="flex flex-wrap gap-3 mt-4 justify-center">
-                        <template v-for="row in groupMembers" :key="row">
-                            <GroupMember :name=row.name :surname=row.surname :role=row.role :photo=row.photo></GroupMember>
-                        </template>
-                    </div>
-                </div>
-                <div class="pt-20 pb-2 flex gap-3 justify-center overflow-auto">
-                    <ActionCard>Dołącz do nas</ActionCard>
-                    <ActionCard>Zobacz sklep</ActionCard>
-                    <ActionCard>Naucz się czegoś</ActionCard>
-                    <ActionCard>Zapoznaj się z wydarzeniami</ActionCard>
-                </div>
-        </div> -->
     </app-layout>
 </template>
 

@@ -3558,11 +3558,11 @@ html {
 .col-span-6 {
 	grid-column: span 6 / span 6;
 }
-.m-4 {
-	margin: 1rem;
-}
 .m-2 {
 	margin: 0.5rem;
+}
+.m-4 {
+	margin: 1rem;
 }
 .mx-auto {
 	margin-left: auto;
@@ -3676,6 +3676,9 @@ html {
 .-mt-px {
 	margin-top: -1px;
 }
+.mt-16 {
+	margin-top: 4rem;
+}
 .mr-1 {
 	margin-right: 0.25rem;
 }
@@ -3684,12 +3687,6 @@ html {
 }
 .mt-36 {
 	margin-top: 9rem;
-}
-.mt-14 {
-	margin-top: 3.5rem;
-}
-.mt-16 {
-	margin-top: 4rem;
 }
 .block {
 	display: block;
@@ -4167,10 +4164,6 @@ html {
 	--tw-border-opacity: 1;
 	border-color: rgba(156, 163, 175, var(--tw-border-opacity));
 }
-.border-white {
-	--tw-border-opacity: 1;
-	border-color: rgba(255, 255, 255, var(--tw-border-opacity));
-}
 .border-gray-500 {
 	--tw-border-opacity: 1;
 	border-color: rgba(107, 114, 128, var(--tw-border-opacity));
@@ -4229,10 +4222,6 @@ html {
 .bg-gray-600 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
-}
-.bg-green-600 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 .bg-neutral {
 	--tw-bg-opacity: 1;
@@ -4298,9 +4287,6 @@ html {
 }
 .bg-no-repeat {
 	background-repeat: no-repeat;
-}
-.stroke-current {
-	stroke: currentColor;
 }
 .object-cover {
 	-o-object-fit: cover;
@@ -5489,26 +5475,6 @@ html {
 		display: none;
 	}
 
-	.lg\:h-full {
-		height: 100%;
-	}
-
-	.lg\:h-48 {
-		height: 12rem;
-	}
-
-	.lg\:h-5 {
-		height: 1.25rem;
-	}
-
-	.lg\:h-52 {
-		height: 13rem;
-	}
-
-	.lg\:h-56 {
-		height: 14rem;
-	}
-
 	.lg\:w-1\/2 {
 		width: 50%;
 	}
@@ -5547,18 +5513,6 @@ html {
 		--tw-space-x-reverse: 0;
 		margin-right: calc(0.75rem * var(--tw-space-x-reverse));
 		margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
-	}
-
-	.lg\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
-		--tw-space-x-reverse: 0;
-		margin-right: calc(1rem * var(--tw-space-x-reverse));
-		margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
-	}
-
-	.lg\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
-		--tw-space-x-reverse: 0;
-		margin-right: calc(0.5rem * var(--tw-space-x-reverse));
-		margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 	}
 
 	.lg\:px-8 {

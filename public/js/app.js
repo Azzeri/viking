@@ -19435,7 +19435,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
   setup: function setup() {
-    var showingNavigationDropdown = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(true);
+    var showingNavigationDropdown = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
 
     var logout = function logout(_) {
       return _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.post(route('logout'));
@@ -26693,7 +26693,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , ["user"]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"main mx-auto max-w-6xl text-center\">\n                <div class=\"pt-10 lg:pt-20\">\n                    <h1 class=\"text-3xl font-bold\"> {{groupName}} </h1>\n                    <h2 class=\"text-xl font-semibold\">  {{groupSlogan}} </h2>\n                    <p class=\"mt-4 text-justify px-4 lg:px-40 lg:text-center\"> {{groupDescription}} </p>\n                </div>\n                <div class=\"pt-20\">\n                    <h1 class=\"text-xl font-semibold\">Nasi członkowie</h1>\n                    <div class=\"flex flex-wrap gap-3 mt-4 justify-center\">\n                        <template v-for=\"row in groupMembers\" :key=\"row\">\n                            <GroupMember :name=row.name :surname=row.surname :role=row.role :photo=row.photo></GroupMember>\n                        </template>\n                    </div>\n                </div>\n                <div class=\"pt-20 pb-2 flex gap-3 justify-center overflow-auto\">\n                    <ActionCard>Dołącz do nas</ActionCard>\n                    <ActionCard>Zobacz sklep</ActionCard>\n                    <ActionCard>Naucz się czegoś</ActionCard>\n                    <ActionCard>Zapoznaj się z wydarzeniami</ActionCard>\n                </div>\n        </div> ")];
+      ))])])])])])];
     }),
     _: 1
     /* STABLE */
@@ -32401,17 +32401,13 @@ var _hoisted_31 = {
 var _hoisted_32 = {
   "class": "text-gray-500 text-sm"
 };
-var _hoisted_33 = ["onClick"];
+var _hoisted_33 = {
+  "class": "card-actions justify-between items-center"
+};
 var _hoisted_34 = {
   "class": "text-lg"
 };
-
-var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn btn-secondary"
-}, "Zobacz", -1
-/* HOISTED */
-);
-
+var _hoisted_35 = ["onClick"];
 var _hoisted_36 = {
   "class": "flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center"
 };
@@ -32509,16 +32505,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* TEXT */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.category_name), 1
         /* TEXT */
-        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.price) + " zł ", 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           onClick: function onClick($event) {
             return _ctx.itemDetails(row.id);
           },
-          "class": "card-actions justify-between items-center"
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.price) + " zł ", 1
-        /* TEXT */
-        ), _hoisted_35], 8
+          "class": "btn btn-primary"
+        }, "Zobacz", 8
         /* PROPS */
-        , _hoisted_33)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <img :alt=row.name class=\"block h-64 w-full object-fill\" :src=row.photo_path>  ")]);
+        , _hoisted_35)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <img :alt=row.name class=\"block h-64 w-full object-fill\" :src=row.photo_path>  ")]);
       }), 128
       /* KEYED_FRAGMENT */
       ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {

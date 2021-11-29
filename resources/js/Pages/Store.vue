@@ -73,11 +73,11 @@
                                 <div class="text-gray-500 text-sm">{{ row.category_name }}</div>
                             </h1> 
                             
-                            <div @click="itemDetails(row.id)" class="card-actions justify-between items-center">
+                            <div class="card-actions justify-between items-center">
                                 <p class="text-lg">
                                     {{ row.price }} zł
                                 </p>
-                                <button class="btn btn-secondary">Zobacz</button>
+                                <button @click="itemDetails(row.id)" class="btn btn-primary">Zobacz</button>
                             </div>
                         </div>
                     </div>
