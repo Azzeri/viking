@@ -14,7 +14,7 @@
                         <h2 class="mt-2 text-2xl font-bold text-gray-500">
                             {{ $page.props.groupInfo.motto }}
                         </h2> 
-                        <p class="mt-5">
+                        <p class="mt-5 text-justify">
                             {{ $page.props.groupInfo.description }}                
                         </p> 
                     </div>

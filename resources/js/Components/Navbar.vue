@@ -64,7 +64,7 @@
     </div>
 
     <!-- Responsive navigation menu -->
-    <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
+    <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden fixed w-full mt-16 z-50">
         <ul class="menu py-4 bg-base-100">
             <ResponsiveNavLink v-for="row in $page.props.navigation" :key="row" :href="route(row.link)" :active="route().current(row.link)">
                 <i :class=row.icon></i>
@@ -108,7 +108,7 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
     setup() {
-        const showingNavigationDropdown = ref(false)
+        const showingNavigationDropdown = ref(true)
         const logout = _ => Inertia.post(route('logout'));
         
         return { showingNavigationDropdown, logout }
