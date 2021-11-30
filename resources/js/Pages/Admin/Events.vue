@@ -2,15 +2,43 @@
   <admin-panel-layout title="Wydarzenia">
     <template #page-title>Wydarzenia</template>
 
-    <div class="mx-auto py-4 px-32">
-		<div class="p-4 glass-admin-content rounded-3xl mx-auto">
-			<DataTable :columns=columns :data=events :filters=filters sortRoute="admin.events.index" @edit=edit>
-				<template #buttons>
-            		<button @click="modalOpened = true" class="p-3 rounded-full border-2">Nowe</button>
-				</template>
-			</DataTable>
+    <div v-if="!events.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
+		<h1>Brak danych</h1>
+		<div class="flex space-x-2">
+			<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
+			<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<i class="fas fa-plus fa-lg"></i>
+			</button>
 		</div>
-    </div>
+	</div>
+
+	<div v-else>
+		<DataTable :columns=columns :data=events :filters=filters sortRoute="admin.events.index">
+
+			<template #buttons>
+				<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
+					<i class="fas fa-plus fa-lg"></i>
+				</button>
+				<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<i class="fas fa-plus fa-lg"></i>
+				</button>
+			</template>
+
+			<template #content>
+				<tr v-for="row in events.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
+					<td class="px-3 py-1">{{ row.name }}</td>
+					<td class="px-3 py-1">{{ row.addrTown }}</td>
+					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
+					<td class="px-3 py-1 text-center">
+						<div class="btn btn-primary btn-xs">Szczegóły</div> 
+					</td>
+				</tr>
+			</template>
+			
+		</DataTable>
+	</div>
 
 	<!-- <CrudModal :show=modalOpened @close=close>
 		<template #title>Nowy użytkownik</template>
@@ -137,14 +165,8 @@ export default defineComponent({
 			modalOpened.value = true 
 		}
 
-		const generateLink = _ => { 
-			form.post('generateRegistrationLink', {
-				onSuccess: () => close()
-			}) 
-		}
-
 		const update = () => { 
-			formEdit.put('users/'+formEdit.id, {
+			formEdit.put('events/'+formEdit.id, {
 				onSuccess: () => close()
 			}) 
 		}
@@ -153,15 +175,13 @@ export default defineComponent({
 
 		const columns = [
             //description
-			{name:'name', label:'Imię', sortable: true},
+			{name:'name', label:'Nazwa', sortable: true},
 			{name:'addrTown', label:'Miejscowość', sortable: true},
-			{name:'date_start', label:'Rozpoczęcie', sortable: true},
-			{name:'date_end', label:'Zakończenie', sortable: true},
-			{name:'time_start', label:'Rozpoczęcie', sortable: true},
-			{name:'time_end', label:'Zakończenie', sortable: true},
+			{name:'date_start', label:'Termin', sortable: true},
+			{name:'actions', label:'Działania'},
         ]
 
-		return { form, formEdit, columns, modalOpened, modalEditMode, close, generateLink, edit, update, currentDate }
+		return { form, formEdit, columns, modalOpened, modalEditMode, close, edit, update, currentDate }
 	},
 
 	components: {

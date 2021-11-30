@@ -27,12 +27,14 @@ class EventFactory extends Factory
             'addrStreet' => $this->faker->streetName(),
             'addrNumber' => $this->faker->buildingNumber(),
             'addrHouseNumber' => $this->faker->optional()->buildingNumber(),
-            'addrPostcode' => $this->faker->postcode(),
+            'addrPostCode' => $this->faker->postcode(),
             'addrTown' => $this->faker->city(),
             'date_start' => $this->faker->date(),
             'date_end' => $this->faker->date(),
             'time_start' => $this->faker->time(),
             'time_end' => $this->faker->optional()->time(),
+            'items' => json_encode($this->faker->randomElements([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], 15)),
+            'participants' => json_encode($this->faker->randomElements([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], 7)),
         ];
     }
 }

@@ -18,11 +18,12 @@ class CreateEventsTable extends Migration
 
             $table->string('name', 64);
             $table->string('description', 255);
+            $table->string('description_summary', 255)->nullable();
 
             $table->string('addrStreet', 64);
             $table->string('addrNumber', 10);
             $table->string('addrHouseNumber', 10)->nullable();
-            $table->string('addrPostcode', 32);
+            $table->string('addrPostCode', 32);
             $table->string('addrTown', 64);
 
             $table->date('date_start');
@@ -31,7 +32,9 @@ class CreateEventsTable extends Migration
             $table->time('time_end')->nullable();
 
             $table->boolean('is_finished')->default('false');
+            $table->string('photo_path')->default('/images/default.png');
             $table->json('participants')->nullable();
+            $table->json('items')->nullable();
 
             $table->timestamps();
         });

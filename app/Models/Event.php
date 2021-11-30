@@ -12,17 +12,20 @@ class Event extends Model
     protected $fillable = [
         'name',
         'description',
+        'description_summary',
         'addrStreet',
         'addrNumber',
         'addrHouseNumber',
-        'addrPostcode',
+        'addrPostCode',
         'addrTown',
         'date_start',
         'date_end',
         'time_start',
         'time_end',
         'is_finished',
-        'participants'
+        'photo_path',
+        'participants',
+        'items'
     ];
     
 }
