@@ -1,10 +1,14 @@
 <template>
-    <div class="flex flex-col items-center">
-        <Link :href=href as="button" class="p-2 glass-admin-nav-button rounded-lg shadow-lg hover:ring ring-gray-700 focus:ring-gray-800">
+    <div class="flex justify-start">
+        <Link :href=href as="button" class="btn h-12 w-12 rounded-r-none lg:rounded-r-lg group-hover:rounded-r-none">
             <i :class="icon"></i>
+            <slot name="avatar"></slot>
         </Link>
-        <span class="md:hidden mt-2"><slot></slot></span>
+        <Link :href=href as="button" class="btn btn-primary lg:hidden lg:group-hover:flex rounded-l-none w-44 justify-start">
+            <slot></slot>
+        </Link>
     </div>
+    
 </template>
 
 <script>

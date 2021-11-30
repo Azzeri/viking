@@ -1,115 +1,93 @@
 <template>
     <Head :title="title" />
-    <body  class="background bg-cover bg-center bg-fixed">
-    <div class="relative min-h-screen h-screen md:flex">
 
-        <!-- mobile menu bar -->
-        <div class="glass-admin-nav p-3 text-gray-100 flex justify-between md:hidden">
-            <!-- logo -->
-            <div class="flex"> 
-                <div class="flex-shrink-0 flex items-center"> 
-                    <Link :href="route('about')"> 
-                        <jet-application-mark class="block h-9 w-auto" /> 
-                    </Link> 
-                </div> 
-            </div>
-            <!-- mobile menu button -->
-            <div class="flex items-center lg:hidden pr-1">
-                <button @click="showingNavigationDropdown = ! showingNavigationDropdown" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': showingNavigationDropdown, 'inline-flex': ! showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! showingNavigationDropdown, 'inline-flex': showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+    <!-- Navbar -->
+    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50">
+
+        <!-- Left side -->
+        <div class="px-2 mx-2 space-x-2 navbar-start">
+            <!-- Logo -->
+            <Link :href="route('about')" as=button class="btn btn-square btn-ghost">
+                <jet-application-mark class="block h-9 w-auto" />
+            </Link>
+            <span class="text-lg font-bold">
+                {{ $page.props.groupInfo.name }}
+            </span>
+        </div> 
+
+        <!-- Right side -->
+        <div class="navbar-end">
+            <!-- User options -->
+            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
+                <button class="btn btn-square btn-ghost">
+                    <i class="fas fa-moon fa-lg"></i>
                 </button>
             </div>
-        </div>
-        
-        <!-- sidebar -->
-        <div :class="{'-translate-x-full': ! showingNavigationDropdown, 'translate-x-0':  showingNavigationDropdown }" 
-              class="z-10 absolute md:relative glass-admin-aside text-blue-100 w-64 md:w-24 inset-y-0 left-0 transform -translate-x-full transition duration-200 ease-in-out md:translate-x-0 flex flex-col justify-between py-6">
-            
-            <nav class="space-y-5 flex flex-col items-center">
-                <div class="flex justify-center"> 
-                    <div class="flex"> 
-                        <div class="flex-shrink-0 flex items-center"> 
-                            <Link :href="route('about')"> 
-                                <jet-application-mark class="block h-9 w-auto" /> 
-                            </Link> 
-                        </div> 
-                    </div> 
-                </div>
-
-                <AdminNavButton class="pt-4" icon="fas fa-home fa-lg" :href="route('admin.dashboard')">Panel</AdminNavButton>
-                <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')">Użytkownicy</AdminNavButton>
-                <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')">Wydarzenia</AdminNavButton>
-                <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store.items.index')">Sklep</AdminNavButton>
-                <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory.items.index')">Sprzęt</AdminNavButton>
-            </nav>
-        </div>
-
-        <!-- content -->
-        <div class="flex-1">
-            <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center">
-        	<!-- <FlashMessage></FlashMessage> -->
-
-                <div class="text-2xl font-bold"><slot name="page-title"></slot></div>
-                <div class="relative">
-                    <jet-dropdown align="right" width="48">
-                        <template #trigger>
-                            <button v-if="$page.props.jetstream.managesProfilePhotos && $page.props.user != null" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
-                            </button>
-                            <button v-else class="flex text-white text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                <div class="rounded-full p-1" ><i class="fas fa-user fa-2x"></i></div>
-                            </button>
-                        </template>
-
-                        <template #content v-if="$page.props.user != null">
-                            <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                Zarządzaj kontem
-                            </div>
-
-                            <jet-dropdown-link :href="route('profile.show')">
-                                Profil
-                            </jet-dropdown-link>
-
-                            <jet-dropdown-link v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" :href="route('admin.dashboard')">
-                                Panel administratora
-                            </jet-dropdown-link>
-
-                            <jet-dropdown-link :href="route('api-tokens.index')" v-if="$page.props.jetstream.hasApiFeatures">
-                                Tokeny API
-                            </jet-dropdown-link>
-
-                            <div class="border-t border-gray-100"></div>
-
-                            <!-- Authentication -->
-                            <form @submit.prevent="logout">
-                                <jet-dropdown-link as="button">
-                                    Wyloguj
-                                </jet-dropdown-link>
-                            </form>
-                        </template>
-                        <template #content v-else>
-                            <jet-dropdown-link :href="route('profile.show')">
-                                Logowanie
-                            </jet-dropdown-link>
-
-                            <jet-dropdown-link :href="route('register')">
-                                Rejestracja
-                            </jet-dropdown-link>
-                        </template>
-                    </jet-dropdown>
-                </div>
+            <div data-tip="Wyloguj" class="hidden lg:flex tooltip tooltip-bottom tooltip-primary">
+                <button @click=logout class="btn btn-square btn-ghost">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                </button>
             </div>
-            <main class="fixed w-full h-full bg-white mx-auto p-2">
-                <slot></slot>
-            </main>
+            <div data-tip="Profil" class="hidden lg:flex tooltip tooltip-bottom tooltip-primary items-center">
+                <Link :href="route('profile.show') " class="avatar mx-3">
+                    <div class="rounded-full w-10 h-10 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
+                        <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
+                    </div>
+                </Link>
+            </div>
+            <!-- Hamburger -->
+            <div class="flex-none lg:hidden">
+                <label for="my-drawer-3" class="btn btn-square btn-ghost">
+                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                </label>
+            </div> 
         </div>
 
     </div>
-    </body>
+
+    <!-- Drawer  -->
+    <div class="shadow bg-base-200 drawer drawer-mobile">
+        <input id="my-drawer-3" type="checkbox" class="drawer-toggle"> 
+        
+        <!-- Drawer content -->
+        <div class="flex flex-col drawer-content">
+            <!-- Main content -->
+            <main class="ml-20">
+                <slot></slot>
+            </main>
+        </div> 
+        
+        <!-- Side drawer content -->
+        <div class="drawer-side fixed h-full">
+            <label for="my-drawer-3" class="drawer-overlay lg:hidden fixed w-full h-full"></label> 
+            <ul class="px-4 pb-24 pt-8 menu lg:w-20 bg-accent lg:hover:w-64 group h-full justify-between">
+                <div class="flex space-y-4 flex-col">
+                    <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')">Panel</AdminNavButton>
+                    <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')">Użytkownicy</AdminNavButton>
+                    <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')">Wydarzenia</AdminNavButton>
+                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store.items.index')">Sklep</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory.items.index')">Sprzęt</AdminNavButton>
+                </div>
+                <!-- User options -->
+                <div class="lg:hidden flex space-y-4 flex-col">
+                    <div class="flex">
+                        <Link :href="route('profile.show')" class="avatar">
+                            <div class="rounded-full w-12 h-12 cursor-pointer transition">
+                                <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
+                            </div>
+                        </Link>
+                        <Link as="button" class="btn btn-primary rounded-l-none pl-10 justify-start -ml-6" style="width:200px;">
+                            Profil
+                        </Link>
+                    </div>
+                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" @click=logout>Wyloguj</AdminNavButton>
+                </div>
+            </ul>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -123,10 +101,17 @@
     import { Head, Link } from '@inertiajs/inertia-vue3';
     import AdminNavButton from '@/Components/AdminNavButton.vue'
     import FlashMessage from '@/Components/FlashMessage.vue'
+    import { Inertia } from '@inertiajs/inertia'
 
     export default defineComponent({
         props: {
             title: String,
+        },
+
+        setup() {
+            const logout = _ => Inertia.post(route('logout'));
+            
+            return { logout }
         },
 
         components: {
@@ -141,17 +126,5 @@
             AdminNavButton,
             FlashMessage
         },
-
-        data() {
-            return {
-                showingNavigationDropdown: false,
-            }
-        },
-
-        methods: {
-            logout() {
-                this.$inertia.post(route('logout'));
-            },
-        }
     })
 </script>
