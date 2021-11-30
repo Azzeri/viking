@@ -32,7 +32,7 @@
 					<td class="px-3 py-1">{{ row.addrTown }}</td>
 					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
 					<td class="px-3 py-1 text-center">
-						<div class="btn btn-primary btn-xs">Szczegóły</div> 
+						<div @click="eventDetails(row)" class="btn btn-primary btn-xs">Szczegóły</div> 
 					</td>
 				</tr>
 			</template>
@@ -114,6 +114,7 @@ import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
+import { Inertia } from '@inertiajs/inertia'
 
 export default defineComponent({
 
@@ -129,16 +130,6 @@ export default defineComponent({
 		const form = useForm({
 			email: null,
 			role: null
-		})
-
-		const formEdit = useForm({
-			id: null,
-			name: null,
-			surname: null,
-			nickname: null,
-			role: null,
-			date_birth: null,
-			email: null
 		})
 
 		const reset = _ => { 
@@ -173,15 +164,16 @@ export default defineComponent({
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
+		const eventDetails = (row) => Inertia.get('events/' + row.id)
+
 		const columns = [
-            //description
 			{name:'name', label:'Nazwa', sortable: true},
 			{name:'addrTown', label:'Miejscowość', sortable: true},
 			{name:'date_start', label:'Termin', sortable: true},
 			{name:'actions', label:'Działania'},
         ]
 
-		return { form, formEdit, columns, modalOpened, modalEditMode, close, edit, update, currentDate }
+		return { form, columns, modalOpened, modalEditMode, close, edit, update, currentDate, eventDetails }
 	},
 
 	components: {
@@ -193,7 +185,6 @@ export default defineComponent({
 		JetValidationErrors,
 		DataTable,
 		CrudModal,
-		
 	},
 
 });

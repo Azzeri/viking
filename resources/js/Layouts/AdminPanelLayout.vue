@@ -1,7 +1,7 @@
 <template>
     <Head :title="title" />
     <body  class="background bg-cover bg-center bg-fixed">
-    <div class="relative min-h-screen md:flex">
+    <div class="relative min-h-screen h-screen md:flex">
 
         <!-- mobile menu bar -->
         <div class="glass-admin-nav p-3 text-gray-100 flex justify-between md:hidden">
@@ -50,7 +50,7 @@
         <!-- content -->
         <div class="flex-1">
             <div class="w-full p-3 md:p-4 lg:px-16 xl:px-64 glass-admin-heading text-gray-100 flex justify-between items-center">
-        	<FlashMessage></FlashMessage>
+        	<!-- <FlashMessage></FlashMessage> -->
 
                 <div class="text-2xl font-bold"><slot name="page-title"></slot></div>
                 <div class="relative">
@@ -103,10 +103,8 @@
                     </jet-dropdown>
                 </div>
             </div>
-            <main class="p-2">
-                <div class="container mx-auto p-2 glass-admin-content rounded-3xl">
-                    <slot></slot>
-                </div>
+            <main class="fixed w-full h-full bg-white mx-auto p-2">
+                <slot></slot>
             </main>
         </div>
 
