@@ -65,6 +65,8 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Event::class);
+
         Event::create(
             $request->validate([
                 'name' => ['required', 'string', 'min:3', 'max:64', 'unique:events'],
@@ -131,7 +133,17 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $this->authorize('update', $event, Event::class);
+        
+        $event->update(
+            $request->validate([
+                'description_summary' => ['required', 'min:3', 'max:255'],
+                'is_finished' => ['required', 'boolean', 'accepted']
+            ])
+        );
+
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano wydarzenie');
+
     }
 
     /**
@@ -143,5 +155,27 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+        /**
+     * Marks the specified event as finished
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function finish(Request $request, Event $event)
+    {
+        $this->authorize('update', $event, Event::class);
+        
+        $event->update(
+            $request->validate([
+                'description_summary' => ['required', 'min:3', 'max:255'],
+                'is_finished' => ['required', 'boolean', 'accepted']
+            ])
+        );
+
+        return redirect()->back()->with('message', 'Pomyślnie podsumowano wydarzenie');
+
     }
 }

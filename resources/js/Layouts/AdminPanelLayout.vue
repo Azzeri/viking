@@ -57,7 +57,7 @@
             <!-- Main content -->
             <main class="lg:ml-20">
                 <div class="hero min-h-screen -mt-16 pt-16 place-items-start">
-                    <div class="hero-content flex-col w-full">
+                    <div class="hero-content flex-col w-full mx-auto">
                         <slot></slot>
                     </div>
                 </div>
