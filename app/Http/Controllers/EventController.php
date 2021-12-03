@@ -20,7 +20,7 @@ class EventController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name,addrTown,date_start'],
+            'field' => ['in:id,name,addrTown,date_start'],
             'filter' => ['in:1,2']
         ]);
 
@@ -39,34 +39,16 @@ class EventController extends Controller
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('date_start');
+            $query->orderBy('id');
 
         $events = $query->paginate()->withQueryString()
             ->through(fn ($event) => [
                 'id' => $event->id,
                 'name' => $event->name,
-                // 'description' => $event->description,
-                // 'description_summary' => $event->description_summary,
-                // 'addrStreet' => $event->addrStreet,
-                // 'addrNumber' => $event->addrNumber,
-                // 'addrHouseNumber' => $event->addrHouseNumber,
-                // 'addrPostcode' => $event->addrPostcode,
                 'addrTown' => $event->addrTown,
                 'date_start' => $event->date_start,
                 'date_end' => $event->date_end,
-                // 'time_start' => $event->time_start,
-                // 'time_end' => $event->time_end,
                 'is_finished' => $event->is_finished,
-                // 'participants' => User::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($user) => [
-                //     'id' => $user->id,
-                //     'name' => $user->name,
-                //     'surname' => $user->surname,
-                //     'nickname' => $user->nickname,
-                // ]),
-                // 'items' => InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
-                //     'id' => $item->id,
-                //     'name' => $item->name,
-                // ])
             ]);
 
 

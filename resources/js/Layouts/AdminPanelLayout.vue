@@ -54,8 +54,12 @@
         <!-- Drawer content -->
         <div class="flex flex-col drawer-content">
             <!-- Main content -->
-            <main class="ml-20">
-                <slot></slot>
+            <main class="lg:ml-20">
+                <div class="hero min-h-screen -mt-16">
+                    <div class="hero-content flex-col w-full">
+                        <slot></slot>
+                    </div>
+                </div>
             </main>
         </div> 
         

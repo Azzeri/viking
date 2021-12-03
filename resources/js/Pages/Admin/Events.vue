@@ -2,19 +2,15 @@
   <admin-panel-layout title="Wydarzenia">
     <template #page-title>Wydarzenia</template>
 
-    <div v-if="!events.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-		<h1>Brak danych</h1>
-		<div class="flex space-x-2">
-			<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-			<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-		</div>
-	</div>
+    <template v-if="!events.data.length && filters.search == null">
+		<h1 class="text-4xl font-bold text-center">Nie dodano jeszcze żadnego wydarzenia</h1>
+		<button @click="modalOpened = true" class="btn btn-wide btn-secondary mt-4">
+			<i class="fas fa-plus fa-lg mr-3"></i>
+			Dodaj wydarzenie
+		</button>
+	</template>
 
-	<div v-else>
+	<template v-else>
 		<DataTable :columns=columns :data=events :filters=filters sortRoute="admin.events.index">
 
 			<template #buttons>
@@ -28,6 +24,7 @@
 
 			<template #content>
 				<tr v-for="row in events.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
+					<td class="px-3 py-1">{{ row.id }}</td>
 					<td class="px-3 py-1">{{ row.name }}</td>
 					<td class="px-3 py-1">{{ row.addrTown }}</td>
 					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
@@ -38,7 +35,7 @@
 			</template>
 			
 		</DataTable>
-	</div>
+	</template>
 
 	<!-- <CrudModal :show=modalOpened @close=close>
 		<template #title>Nowy użytkownik</template>
@@ -167,6 +164,7 @@ export default defineComponent({
 		const eventDetails = (row) => Inertia.get('events/' + row.id)
 
 		const columns = [
+			{name:'id', label:'ID', sortable: true},
 			{name:'name', label:'Nazwa', sortable: true},
 			{name:'addrTown', label:'Miejscowość', sortable: true},
 			{name:'date_start', label:'Termin', sortable: true},
