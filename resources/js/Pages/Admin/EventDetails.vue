@@ -8,6 +8,7 @@
             <div class="space-x-3">
                 <button class="btn btn-sm btn-primary">Zadania</button>
                 <button class="btn btn-sm btn-secondary">Biorę udział</button>
+                <button class="btn btn-sm btn-accent">Podsumuj</button>
             </div>
         </div>
         <div class="w-full h-full flex lg:flex-row flex-col space-y-4 lg:space-x-7 lg:space-y-0">

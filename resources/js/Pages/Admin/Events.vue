@@ -27,7 +27,7 @@
 					<td class="px-3 py-1">{{ row.addrTown }}</td>
 					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
 					<td class="px-3 py-1">
-						<div @click="show(row)" class="btn btn-primary btn-xs">Szczegóły</div> 
+						<Link :href="route('admin.events.show', row.id)" class="btn btn-primary btn-xs">Szczegóły</Link> 
 					</td>
 				</tr>
 			</template>
@@ -109,7 +109,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
-import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
@@ -154,8 +153,6 @@ export default defineComponent({
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		const show = (row) => Inertia.get(route("admin.events.show", row.id))
-
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
 			{name:'name', label:'Nazwa', sortable: true},
@@ -169,7 +166,7 @@ export default defineComponent({
 			{ label: 'Zakończone', value: 1, color:'btn-accent' }
 		]
 
-		return { form, columns, modalOpened, frontFilters, close, currentDate, show, store }
+		return { form, columns, modalOpened, frontFilters, close, currentDate, store }
 	},
 
 	components: {
