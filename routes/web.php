@@ -80,6 +80,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
     Route::put('/events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
+    
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
     Route::resource('/inventorycategories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('/inventoryitems', InventoryItemController::class)->except(['create', 'edit', 'show']);

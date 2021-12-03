@@ -16,7 +16,7 @@
                     <div class="card-title px-1 flex space-x-2 items-center">
                         <h1>Szczegóły</h1>
                         <template v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN">
-                            <i @click="openEdit()" class="pl-4 fas fa-edit cursor-pointer"></i>
+                            <i v-if="event.is_finished == false" @click="openEdit()" class="pl-4 fas fa-edit cursor-pointer"></i>
 						    <i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
                         </template>
                     </div>
@@ -116,6 +116,8 @@
 
             <template #content>
                 <jet-validation-errors v-if="formEdit.hasErrors || formSummary.hasErrors || formItems.hasErrors" class="my-6" />
+
+                <!-- Podsumowanie -->
                 <template v-if="modals.summary">
                     <form @submit.prevent=update>
                         <div class="form-control mt-4">
@@ -126,10 +128,78 @@
                         </div> 
                     </form>
                 </template>
+
+                <!-- Edycja -->
+                <template v-if="modals.edit">
+                    <form @submit.prevent=store>
+                        <div class="form-control mt-4">
+                            <label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+                            <input v-model=formEdit.name type="text" placeholder="Nazwa wydarzenia" class="input input-primary input-bordered">
+
+                            <div class="flex space-x-2 mt-4">
+                                <div class="w-1/2">
+                                    <label class="label"><span class="label-text">Rozpoczęcie<span class="ml-1 text-red-500">*</span></span></label> 
+                                    <input v-model=formEdit.date_start type="date"  class="input input-primary input-bordered w-full">
+                                </div>
+                                <div class="w-1/2">
+                                    <label class="label"><span class="label-text text-white">Rozpoczęcie</span></label> 
+                                    <input v-model=formEdit.time_start type="time" class="input input-primary input-bordered w-full">
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <div class="w-1/2">
+                                    <label class="label"><span class="label-text">Zakończenie<span class="ml-1 text-red-500">*</span> (czas opcjonalny)</span></label> 
+                                    <input v-model=formEdit.date_end type="date"  class="input input-primary input-bordered w-full">
+                                </div>
+                                <div class="w-1/2">
+                                    <label class="label"><span class="label-text text-white">Zakończenie (czas opcjonalny)</span></label> 
+                                    <input v-model=formEdit.time_end type="time" class="input input-primary input-bordered w-full">
+                                </div>
+                            </div>
+
+                            <div class="flex mt-4 space-x-2">
+                                <div class="w-full">
+                                    <label class="label"><span class="label-text">Ulica<span class="ml-1 text-red-500">*</span></span></label> 
+                                    <input v-model=formEdit.addrStreet type="text" placeholder="Ulica" class="input input-primary input-bordered w-full">
+                                </div>
+                                <div class="w-24">
+                                    <label class="label"><span class="label-text">Nr<span class="ml-1 text-red-500">*</span></span></label> 
+                                    <input v-model=formEdit.addrNumber type="text" placeholder="Nr" class="input input-primary input-bordered w-full">
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <div class="w-48">
+                                    <label class="label"><span class="label-text">Kod pocztowy<span class="ml-1 text-red-500">*</span></span></label> 
+                                    <input v-model=formEdit.addrPostCode type="text" placeholder="Kod pocztowy" class="input input-primary input-bordered w-full">
+                                </div>
+                                <div class="w-full">
+                                    <label class="label"><span class="label-text">Miejscowość<span class="ml-1 text-red-500">*</span></span></label> 
+                                    <input v-model=formEdit.addrTown type="text" placeholder="Miejscowość" class="input input-primary input-bordered w-full">
+                                </div>
+                            </div>
+
+                            <label class="label mt-4">
+                                <span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
+                            </label> 
+                            <textarea v-model=formEdit.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+
+                            <!-- Przedmioty -->
+                            <template v-if="modals.items">
+
+                            </template>
+                        </div> 
+                    </form>
+                </template>
+
             </template>
 
             <template #footer>
                 <template v-if="modals.summary">
+                    <button @click=finish() class="btn btn-info">Zapisz</button>
+                </template>
+                 <template v-if="modals.edit">
                     <button @click=update() class="btn btn-info">Zapisz</button>
                 </template>
             </template>
@@ -196,8 +266,14 @@ export default defineComponent({
             formSummary.clearErrors()
 		}
 
-		const update = _ => { 
+		const finish = _ => { 
 			formSummary.put(route('admin.events.finish', props.event.id), {
+				onSuccess: () => close()
+			}) 
+		}
+
+        const update = _ => { 
+			formEdit.put(route('admin.events.update', props.event.id), {
 				onSuccess: () => close()
 			}) 
 		}
@@ -210,6 +286,20 @@ export default defineComponent({
         }
 
         const openEdit = _ => {
+            formEdit.name = props.event.name,
+
+			formEdit.date_start=props.event.date_start,
+			formEdit.time_start=props.event.time_start,
+			formEdit.date_end=props.event.date_end,
+			formEdit.time_end=props.event.time_end,
+			
+			formEdit.addrStreet=props.event.addrStreet,
+			formEdit.addrNumber=props.event.addrNumber,
+			formEdit.addrPostCode=props.event.addrPostCode,
+			formEdit.addrTown=props.event.addrTown,
+
+			formEdit.description=props.event.description
+
             modals.value.edit = true
             modalOpened.value = true
         }
@@ -220,7 +310,7 @@ export default defineComponent({
         }
 
 
-		return { formEdit, formSummary, formItems, close, update, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
+		return { formEdit, formSummary, formItems, close, update, finish, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
 	},
 
 	components: {

@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\InventoryItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
@@ -74,10 +75,10 @@ class EventController extends Controller
                 'time_start' => ['required', 'date_format:H:i'],
                 'date_end' => ['required', 'date', 'after_or_equal:date_start'],
                 'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
-                'addrStreet' => ['required', 'alpha'],
+                'addrStreet' => ['required'],
                 'addrNumber' => ['required', 'alpha_num'],
                 'addrPostCode' => ['required', 'alpha_dash'],
-                'addrTown' => ['required', 'alpha'],
+                'addrTown' => ['required'],
                 'description' => ['required', 'min:3', 'max:255']
             ])
         );
@@ -134,14 +135,22 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $this->authorize('update', $event, Event::class);
-        
+
         $event->update(
             $request->validate([
-                'description_summary' => ['required', 'min:3', 'max:255'],
-                'is_finished' => ['required', 'boolean', 'accepted']
+                'name' => ['required', 'string', 'min:3', 'max:64', Rule::unique('events')->ignore($event)],
+                'date_start' => ['required', 'date', 'after_or_equal:today'],
+                'time_start' => ['required', 'date_format:H:i'],
+                'date_end' => ['required', 'date', 'after_or_equal:date_start'],
+                'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+                'addrStreet' => ['required'],
+                'addrNumber' => ['required', 'alpha_num'],
+                'addrPostCode' => ['required', 'alpha_dash'],
+                'addrTown' => ['required'],
+                'description' => ['required', 'min:3', 'max:255']
             ])
         );
-
+        
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano wydarzenie');
 
     }
