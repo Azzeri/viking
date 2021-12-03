@@ -63,7 +63,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
     Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
     
-    Route::resource('/events', EventController::class, ['names' => ['index' => 'events.index']]);
+    Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
     Route::resource('/inventorycategories', InventoryCategoryController::class, ['names' => ['index' => 'inventory.category.index']]);
     Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);

@@ -27,7 +27,7 @@
 					<td class="px-3 py-1">{{ row.addrTown }}</td>
 					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
 					<td class="px-3 py-1">
-						<div @click="eventDetails(row)" class="btn btn-primary btn-xs">Szczegóły</div> 
+						<div @click="show(row)" class="btn btn-primary btn-xs">Szczegóły</div> 
 					</td>
 				</tr>
 			</template>
@@ -35,66 +35,73 @@
 		</DataTable>
 	</template>
 
-	<!-- <CrudModal :show=modalOpened @close=close>
-		<template #title>Nowy użytkownik</template>
-		<template #content v-if="!modalEditMode">
+	<CrudModal :show=modalOpened @close=close>
+		<template #title>Nowe wydarzenie</template>
 
+		<template #content>
 			<jet-validation-errors class="my-6" />
-			<form id="generateLinkForm">
-				<div class="mt-4">
-					<jet-label for="email" value="Email" />
-					<jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required placeholder="Wprowadź email" />
-				</div>
+			<form @submit.prevent=store>
+				<div class="form-control mt-4">
+					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.name type="text" placeholder="Nazwa wydarzenia" class="input input-primary input-bordered">
 
-				<div class="mt-4">
-					<jet-label for="role" value="Rola w grupie" />
-					<jet-input id="role" type="text" class="mt-1 block w-full" v-model="form.role" required placeholder="Wprowadź rolę" />
-				</div>
-			</form>
+					<div class="flex space-x-2 mt-4">
+						<div class="w-1/2">
+							<label class="label"><span class="label-text">Rozpoczęcie<span class="ml-1 text-red-500">*</span></span></label> 
+							<input v-model=form.date_start type="date"  class="input input-primary input-bordered w-full">
+						</div>
+						<div class="w-1/2">
+							<label class="label"><span class="label-text text-white">Rozpoczęcie</span></label> 
+							<input v-model=form.time_start type="time" class="input input-primary input-bordered w-full">
+						</div>
+					</div>
 
-		</template>
+					<div class="flex space-x-2">
+						<div class="w-1/2">
+							<label class="label"><span class="label-text">Zakończenie<span class="ml-1 text-red-500">*</span> (czas opcjonalny)</span></label> 
+							<input v-model=form.date_end type="date"  class="input input-primary input-bordered w-full">
+						</div>
+						<div class="w-1/2">
+							<label class="label"><span class="label-text text-white">Zakończenie (czas opcjonalny)</span></label> 
+							<input v-model=form.time_end type="time" class="input input-primary input-bordered w-full">
+						</div>
+					</div>
 
-		<template #content v-else>
-			<jet-validation-errors class="my-6" />
-			<form id="editForm" @submit.prevent=update>
-				<div class="mt-6">
-					<jet-input id="name" type="text" class="mt-1 block w-full" v-model="formEdit.name" required autofocus placeholder="Imię" autocomplete="name" />
-				</div>
+					<div class="flex mt-4 space-x-2">
+						<div class="w-full">
+							<label class="label"><span class="label-text">Ulica<span class="ml-1 text-red-500">*</span></span></label> 
+							<input v-model=form.addrStreet type="text" placeholder="Ulica" class="input input-primary input-bordered w-full">
+						</div>
+						<div class="w-24">
+							<label class="label"><span class="label-text">Nr<span class="ml-1 text-red-500">*</span></span></label> 
+							<input v-model=form.addrNumber type="text" placeholder="Nr" class="input input-primary input-bordered w-full">
+						</div>
+					</div>
 
-				<div class="mt-6">
-					<jet-input id="surname" type="text" class="mt-1 block w-full" v-model="formEdit.surname" required placeholder="Nazwisko" autocomplete="surname" />
-				</div>
+					<div class="flex space-x-2">
+						<div class="w-48">
+							<label class="label"><span class="label-text">Kod pocztowy<span class="ml-1 text-red-500">*</span></span></label> 
+							<input v-model=form.addrPostCode type="text" placeholder="Kod pocztowy" class="input input-primary input-bordered w-full">
+						</div>
+						<div class="w-full">
+							<label class="label"><span class="label-text">Miejscowość<span class="ml-1 text-red-500">*</span></span></label> 
+							<input v-model=form.addrTown type="text" placeholder="Miejscowość" class="input input-primary input-bordered w-full">
+						</div>
+					</div>
 
-				<div class="mt-6">
-					<jet-input id="nickname" type="text" class="mt-1 block w-full" v-model="formEdit.nickname" placeholder="Nick" autocomplete="nickname" />
-				</div>
-
-				<div class="mt-6">
-					<jet-input id="date_birth" type="date" class="mt-1 block w-full" v-model="formEdit.date_birth" :max="currentDate()" min="1900-01-01" autocomplete="date_birth" />
-				</div>
-
-				<div class="mt-6">
-					<jet-input id="email" type="email" class="mt-1 block w-full" v-model="formEdit.email" required placeholder="Adres email" />
-				</div>
-
-				<div class="mt-6">
-					<jet-input id="role" type="text" class="mt-1 block w-full" v-model="formEdit.role" required placeholder="Rola w grupie" />
-				</div>
-
+					<label class="label mt-4">
+						<span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
+					</label> 
+					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+					
+				</div> 
 			</form>
 		</template>
 
 		<template #footer>
-			<jet-button type="submit" form="generateLinkForm" v-if=!modalEditMode @click=generateLink class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Wygeneruj link do rejestracji
-			</jet-button>
-
-			<jet-button type="submit" form="editForm" v-else @click=update class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Edytuj
-			</jet-button>
-
+			<button @click=store class="btn btn-info">Dodaj</button>
 		</template>
-	</CrudModal> -->
+	</CrudModal> 
 	
   </admin-panel-layout>
 </template>
@@ -102,14 +109,11 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetButton from '@/Jetstream/Button.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
-import { Inertia } from '@inertiajs/inertia'
 
 export default defineComponent({
 
@@ -120,46 +124,51 @@ export default defineComponent({
 
 	setup() {
 		const modalOpened = ref(false)
-		const modalEditMode = ref(false)
 
 		const form = useForm({
-			email: null,
-			role: null
-		})
+			// name:null,
 
-		const reset = _ => { 
-			form.reset()
-			formEdit.reset()
-			modalEditMode.value = false 
-		}
+			// date_start:null,
+			// time_start:null,
+			// date_end:null,
+			// time_end:null,
+			
+			// addrStreet:null,
+			// addrNumber:null,
+			// addrPostCode:null,
+			// addrTown:null,
+
+			// description:null,
+
+			name:'maniutek',
+
+			date_start:'2022-10-10',
+			time_start:'08:00',
+			date_end:'2022-10-11',
+			time_end:'09:00',
+			
+			addrStreet:'Sezamkowa',
+			addrNumber:'54',
+			addrPostCode:'48-330',
+			addrTown:'Nysa',
+
+			description:'Długi opis',
+		})
 
 		const close = _ => { 
 			modalOpened.value = false
-			reset() 
+			form.reset() 
 		}
 
-		const edit = (row) => { 
-			modalEditMode.value = true
-			formEdit.id = row.id
-			formEdit.name = row.name
-			formEdit.surname = row.surname
-			formEdit.nickname = row.nickname
-			formEdit.date_birth = row.date_birth
-			formEdit.email = row.email
-			formEdit.role = row.role
-
-			modalOpened.value = true 
-		}
-
-		const update = () => { 
-			formEdit.put('events/'+formEdit.id, {
+		const store = _ => { 
+			form.post(route('admin.events.store'), {
 				onSuccess: () => close()
 			}) 
 		}
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		const eventDetails = (row) => Inertia.get('events/' + row.id)
+		const show = (row) => Inertia.get(route("admin.events.show", row.id))
 
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
@@ -174,15 +183,12 @@ export default defineComponent({
 			{ label: 'Zakończone', value: 1, color:'btn-accent' }
 		]
 
-		return { form, columns, modalOpened, modalEditMode, frontFilters, close, edit, update, currentDate, eventDetails }
+		return { form, columns, modalOpened, frontFilters, close, currentDate, show, store }
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetButton,
-		JetInput,
-		JetLabel,
 		JetValidationErrors,
 		DataTable,
 		CrudModal,

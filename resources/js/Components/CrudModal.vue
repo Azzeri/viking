@@ -1,52 +1,41 @@
 <template>
-    <modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
-        <div class="px-6 py-4">
-            <div class="text-lg">
-                <slot name="title">
-                </slot>
-            </div>
+    <div id="modal" class="modal">
+        <div class="modal-box">
+            <h1 class="text-lg font-bold">
+                <slot name="title"></slot>
+            </h1>
+            
+            <slot name="content"></slot>
 
-            <div class="mt-4">
-                <slot name="content">
-                </slot>
+            <div class="modal-action">
+                <slot name="footer"></slot>
+                <button @click="close()" class="btn">Zamknij</button>
             </div>
         </div>
-
-        <div class="px-6 py-4 space-x-3 bg-gray-100 text-right">
-            <slot name="footer">
-            </slot>
-            <button @click="close()" class="p-3 rounded-full border-2">Zamknij</button>
-        </div>
-    </modal>
+    </div>
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import Modal from '@/Jetstream/Modal.vue'
+    import { defineComponent, watch } from 'vue'
 
     export default defineComponent({
         emits: ['close'],
 
-        components: {
-            Modal,
+        props: {
+            show: Boolean
         },
 
-        props: {
-            show: {
-                default: false
-            },
-            maxWidth: {
-                default: '2xl'
-            },
-            closeable: {
-                default: true
-            },
+        setup(props) {
+            watch(() => props.show, _ => document.getElementById('modal').classList.contains('modal-open') ? 
+            document.getElementById('modal').classList.remove('modal-open') : 
+            document.getElementById('modal').classList.add('modal-open'))
+    
         },
 
         methods: {
             close() {
                 this.$emit('close')
-            },
+            }
         }
     })
 </script>

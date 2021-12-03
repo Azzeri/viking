@@ -15,7 +15,6 @@ class Event extends Model
         'description_summary',
         'addrStreet',
         'addrNumber',
-        'addrHouseNumber',
         'addrPostCode',
         'addrTown',
         'date_start',

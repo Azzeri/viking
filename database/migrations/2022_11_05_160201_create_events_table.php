@@ -22,7 +22,6 @@ class CreateEventsTable extends Migration
 
             $table->string('addrStreet', 64);
             $table->string('addrNumber', 10);
-            $table->string('addrHouseNumber', 10)->nullable();
             $table->string('addrPostCode', 32);
             $table->string('addrTown', 64);
 

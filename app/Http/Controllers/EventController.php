@@ -65,7 +65,22 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-
+        Event::create(
+            $request->validate([
+                'name' => ['required', 'string', 'min:3', 'max:64', 'unique:events'],
+                'date_start' => ['required', 'date', 'after_or_equal:today'],
+                'time_start' => ['required', 'date_format:H:i'],
+                'date_end' => ['required', 'date', 'after_or_equal:date_start'],
+                'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+                'addrStreet' => ['required', 'alpha'],
+                'addrNumber' => ['required', 'alpha_num'],
+                'addrPostCode' => ['required', 'alpha_dash'],
+                'addrTown' => ['required', 'alpha'],
+                'description' => ['required', 'min:3', 'max:255']
+            ])
+        );
+        
+        return redirect()->back()->with('message', 'Pomyślnie utworzono wydarzenie');
     }
 
     /**
@@ -83,7 +98,6 @@ class EventController extends Controller
             'description_summary' => $event->description_summary,
             'addrStreet' => $event->addrStreet,
             'addrNumber' => $event->addrNumber,
-            'addrHouseNumber' => $event->addrHouseNumber,
             'addrPostCode' => $event->addrPostCode,
             'addrTown' => $event->addrTown,
             'date_start' => $event->date_start,
@@ -91,16 +105,16 @@ class EventController extends Controller
             'time_start' => $event->time_start,
             'time_end' => $event->time_end,
             'is_finished' => $event->is_finished,
-            'participants' => User::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($user) => [
+            'participants' => $event->participants ? User::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
-            ]),
-            'items' => InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
+            ]) : null,
+            'items' => $event->items ? InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
                 'id' => $item->id,
                 'name' => $item->name,
-            ])
+            ]) : null
         );
 
         return inertia('Admin/EventDetails', [

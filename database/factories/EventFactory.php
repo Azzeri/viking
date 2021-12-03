@@ -26,7 +26,6 @@ class EventFactory extends Factory
             'description' => $this->faker->realText($maxNbChars = 255, $indexSize = 2),
             'addrStreet' => $this->faker->streetName(),
             'addrNumber' => $this->faker->buildingNumber(),
-            'addrHouseNumber' => $this->faker->optional()->buildingNumber(),
             'addrPostCode' => $this->faker->postcode(),
             'addrTown' => $this->faker->city(),
             'date_start' => $this->faker->date(),

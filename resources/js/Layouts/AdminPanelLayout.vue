@@ -1,5 +1,6 @@
 <template>
     <Head :title="title" />
+    <FlashMessage></FlashMessage>
 
     <!-- Navbar -->
     <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50">

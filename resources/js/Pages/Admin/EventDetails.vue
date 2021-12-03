@@ -32,7 +32,6 @@
                         </div>
                         <div>
                             <span>{{ 'ul. ' + event.addrStreet + ' ' + event.addrNumber }}</span>
-                            <span v-if="event.addrHouseNumber">{{ '/' + event.addrHouseNumber }}</span>
                             <br>
                             <span>{{ event.addrPostCode + ' ' + event.addrTown }}</span>
                         </div>
