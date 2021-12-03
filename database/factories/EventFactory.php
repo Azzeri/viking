@@ -30,6 +30,7 @@ class EventFactory extends Factory
             'addrPostCode' => $this->faker->postcode(),
             'addrTown' => $this->faker->city(),
             'date_start' => $this->faker->date(),
+            'is_finished' => $this->faker->boolean(),
             'date_end' => $this->faker->date(),
             'time_start' => $this->faker->time(),
             'time_end' => $this->faker->optional()->time(),

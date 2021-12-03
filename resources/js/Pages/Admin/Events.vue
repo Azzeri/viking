@@ -2,8 +2,8 @@
   <admin-panel-layout title="Wydarzenia">
     <template #page-title>Wydarzenia</template>
 
-    <template v-if="!events.data.length && filters.search == null">
-		<h1 class="text-4xl font-bold text-center">Nie dodano jeszcze żadnego wydarzenia</h1>
+    <template v-if="!events.data.length && filters.search == null && filters.filter == null">
+		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego wydarzenia</h1>
 		<button @click="modalOpened = true" class="btn btn-wide btn-secondary mt-4">
 			<i class="fas fa-plus fa-lg mr-3"></i>
 			Dodaj wydarzenie
@@ -11,14 +11,12 @@
 	</template>
 
 	<template v-else>
-		<DataTable :columns=columns :data=events :filters=filters sortRoute="admin.events.index">
+		<DataTable :columns=columns :data=events :filters=filters :frontFilters=frontFilters sortRoute="admin.events.index">
 
 			<template #buttons>
-				<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-					<i class="fas fa-plus fa-lg"></i>
-				</button>
-				<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-					<i class="fas fa-plus fa-lg"></i>
+				<button @click="modalOpened = true" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
+					<i class="fas fa-plus fa-lg mr-2"></i>
+					Dodaj wydarzenie
 				</button>
 			</template>
 
@@ -28,7 +26,7 @@
 					<td class="px-3 py-1">{{ row.name }}</td>
 					<td class="px-3 py-1">{{ row.addrTown }}</td>
 					<td class="px-3 py-1">{{ row.date_start + ' - ' + row.date_end }}</td>
-					<td class="px-3 py-1 text-center">
+					<td class="px-3 py-1">
 						<div @click="eventDetails(row)" class="btn btn-primary btn-xs">Szczegóły</div> 
 					</td>
 				</tr>
@@ -171,7 +169,12 @@ export default defineComponent({
 			{name:'actions', label:'Działania'},
         ]
 
-		return { form, columns, modalOpened, modalEditMode, close, edit, update, currentDate, eventDetails }
+		const frontFilters = [
+			{ label: 'Niezakończone', value: 0, color:'btn-secondary' },
+			{ label: 'Zakończone', value: 1, color:'btn-accent' }
+		]
+
+		return { form, columns, modalOpened, modalEditMode, frontFilters, close, edit, update, currentDate, eventDetails }
 	},
 
 	components: {

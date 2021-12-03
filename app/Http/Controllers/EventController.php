@@ -21,7 +21,7 @@ class EventController extends Controller
         request()->validate([
             'direction' => ['in:asc,desc'],
             'field' => ['in:id,name,addrTown,date_start'],
-            'filter' => ['in:1,2']
+            'filter' => ['in:0,1']
         ]);
 
         $query = Event::query();
@@ -50,11 +50,6 @@ class EventController extends Controller
                 'date_end' => $event->date_end,
                 'is_finished' => $event->is_finished,
             ]);
-
-
-        // $event = Event::where('items', '!=', null)->first();
-        // $encoded = json_decode($event->items);
-        // dd(InventoryItem::whereIn('id', $encoded )->get());
 
         return inertia('Admin/Events', [
             'events' => $events,

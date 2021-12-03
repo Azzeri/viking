@@ -55,7 +55,7 @@
         <div class="flex flex-col drawer-content">
             <!-- Main content -->
             <main class="lg:ml-20">
-                <div class="hero min-h-screen -mt-16">
+                <div class="hero min-h-screen -mt-16 pt-16 place-items-start">
                     <div class="hero-content flex-col w-full">
                         <slot></slot>
                     </div>
