@@ -36,6 +36,7 @@ class CreateEventsTable extends Migration
             $table->json('items')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

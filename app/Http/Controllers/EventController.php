@@ -163,7 +163,11 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        $this->authorize('delete', $event, Event::class);
+
+        $event->delete();
+
+        return redirect()->route('admin.events.index')->with('message', 'Pomyślnie usunięto wydarzenie');
     }
 
         /**

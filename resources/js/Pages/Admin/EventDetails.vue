@@ -17,7 +17,7 @@
                         <h1>Szczegóły</h1>
                         <template v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN">
                             <i v-if="event.is_finished == false" @click="openEdit()" class="pl-4 fas fa-edit cursor-pointer"></i>
-						    <i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
+						    <i @click="deleteEvent()" class="fas fa-trash cursor-pointer text-red-700"></i>
                         </template>
                     </div>
                     <div class="card-body py-0 px-2 overflow-y-auto">
@@ -278,6 +278,11 @@ export default defineComponent({
 			}) 
 		}
 
+        const deleteEvent = _ => {
+            if (!confirm('Na pewno?')) return;
+            Inertia.delete(route('admin.events.destroy', props.event.id))
+        }
+
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
         const openSummary = _ => {
@@ -310,7 +315,7 @@ export default defineComponent({
         }
 
 
-		return { formEdit, formSummary, formItems, close, update, finish, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
+		return { formEdit, formSummary, formItems, close, update, finish, deleteEvent, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
 	},
 
 	components: {

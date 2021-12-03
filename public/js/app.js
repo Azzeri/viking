@@ -20861,6 +20861,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     };
 
+    var deleteEvent = function deleteEvent(_) {
+      if (!confirm('Na pewno?')) return;
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"](route('admin.events.destroy', props.event.id));
+    };
+
     var currentDate = function currentDate(_) {
       return new Date().toISOString().split('T')[0];
     };
@@ -20888,6 +20893,7 @@ __webpack_require__.r(__webpack_exports__);
       close: close,
       update: update,
       finish: finish,
+      deleteEvent: deleteEvent,
       currentDate: currentDate,
       modals: modals,
       openSummary: openSummary,
@@ -27188,7 +27194,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "pl-4 fas fa-edit cursor-pointer"
       })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
         onClick: _cache[2] || (_cache[2] = function ($event) {
-          return _ctx.deleteRow(_ctx.row);
+          return _ctx.deleteEvent();
         }),
         "class": "fas fa-trash cursor-pointer text-red-700"
       })], 64
