@@ -20856,26 +20856,16 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup() {
     var modalOpened = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
-      // name:null,
-      // date_start:null,
-      // time_start:null,
-      // date_end:null,
-      // time_end:null,
-      // addrStreet:null,
-      // addrNumber:null,
-      // addrPostCode:null,
-      // addrTown:null,
-      // description:null,
-      name: 'maniutek',
-      date_start: '2022-10-10',
-      time_start: '08:00',
-      date_end: '2022-10-11',
-      time_end: '09:00',
-      addrStreet: 'Sezamkowa',
-      addrNumber: '54',
-      addrPostCode: '48-330',
-      addrTown: 'Nysa',
-      description: 'Długi opis'
+      name: null,
+      date_start: null,
+      time_start: null,
+      date_end: null,
+      time_end: null,
+      addrStreet: null,
+      addrNumber: null,
+      addrPostCode: null,
+      addrTown: null,
+      description: null
     });
 
     var close = function close(_) {
@@ -26049,7 +26039,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fa-shopping-basket fa-lg",
-    href: _ctx.route('admin.store.items.index')
+    href: _ctx.route('admin.storeitems.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_25];
@@ -26061,7 +26051,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fas fa-ankh fa-lg",
-    href: _ctx.route('admin.inventory.items.index')
+    href: _ctx.route('admin.inventoryitems.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_26];

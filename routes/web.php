@@ -61,32 +61,33 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
-    Route::resource('/users', UserController::class, ['names' => ['index' => 'users.index']]);
-    
-    Route::resource('/events', EventController::class)->except(['create', 'edit']);
-
-    Route::resource('/inventorycategories', InventoryCategoryController::class, ['names' => ['index' => 'inventory.category.index']]);
     Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);
     Route::post('/inventoryCategories/DeletePhoto/{id}', [InventoryCategoryController::class, 'deletePhoto']);
 
-    Route::resource('/inventoryitems', InventoryItemController::class, ['names' => ['index' => 'inventory.items.index']]);
     Route::post('/inventoryItems/StorePhoto/{id}', [InventoryItemController::class, 'storePhoto']);
     Route::post('/inventoryItems/DeletePhoto/{id}', [InventoryItemController::class, 'deletePhoto']);
 
-    Route::resource('/inventoryservices', InventoryServiceController::class, ['names' => ['index' => 'inventory.services.index']]);
     Route::post('/inventoryservicesfinish', [InventoryServiceController::class, 'finish']);
 
-    Route::resource('/storecategories', StoreCategoryController::class, ['names' => ['index' => 'store.category.index']]);
     Route::post('/storeCategories/StorePhoto/{id}', [StoreCategoryController::class, 'storePhoto']);
     Route::post('/storeCategories/DeletePhoto/{id}', [StoreCategoryController::class, 'deletePhoto']);
 
-    Route::resource('/storeitems', StoreItemController::class, ['names' => ['index' => 'store.items.index']]);
     Route::post('/storeItems/StorePhoto/{id}', [StoreItemController::class, 'storePhoto']);
     Route::post('/storeItems/DeletePhoto/{id}', [StoreItemController::class, 'deletePhoto']);
 
-    Route::resource('/storerequests', StoreRequestController::class, ['names' => ['index' => 'store.requests.index']]);
     Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
+
+    Route::resource('/events', EventController::class)->except(['create', 'edit']);
+    Route::resource('/users', UserController::class)->except(['create', 'edit']);
+    Route::resource('/inventorycategories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/inventoryitems', InventoryItemController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/inventoryservices', InventoryServiceController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/storecategories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/storeitems', StoreItemController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/storerequests', StoreRequestController::class)->except(['create', 'edit', 'show']);
+
+
 });
 
 

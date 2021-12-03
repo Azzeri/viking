@@ -126,33 +126,19 @@ export default defineComponent({
 		const modalOpened = ref(false)
 
 		const form = useForm({
-			// name:null,
+			name:null,
 
-			// date_start:null,
-			// time_start:null,
-			// date_end:null,
-			// time_end:null,
+			date_start:null,
+			time_start:null,
+			date_end:null,
+			time_end:null,
 			
-			// addrStreet:null,
-			// addrNumber:null,
-			// addrPostCode:null,
-			// addrTown:null,
+			addrStreet:null,
+			addrNumber:null,
+			addrPostCode:null,
+			addrTown:null,
 
-			// description:null,
-
-			name:'maniutek',
-
-			date_start:'2022-10-10',
-			time_start:'08:00',
-			date_end:'2022-10-11',
-			time_end:'09:00',
-			
-			addrStreet:'Sezamkowa',
-			addrNumber:'54',
-			addrPostCode:'48-330',
-			addrTown:'Nysa',
-
-			description:'Długi opis',
+			description:null
 		})
 
 		const close = _ => { 
