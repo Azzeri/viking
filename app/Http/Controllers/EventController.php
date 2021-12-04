@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\InventoryItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class EventController extends Controller
@@ -32,7 +33,7 @@ class EventController extends Controller
                 ->orWhere('addrTown', 'ILIKE', '%' . request('search') . '%');
         }
 
-        if (request('filter')) 
+        if (request('filter'))
             $query->where('is_finished', request('filter'));
         else
             $query->where('is_finished', false);
@@ -82,7 +83,7 @@ class EventController extends Controller
                 'description' => ['required', 'min:3', 'max:255']
             ])
         );
-        
+
         return redirect()->back()->with('message', 'Pomyślnie utworzono wydarzenie');
     }
 
@@ -108,7 +109,7 @@ class EventController extends Controller
             'time_start' => $event->time_start,
             'time_end' => $event->time_end,
             'is_finished' => $event->is_finished,
-            'participants' => $event->participants ? User::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($user) => [
+            'participants' => $event->participants ? User::whereIn('id', json_decode($event->participants))->orderBy('name')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
@@ -150,9 +151,8 @@ class EventController extends Controller
                 'description' => ['required', 'min:3', 'max:255']
             ])
         );
-        
-        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano wydarzenie');
 
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano wydarzenie');
     }
 
     /**
@@ -170,7 +170,7 @@ class EventController extends Controller
         return redirect()->route('admin.events.index')->with('message', 'Pomyślnie usunięto wydarzenie');
     }
 
-        /**
+    /**
      * Marks the specified event as finished
      *
      * @param  \Illuminate\Http\Request  $request
@@ -180,7 +180,7 @@ class EventController extends Controller
     public function finish(Request $request, Event $event)
     {
         $this->authorize('update', $event, Event::class);
-        
+
         $event->update(
             $request->validate([
                 'description_summary' => ['required', 'min:3', 'max:255'],
@@ -189,6 +189,38 @@ class EventController extends Controller
         );
 
         return redirect()->back()->with('message', 'Pomyślnie podsumowano wydarzenie');
+    }
+
+    /**
+     * Adds authenticated user to event's participants list
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm_participation(Event $event)
+    {
+        $this->authorize('update', $event, Event::class);
+
+        $participants = json_decode($event->participants);
+
+        if (!in_array(Auth::user()->id, $participants)) {
+            array_push($participants, Auth::user()->id);
+            $event->update([
+                'participants' => $participants
+            ]);
+
+            return redirect()->back()->with('message', 'Potwierdzono Twój udział w wydarzeniu');
+
+        } else {
+            unset($participants[array_search(Auth::user()->id, $participants)]);
+            $event->update([
+                'participants' => $participants
+            ]);
+
+            return redirect()->back()->with('message', 'Wypisano Cię z wydarzenia');
+
+        }
 
     }
 }

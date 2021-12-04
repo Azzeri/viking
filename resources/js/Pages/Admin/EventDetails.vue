@@ -6,8 +6,11 @@
             <h1 class="text-2xl font-bold">{{ event.name }}</h1>
             <div class="space-x-1 sm:space-x-3 flex justify-center">
                 <button class="btn btn-sm btn-primary">Zadania</button>
-                <button class="btn btn-sm btn-secondary">Biorę udział</button>
-                <button v-if="event.is_finished == false" @click="openSummary()" class="btn btn-sm btn-accent">Podsumuj</button>
+                <template v-if="event.is_finished == false">
+                    <button v-if="!userInParticipants($page.props.user.id)" @click=confirmParticipation() class="btn btn-sm btn-secondary">Biorę udział</button>
+                    <button v-else @click=confirmParticipation() class="btn btn-sm btn-secondary">Nie biorę udziału</button>
+                    <button  @click="openSummary()" class="btn btn-sm btn-accent">Podsumuj</button>
+                </template>
             </div>
         </div>
         <div class="w-full flex flex-col lg:flex-row space-y-5 lg:space-x-7 lg:space-y-0">
@@ -272,6 +275,8 @@ export default defineComponent({
 			}) 
 		}
 
+        const confirmParticipation = _ => Inertia.put(route('admin.events.participation', props.event.id))
+
         const update = _ => { 
 			formEdit.put(route('admin.events.update', props.event.id), {
 				onSuccess: () => close()
@@ -284,6 +289,10 @@ export default defineComponent({
         }
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
+
+        const userInParticipants = (id) => {
+            return props.event.participants.some((ele) => ele.id == id)
+        }
 
         const openSummary = _ => {
             modals.value.summary = true
@@ -314,8 +323,7 @@ export default defineComponent({
             modalOpened.value = true
         }
 
-
-		return { formEdit, formSummary, formItems, close, update, finish, deleteEvent, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
+		return { formEdit, formSummary, formItems, close, update, finish, deleteEvent, confirmParticipation, userInParticipants, currentDate, modals ,openSummary, openEdit, openItems, modalOpened}
 	},
 
 	components: {

@@ -79,8 +79,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 
     Route::put('/events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
+    Route::put('/events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
-    
+
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
     Route::resource('/inventorycategories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('/inventoryitems', InventoryItemController::class)->except(['create', 'edit', 'show']);

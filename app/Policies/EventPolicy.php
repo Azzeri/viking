@@ -42,7 +42,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN]) && $event->is_finished == false;
     }
 
     /**
