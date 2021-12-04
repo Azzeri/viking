@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +24,7 @@ class UserController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            // 'field' => ['in:id,name, privilege_id']
+            'field' => ['in:id,surname,email,date_birth,role']
         ]);
 
         $query = User::with('privilege');
@@ -42,7 +41,7 @@ class UserController extends Controller
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('privilege_id');
+            $query->orderBy('id');
 
 
         $users = $query->paginate()->withQueryString()
@@ -64,61 +63,39 @@ class UserController extends Controller
         ]);
     }
 
-    public function generateRegistrationLink(Request $request)
-    {
-        $this->authorize('create', User::class);
-        
-        $request->validate([
-            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
-            'role' => ['required', 'string', 'min:3', 'max:128']
-        ]);
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function storeMember(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+    //         'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+    //         'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
+    //         'role' => ['required', 'string', 'min:3', 'max:128'],
+    //         'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
+    //         'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'exists:allowed_mails'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //     ]);
 
-        DB::table('allowed_mails')->insert(['email' => $request->email]);
+    //     User::create([
+    //         'name' => $request['name'],
+    //         'surname' => $request['surname'],
+    //         'nickname' => $request['nickname'],
+    //         'date_birth' => $request['date_birth'],
+    //         'privilege_id' => Privilege::IS_GROUP_MEMBER,
+    //         'role' => $request['role'],
+    //         'email' => $request['email'],
+    //         'password' => Hash::make($request['password']),
+    //     ]);
 
-        $details = [
-            'title' => 'Link do rejestracji',
-            'body' => 'Przesyłamy Twój link do rejestracji',
-            'link' => URL::signedRoute('registerMember', ['email' => $request->email, 'role' => $request->role])
-        ];
+    //     DB::table('allowed_mails')->where('email', $request->email)->delete();
 
-        Mail::to($request->email)->send(new \App\Mail\sendRegistrationLink($details));
-
-        return redirect()->back()->with('Message', 'Pomyślnie wygenerowano link');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeMember(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'role' => ['required', 'string', 'min:3', 'max:128'],
-            'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
-            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'exists:allowed_mails'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        User::create([
-            'name' => $request['name'],
-            'surname' => $request['surname'],
-            'nickname' => $request['nickname'],
-            'date_birth' => $request['date_birth'],
-            'privilege_id' => Privilege::IS_GROUP_MEMBER,
-            'role' => $request['role'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-        ]);
-
-        DB::table('allowed_mails')->where('email', $request->email)->delete();
-
-        return redirect()->route('login');
-    }
+    //     return redirect()->route('login');
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -140,7 +117,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email:filter', 'max:255', Rule::unique('users')->ignore(User::find($user->id))],
         ]));
 
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano użytkownika');
     }
 
     /**
@@ -149,13 +126,39 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
         $this->authorize('delete', $user, User::class);
 
         $user->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto użytkownika');
+    }
+
+    /**
+     * Generate a registration link with token
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function generateLink(Request $request)
+    {
+        $this->authorize('create', User::class);
+        
+        $request->validate([
+            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
+            'role' => ['required', 'string', 'min:3', 'max:128']
+        ]);
+
+        DB::table('allowed_mails')->insert(['email' => $request->email]);
+        $details = [
+            'title' => 'Link do rejestracji',
+            'body' => 'Przesyłamy Twój link do rejestracji',
+            'link' => URL::signedRoute('registerMember', ['email' => $request->email, 'role' => $request->role])
+        ];
+
+        Mail::to($request->email)->send(new \App\Mail\sendRegistrationLink($details));
+
+        return redirect()->back()->with('message', 'Pomyślnie wygenerowano link');
     }
 }

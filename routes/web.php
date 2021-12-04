@@ -57,8 +57,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
-    Route::post('/generateRegistrationLink', [UserController::class, 'generateRegistrationLink'])->name('generateRegistrationLink');
-
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
     Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);
@@ -78,11 +76,17 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 
+
+
     Route::put('/events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
     Route::put('/events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
+    Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
+
+    
+
     Route::resource('/inventorycategories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('/inventoryitems', InventoryItemController::class)->except(['create', 'edit', 'show']);
     Route::resource('/inventoryservices', InventoryServiceController::class)->except(['create', 'edit', 'show']);
