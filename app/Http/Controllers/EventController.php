@@ -202,7 +202,7 @@ class EventController extends Controller
     {
         $this->authorize('update', $event, Event::class);
 
-        $participants = json_decode($event->participants);
+        $participants = $event->participants ? json_decode($event->participants) : array();
 
         if (!in_array(Auth::user()->id, $participants)) {
             array_push($participants, Auth::user()->id);
