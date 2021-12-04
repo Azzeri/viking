@@ -20875,7 +20875,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var userInParticipants = function userInParticipants(id) {
-      return props.event.participants.some(function (ele) {
+      if (props.event.participants) return props.event.participants.some(function (ele) {
         return ele.id == id;
       });
     };
@@ -20977,6 +20977,7 @@ __webpack_require__.r(__webpack_exports__);
     var close = function close(_) {
       modalOpened.value = false;
       form.reset();
+      form.clearErrors();
     };
 
     var store = function store(_) {
@@ -27165,6 +27166,8 @@ var _hoisted_67 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_68 = ["disabled"];
+var _hoisted_69 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_jet_validation_errors = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-validation-errors");
 
@@ -27400,14 +27403,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[19] || (_cache[19] = function ($event) {
               return _ctx.finish();
             }),
-            "class": "btn btn-info"
-          }, "Zapisz")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.modals.edit ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+            disabled: _ctx.formSummary.processing,
+            "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+              'opacity-25': _ctx.formSummary.processing
+            }, "btn btn-info"])
+          }, "Zapisz", 10
+          /* CLASS, PROPS */
+          , _hoisted_68)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.modals.edit ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
             key: 1,
             onClick: _cache[20] || (_cache[20] = function ($event) {
               return _ctx.update();
             }),
-            "class": "btn btn-info"
-          }, "Zapisz")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+            disabled: _ctx.formEdit.processing,
+            "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+              'opacity-25': _ctx.formEdit.processing
+            }, "btn btn-info"])
+          }, "Zapisz", 10
+          /* CLASS, PROPS */
+          , _hoisted_69)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
         }),
         _: 1
         /* STABLE */
@@ -27629,6 +27642,7 @@ var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_39 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
@@ -27715,9 +27729,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [_hoisted_15];
         }),
         content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_validation_errors, {
+          return [_ctx.form.hasErrors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_validation_errors, {
+            key: 0,
             "class": "my-6"
-          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+          })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
             onSubmit: _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
               return _ctx.store && _ctx.store.apply(_ctx, arguments);
             }, ["prevent"]))
@@ -27815,8 +27830,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[13] || (_cache[13] = function () {
               return _ctx.store && _ctx.store.apply(_ctx, arguments);
             }),
-            "class": "btn btn-info"
-          }, "Dodaj")];
+            disabled: _ctx.form.processing,
+            "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+              'opacity-25': _ctx.form.processing
+            }, "btn btn-info"])
+          }, "Dodaj", 10
+          /* CLASS, PROPS */
+          , _hoisted_39)];
         }),
         _: 1
         /* STABLE */

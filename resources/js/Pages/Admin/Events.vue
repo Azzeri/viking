@@ -39,7 +39,7 @@
 		<template #title>Nowe wydarzenie</template>
 
 		<template #content>
-			<jet-validation-errors class="my-6" />
+			<jet-validation-errors v-if="form.hasErrors" class="my-6" />
 			<form @submit.prevent=store>
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
@@ -99,7 +99,7 @@
 		</template>
 
 		<template #footer>
-			<button @click=store class="btn btn-info">Dodaj</button>
+			<button @click=store :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn btn-info">Dodaj</button>
 		</template>
 	</CrudModal> 
 	
@@ -143,6 +143,7 @@ export default defineComponent({
 		const close = _ => { 
 			modalOpened.value = false
 			form.reset() 
+			form.clearErrors()
 		}
 
 		const store = _ => { 

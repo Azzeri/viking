@@ -200,10 +200,10 @@
 
             <template #footer>
                 <template v-if="modals.summary">
-                    <button @click=finish() class="btn btn-info">Zapisz</button>
+                    <button @click=finish() :disabled="formSummary.processing" :class="{ 'opacity-25': formSummary.processing }" class="btn btn-info">Zapisz</button>
                 </template>
                  <template v-if="modals.edit">
-                    <button @click=update() class="btn btn-info">Zapisz</button>
+                    <button @click=update() :disabled="formEdit.processing" :class="{ 'opacity-25': formEdit.processing }" class="btn btn-info">Zapisz</button>
                 </template>
             </template>
         </CrudModal> 
@@ -291,7 +291,8 @@ export default defineComponent({
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
         const userInParticipants = (id) => {
-            return props.event.participants.some((ele) => ele.id == id)
+            if(props.event.participants)
+                return props.event.participants.some((ele) => ele.id == id)
         }
 
         const openSummary = _ => {
