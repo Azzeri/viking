@@ -36,10 +36,6 @@
                 <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm font-semibold text-gray-800 hover:text-gray-900 mt-3">
                     Nie pamiętam hasła
                 </Link>
-
-                <Link :href="route('register')" class="text-sm font-semibold text-gray-800 hover:text-gray-900 mt-2">
-                    Zarejestruj się
-                </Link>
             </div>
         </form>
     </jet-authentication-card>
