@@ -72,8 +72,8 @@
                     <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')">Panel</AdminNavButton>
                     <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')">Użytkownicy</AdminNavButton>
                     <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')">Wydarzenia</AdminNavButton>
-                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.storeitems.index')">Sklep</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventoryitems.index')">Sprzęt</AdminNavButton>
+                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store.items.index')">Sklep</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory.items.index')">Sprzęt</AdminNavButton>
                 </div>
                 <!-- User options -->
                 <div class="lg:hidden flex space-y-4 flex-col">

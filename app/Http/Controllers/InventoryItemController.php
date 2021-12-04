@@ -87,16 +87,14 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $InventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryItem $inventoryItem)
+    public function update(Request $request, InventoryItem $item)
     {
-        $this->authorize('update', $inventoryItem, InventoryItem::class);
+        $this->authorize('update', $item, InventoryItem::class);
 
-        $inventoryItem = InventoryItem::find($request->id);
-
-        $inventoryItem->update($request->validate([
+        $item->update($request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('inventory_items')->ignore(InventoryItem::find($inventoryItem->id))
+                Rule::unique('inventory_items')->ignore(InventoryItem::find($item->id))
             ],
             'inventory_category_id' => ['required', 'integer'],
             'description' => ['nullable', 'min:3', 'max:255'],
@@ -113,9 +111,8 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $InventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy($inventoryItem)
+    public function destroy(InventoryItem $item)
     {
-        $item = InventoryItem::find($inventoryItem);
         $this->authorize('delete', $item, InventoryItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');
@@ -127,10 +124,8 @@ class InventoryItemController extends Controller
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
     }
 
-    public function storePhoto(Request $request, $id)
+    public function storePhoto(Request $request, InventoryItem $item)
     {
-        $item = InventoryItem::find($id);
-
         $this->authorize('update', $item, InventoryItem::class);
 
         $request->validate([
@@ -150,10 +145,8 @@ class InventoryItemController extends Controller
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano zdjęcie');
     }
 
-    public function deletePhoto($id)
+    public function deletePhoto(InventoryItem $item)
     {
-        $item = InventoryItem::find($id);
-
         $this->authorize('update', $item, InventoryItem::class);
 
         $photoName = ltrim($item->photo_path, '/images/');

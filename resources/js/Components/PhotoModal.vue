@@ -9,7 +9,7 @@
                 <div class="p-4 flex flex-col">
                     <div class="mx-auto">
 		            <jet-validation-errors class="my-6" />
-                    <img v-if=!changed :src="src" alt="img" class="w-24 h-24">
+                    <img v-if=!changed :src="item.photo_path" alt="img" class="w-24 h-24">
                     <img v-else :src="isrc" alt="img" class="w-24 h-24">
                     </div>
                     <div class="flex justify-center">
@@ -17,7 +17,7 @@
                             <input type="file" ref="file" accept="image/*" @input="form.avatar = $event.target.files[0]" @change="change"/>
                         </form>
                         <jet-button class="mt-2" @click="browse()"> {{ buttonString }} </jet-button>
-                        <jet-button v-if="src != '/images/default.png'" @click="deleteAvatar()" class="mt-2 ml-2"> Usuń</jet-button>
+                        <jet-button v-if="item.photo_path != '/images/default.png'" @click="deleteAvatar()" class="mt-2 ml-2"> Usuń</jet-button>
                     </div>
                 </div>
             </div>
@@ -44,10 +44,9 @@ export default defineComponent({
     emits: ['close-photo-modal'],
 
     props: {
-        item_id: Number,
+        item: Object,
         show: Boolean,
         path: String,
-        src: String
     },
 
     setup(props, { emit }) {
@@ -60,19 +59,20 @@ export default defineComponent({
         const isrc = ref('')
 
         const buttonString = computed(() => {
-            return props.src == '/images/default.png' ? 'Dodaj' : 'Zmień'
+            return props.item.photo_path == '/images/default.png' ? 'Dodaj' : 'Zmień'
         })
 
         const submit = _ => { 
-			form.post(props.path + '/StorePhoto/'+props.item_id, {
+			form.post(route(props.path + '.photo.store', props.item), {
 				onSuccess: () => closePhotoModal()
 			}) 
 		}
 
         const deleteAvatar = _ => {
             if (!confirm('Na pewno?')) return;
-            Inertia.post(props.path + '/DeletePhoto/' + props.item_id)
-            closePhotoModal();
+            Inertia.post(route(props.path + '.photo.delete', props.item), {
+				onSuccess: () => closePhotoModal()
+			}) 
         }
 
         const change = (e) => {

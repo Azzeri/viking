@@ -71,8 +71,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);
     Route::post('/inventoryCategories/DeletePhoto/{id}', [InventoryCategoryController::class, 'deletePhoto']);
 
-    Route::post('/inventoryItems/StorePhoto/{id}', [InventoryItemController::class, 'storePhoto']);
-    Route::post('/inventoryItems/DeletePhoto/{id}', [InventoryItemController::class, 'deletePhoto']);
+
 
     Route::post('/inventoryservicesfinish', [InventoryServiceController::class, 'finish']);
 
@@ -86,21 +85,32 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 
 
-    // Events
+    // Event
     Route::put('/events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
     Route::put('/events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
-    // Users
+    // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
 
 
+    // Inventory
+    Route::prefix('inventory')->name('inventory.')->group(function () {
+        Route::resource('/categories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
+        
+        Route::post('/items/photo_store/{item}', [InventoryItemController::class, 'storePhoto'])->name('items.photo.store');
+        Route::post('/items/photo_delete/{item}', [InventoryItemController::class, 'deletePhoto'])->name('items.photo.delete');
+        Route::resource('/items', InventoryItemController::class)->except(['create', 'edit', 'show']);
 
-    Route::resource('/inventorycategories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
-    Route::resource('/inventoryitems', InventoryItemController::class)->except(['create', 'edit', 'show']);
-    Route::resource('/inventoryservices', InventoryServiceController::class)->except(['create', 'edit', 'show']);
-    Route::resource('/storecategories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
-    Route::resource('/storeitems', StoreItemController::class)->except(['create', 'edit', 'show']);
-    Route::resource('/storerequests', StoreRequestController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/services', InventoryServiceController::class)->except(['create', 'edit', 'show']);
+    });
+    
+    // Store
+    Route::prefix('store')->name('store.')->group(function () {
+        Route::resource('/categories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
+        
+        Route::resource('/items', StoreItemController::class)->except(['create', 'edit', 'show']);
+        Route::resource('/requests', StoreRequestController::class)->except(['create', 'edit', 'show']);
+    });
 });

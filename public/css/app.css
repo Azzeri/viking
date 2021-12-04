@@ -2952,11 +2952,22 @@ html {
 .btn-info:focus-visible {
 	box-shadow: 0 0 0 2px hsl(var(--b1)),0 0 0 4px hsl(var(--in));
 }
+.btn-success {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--su)/var(--tw-bg-opacity,1));
+	--tw-border-opacity: 1;
+	border-color: hsla(var(--su)/var(--tw-border-opacity,1));
+	--tw-text-opacity: 1;
+	color: hsla(var(--b2)/var(--tw-text-opacity,1));
+}
 .btn-success.btn-active,.btn-success:hover {
 	--tw-bg-opacity: 1;
 	background-color: hsla(var(--su)/var(--tw-bg-opacity,1));
 	--tw-border-opacity: 1;
 	border-color: hsla(var(--su)/var(--tw-border-opacity,1));
+}
+.btn-success:focus-visible {
+	box-shadow: 0 0 0 2px hsl(var(--b1)),0 0 0 4px hsl(var(--su));
 }
 .btn-warning.btn-active,.btn-warning:hover {
 	--tw-bg-opacity: 1;
@@ -3032,6 +3043,18 @@ html {
 	border-color: hsla(var(--af)/var(--tw-border-opacity,1));
 	--tw-text-opacity: 1;
 	color: hsla(var(--ac)/var(--tw-text-opacity,1));
+}
+.btn-outline.btn-success {
+	--tw-text-opacity: 1;
+	color: hsla(var(--su)/var(--tw-text-opacity,1));
+}
+.btn-outline.btn-success:hover {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--su)/var(--tw-bg-opacity,1));
+	--tw-border-opacity: 1;
+	border-color: hsla(var(--su)/var(--tw-border-opacity,1));
+	--tw-text-opacity: 1;
+	color: hsla(var(--nc)/var(--tw-text-opacity,1));
 }
 .btn-outline.btn-info {
 	--tw-text-opacity: 1;
@@ -3723,6 +3746,9 @@ html {
 }
 .btn-wide {
 	width: 16rem;
+}
+.btn-block {
+	width: 100%;
 }
 .btn-square.btn-xs {
 	height: 1.5rem;
@@ -5358,6 +5384,16 @@ html {
 }
 @media (min-width: 640px) {
 
+	.sm\:btn-square {
+		height: 3rem;
+		padding: 0;
+		width: 3rem;
+	}
+
+	.btn.loading.sm\:btn-circle:before,.btn.loading.sm\:btn-square:before {
+		margin-right: 0;
+	}
+
 	.btn.loading.sm\:btn-sm:before,.btn.loading.sm\:btn-xs:before {
 		height: .75rem;
 		width: .75rem;
@@ -5384,6 +5420,16 @@ html {
 		font-size: .875rem;
 	}
 
+	.sm\:btn-block {
+		width: 100%;
+	}
+
+	.btn-square.sm\:btn-xs {
+		height: 1.5rem;
+		padding: 0;
+		width: 1.5rem;
+	}
+
 	.btn-square.sm\:btn-xs {
 		height: 1.5rem;
 		padding: 0;
@@ -5394,6 +5440,24 @@ html {
 		height: 2rem;
 		padding: 0;
 		width: 2rem;
+	}
+
+	.btn-square.sm\:btn-sm {
+		height: 2rem;
+		padding: 0;
+		width: 2rem;
+	}
+
+	.btn-square.sm\:btn-md {
+		height: 3rem;
+		padding: 0;
+		width: 3rem;
+	}
+
+	.btn-square.sm\:btn-lg {
+		height: 4rem;
+		padding: 0;
+		width: 4rem;
 	}
 
 	.btn-circle.sm\:btn-xs {

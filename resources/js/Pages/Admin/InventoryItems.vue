@@ -4,37 +4,29 @@
 	
 	<template #page-title>Sprzęt</template>
 
-	<div v-if="!items.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-		<h1>Brak danych</h1>
-		<div class="flex space-x-2">
-			<Link as=button :href="route('admin.inventory.category.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
-			<button v-if="categories.length" @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-			<button v-if="categories.length" @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-		</div>
-		
-	</div>
+	<template v-if="!items.data.length && filters.search == null">
+		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego przedmiotu</h1>
+		<Link as=button :href="route('admin.inventory.categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+		<button v-if="categories.length" @click="modalOpened = true" class="btn btn-wide btn-secondary mt-4">
+			<i class="fas fa-plus fa-lg mr-3"></i>
+			Dodaj wydarzenie
+		</button>
+	</template>
 
-	<div v-else>
+	<template v-else>
 		<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.inventory.items.index" extraClass="first:h-16 sm:first:h-auto flex sm:table-cell">
 
 			<template #buttons>
 				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.inventory.category.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+					<Link as=button :href="route('admin.inventory.categories.index')" class="btn btn-primary btn-sm">Kategorie</Link>
 				</div>
 				<div class="w-1/3 sm:w-auto flex justify-center">
-					<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-						<i class="fas fa-plus fa-lg"></i>
-					</button>
-					<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<button @click="modalOpened = true" class="btn btn-success btn-circle sm:btn-sm">
 						<i class="fas fa-plus fa-lg"></i>
 					</button>
 				</div>
 				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.inventory.services.index')" class="bg-white bg-opacity-70 text-gray-800 font-semibold px-2 py-1 rounded-full border-2">Serwisy</Link>
+					<Link as=button :href="route('admin.inventory.services.index')" class="btn btn-primary btn-sm">Serwisy</Link>
 				</div>
 			</template>
 
@@ -54,7 +46,7 @@
 			</template>
 			
 		</DataTable>
-	</div>
+	</template>
 
 </admin-panel-layout>
 
@@ -101,7 +93,7 @@
 	</template>
 </CrudModal>
 
-<PhotoModal :item_id=itemForPhotoForm.id :show=photoModalOpened :src=itemForPhotoForm.photo_path path='inventoryItems' @closePhotoModal=closePhotoModal></PhotoModal>
+<PhotoModal :item=itemForPhotoForm :show=photoModalOpened path='admin.inventory.items' @closePhotoModal=closePhotoModal></PhotoModal>
 
 </template>
 
@@ -131,7 +123,7 @@ export default defineComponent({
 		const modalOpened = ref(false)
 		const modalEditMode = ref(false)
 		const photoModalOpened = ref(false)
-		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : ref(0)
+		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : ref({})
 		
 		const form = useForm({
             id: null,
@@ -172,20 +164,20 @@ export default defineComponent({
 		}
 
         const store = _ => { 
-			form.post('inventoryitems/', {
+			form.post(route('admin.inventory.items.store'), {
 				onSuccess: () => close()
 			}) 
 		}
 
 		const update = _ => { 
-			form.put('inventoryitems/' + form.id, {
+			form.put(route('admin.inventory.items.update', form.id), {
 				onSuccess: () => close()
 			}) 
 		}
 
         const deleteRow = (row) => {
             if (!confirm('Na pewno? Wszystkie konserwacje związane z przedmiotem również zostaną usunięte!')) return;
-            Inertia.delete('inventoryitems/' + row.id)
+            Inertia.delete(route('admin.inventory.items.destroy', row.id))
         }
 
 		const columns = [
