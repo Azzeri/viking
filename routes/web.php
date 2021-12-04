@@ -56,6 +56,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return inertia('Dashboard');
 })->name('dashboard');
 
+
+// Group Coordinator registration
+Route::middleware('signed', 'guest')->get('/registerMember', fn (Request $request) => inertia('Auth/RegisterMember', [
+    'email' => $request->email,
+    'role' => $request->role
+]))->name('registerMember');
+Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeMember']);
+
+// Administrator and Coordinators routes
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
@@ -95,11 +104,3 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/storeitems', StoreItemController::class)->except(['create', 'edit', 'show']);
     Route::resource('/storerequests', StoreRequestController::class)->except(['create', 'edit', 'show']);
 });
-
-
-Route::middleware('signed', 'guest')->get('/registerMember', fn (Request $request) => inertia('Auth/RegisterMember', [
-    'email' => $request->email,
-    'role' => $request->role
-]))->name('registerMember');
-
-Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeMember']);

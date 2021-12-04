@@ -54,7 +54,7 @@
 				<form @submit.prevent=generateLink>
 					<div class="form-control mt-4">
 						<label class="label"><span class="label-text">Email<span class="ml-1 text-red-500">*</span></span></label> 
-						<input v-model=form.email type="email" placeholder="Email użytkownika" class="input input-primary input-bordered">
+						<input v-model=form.email type="email" placeholder="Email użytkownika" class="input input-primary input-bordered" autocomplete="email">
 
 						<label class="label"><span class="label-text">Rola<span class="ml-1 text-red-500">*</span></span></label> 
 						<input v-model=form.role type="text" placeholder="Rola użytkownika" class="input input-primary input-bordered">

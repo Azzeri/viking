@@ -63,39 +63,39 @@ class UserController extends Controller
         ]);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function storeMember(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-    //         'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-    //         'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
-    //         'role' => ['required', 'string', 'min:3', 'max:128'],
-    //         'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
-    //         'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'exists:allowed_mails'],
-    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
-    //     ]);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeMember(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
+            'role' => ['required', 'string', 'min:3', 'max:128'],
+            'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
+            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'exists:allowed_mails'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
-    //     User::create([
-    //         'name' => $request['name'],
-    //         'surname' => $request['surname'],
-    //         'nickname' => $request['nickname'],
-    //         'date_birth' => $request['date_birth'],
-    //         'privilege_id' => Privilege::IS_GROUP_MEMBER,
-    //         'role' => $request['role'],
-    //         'email' => $request['email'],
-    //         'password' => Hash::make($request['password']),
-    //     ]);
+        User::create([
+            'name' => $request['name'],
+            'surname' => $request['surname'],
+            'nickname' => $request['nickname'],
+            'date_birth' => $request['date_birth'],
+            'privilege_id' => Privilege::IS_COORDINATOR,
+            'role' => $request['role'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
 
-    //     DB::table('allowed_mails')->where('email', $request->email)->delete();
+        DB::table('allowed_mails')->where('email', $request->email)->delete();
 
-    //     return redirect()->route('login');
-    // }
+        return redirect()->route('login');
+    }
 
     /**
      * Update the specified resource in storage.
@@ -146,7 +146,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         
         $request->validate([
-            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'unique:allowed_mails'],
             'role' => ['required', 'string', 'min:3', 'max:128']
         ]);
 
