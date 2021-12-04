@@ -7,7 +7,7 @@
 	<div v-if="!items.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 		<h1>Brak danych</h1>
 		<div class="flex space-x-2">
-			<Link as=button :href="route('admin.store.category.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+			<Link as=button :href="route('admin.store.categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
 			<button v-if="categories.length" @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
 				<i class="fas fa-plus fa-lg"></i>
 			</button>
@@ -23,7 +23,7 @@
 
 			<template #buttons>
 				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.store.category.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+					<Link as=button :href="route('admin.store.categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
 				</div>
 				<div class="w-1/3 sm:w-auto flex justify-center">
 					<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
