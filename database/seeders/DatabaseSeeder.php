@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             StoreCategorySeeder::class,
             StoreItemSeeder::class,
             StoreRequestSeeder::class,
-
+            EventTaskSeeder::class
         ]);
     }
 }
