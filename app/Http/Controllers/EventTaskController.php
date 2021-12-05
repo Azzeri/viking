@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EventTask;
 use App\Models\EventTaskState;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventTaskController extends Controller
 {
@@ -16,7 +17,26 @@ class EventTaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', EventTask::class);
+
+        $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:128'],
+            'description' => ['nullable', 'min:3', 'max:255'],
+            'date_due' => ['nullable', 'date', 'after_or_equal:today'],
+            'event_id' => ['required', 'integer'],
+            'event_task_state_id' => ['required', 'integer'],
+        ]);
+
+        EventTask::create([
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'date_due' => $request['date_due'],
+            'event_id' => $request['event_id'],
+            'event_task_state_id' => $request['event_task_state_id'],
+            'user_id' => Auth::user()->id,
+        ]);
+
+        return redirect()->back()->with('message', 'Pomyślnie dodano zadanie');
     }
 
     /**

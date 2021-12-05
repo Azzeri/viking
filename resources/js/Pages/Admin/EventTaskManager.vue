@@ -5,12 +5,15 @@
 	<div class="w-full flex space-x-2">
 
 		<div v-for="state in task_states" :key=state.id @drop="onDrop($event, state)" @dragenter.prevent @dragover.prevent class="flex-shrink-0 border w-64 p-2 bg-neutral rounded-lg">
-			<h1 class="text-base-200 font-bold capitalize">{{ state.name }}</h1>
+			<div class="flex justify-between items-center text-base-200">
+				<h1 class="font-bold capitalize">{{ state.name }}</h1>
+				<button @click="createTask(state.id)" for="create-task-modal" class="btn btn-ghost btn-sm modal-button"><i class="fas fa-plus"></i></button>
+			</div>
 			<div class="mt-4 space-y-3">
 				<template v-for="task in tasks" :key="task.id">
 					<div @click=showDetails(task) v-if="task.event_task_state_id == state.id" draggable=true @dragstart="startDrag($event, task)"
 					class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
-						{{task.name}}
+						<h1>{{ task.name }}</h1>					
 					</div>
 				</template>
 			</div>
@@ -19,9 +22,9 @@
 	</div>
   </admin-panel-layout>
 
-	<!-- Modal -->
+	<!-- Modal - details -->
 	<input type="checkbox" id="task-details" class="modal-toggle"> 
-	<div id="task-details" class="modal ">
+	<div class="modal ">
 		<div class="modal-box">
 
 			<!-- Task name and close button -->
@@ -66,6 +69,39 @@
 		</div>
 	</div>
 
+	<!-- Modal - create -->
+	<input type="checkbox" id="create-task-modal" class="modal-toggle"> 
+	<div class="modal">
+		<div class="modal-box">
+			<div class="flex justify-between items-center">
+				<div class="flex items-center space-x-2">
+					<i class="fas fa-thumbtack"></i>
+					<h1 class="font-bold text-lg capitalize">Nowe zadanie</h1>
+				</div>
+				<label @click="reset" for="create-task-modal" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
+			</div>
+			<jet-validation-errors v-if="createTaskForm.hasErrors" class="my-6" />
+			<form @submit.prevent=storeTask>
+				<div class="form-control mt-4">
+					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=createTaskForm.name type="text" placeholder="Nazwa zadania" class="input input-primary input-bordered">
+					
+					<label class="label"><span class="label-text">Termin</span></label> 
+					<input v-model=createTaskForm.date_due type="date" :min=currentDate() class="input input-primary input-bordered">
+
+					<label class="label">
+						<span class="label-text">Opis</span>
+					</label> 
+					<textarea v-model=createTaskForm.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+					
+				</div> 
+			</form>
+
+			<div class="modal-action">
+				<button @click="storeTask()" class="btn">Dodaj</button>
+			</div>
+		</div>
+	</div>
 
 </template>
 
@@ -85,11 +121,38 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const currentTask = props.tasks.length ? ref(props.tasks[0]) : ref({})
+		const currentTask = ref(props.tasks[0]) || ref({})
+
+		const createTaskForm = useForm({
+			name:null,
+			description:null,
+			date_due:null,
+			event_id:props.event.id,
+			event_task_state_id:null,
+		})
+
+		const reset = () => {
+			createTaskForm.reset()
+			createTaskForm.clearErrors()
+		}
 
 		const showDetails = (row) => {
 			currentTask.value = row
 			document.getElementById('task-details').checked = true
+		}
+
+		const createTask = (id) => {
+			createTaskForm.event_task_state_id = id
+			document.getElementById('create-task-modal').checked = true
+		}
+
+		const storeTask = () => {
+			createTaskForm.post(route('admin.event_tasks.store'), {
+				onSuccess: () => {
+					document.getElementById('create-task-modal').checked = false
+					reset()
+				}
+			})
 		}
 
 		const finishSubtask = (row) => {
@@ -107,7 +170,9 @@ export default defineComponent({
 			Inertia.put(route('admin.event_tasks.change_state', [itemID, state]))
 		}
 
-		return { showDetails, finishSubtask, startDrag, onDrop, currentTask }
+		const currentDate = _ => new Date().toISOString().split('T')[0]
+
+		return { showDetails, createTask, storeTask, finishSubtask, startDrag, onDrop, currentDate, currentTask, createTaskForm, reset }
 	},
 
 	components: {
