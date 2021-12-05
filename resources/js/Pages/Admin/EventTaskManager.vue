@@ -32,6 +32,10 @@
 				<div class="flex items-center space-x-2">
 					<i class="fas fa-thumbtack"></i>
 					<h1 class="font-bold text-lg capitalize">{{ currentTask.name }}</h1>
+					<button @click="deleteTask(currentTask)" class="btn btn-error btn-xs">
+						<i class="fas fa-times"></i>
+						<span class="ml-2">Usuń</span>
+					</button>
 				</div>
 				<label for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
 			</div>
@@ -134,6 +138,8 @@ export default defineComponent({
 		const reset = () => {
 			createTaskForm.reset()
 			createTaskForm.clearErrors()
+			document.getElementById('create-task-modal').checked = false
+			document.getElementById('task-details').checked = false
 		}
 
 		const showDetails = (row) => {
@@ -148,12 +154,16 @@ export default defineComponent({
 
 		const storeTask = () => {
 			createTaskForm.post(route('admin.event_tasks.store'), {
-				onSuccess: () => {
-					document.getElementById('create-task-modal').checked = false
-					reset()
-				}
+				onSuccess: () => reset()
 			})
 		}
+
+		const deleteTask = (row) => {
+            if (!confirm('Na pewno?')) return;
+            Inertia.delete(route('admin.event_tasks.destroy', row.id), {
+				onSuccess: () => reset()
+			})
+        }
 
 		const finishSubtask = (row) => {
 			Inertia.put(route('admin.event_sub_tasks.finish', row.id))
@@ -172,7 +182,7 @@ export default defineComponent({
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		return { showDetails, createTask, storeTask, finishSubtask, startDrag, onDrop, currentDate, currentTask, createTaskForm, reset }
+		return { showDetails, createTask, storeTask, deleteTask, finishSubtask, startDrag, onDrop, currentDate, currentTask, createTaskForm, reset }
 	},
 
 	components: {

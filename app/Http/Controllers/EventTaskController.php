@@ -59,7 +59,11 @@ class EventTaskController extends Controller
      */
     public function destroy(EventTask $eventTask)
     {
-        //
+        $this->authorize('delete', $eventTask, EventTask::class);    
+        
+        $eventTask->delete();
+
+        return redirect()->back()->with('message', 'Pomyślnie usunięto zadanie');
     }
 
     /**
