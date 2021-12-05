@@ -1,7 +1,7 @@
 <template>
   <admin-panel-layout title="Menedżer zadań">
     <template #page-title>Menedżer zadań</template>
-{{event}}
+{{event}}{{tasks}}
   </admin-panel-layout>
 </template>
 
@@ -15,6 +15,7 @@ export default defineComponent({
 
 	props: {
 		event: Object,
+		tasks: Object
 	},
 
 	setup() {

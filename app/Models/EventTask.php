@@ -11,7 +11,7 @@ class EventTask extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['name', 'description', 'date_due', 'user_id', 'event_id'];
+    protected $fillable = ['name', 'description', 'date_due', 'user_id', 'event_id', 'event_task_state_id'];
     // protected $cascadeDeletes = ['subcategories', 'items'];
 
     public function user() {

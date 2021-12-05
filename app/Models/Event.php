@@ -30,4 +30,7 @@ class Event extends Model
         'items'
     ];
     
+    public function tasks() {
+        return $this->hasMany(EventTask::class);
+    }
 }

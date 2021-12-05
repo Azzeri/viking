@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventTask;
 use App\Models\InventoryItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -140,8 +141,14 @@ class EventController extends Controller
             'is_finished' => $event->is_finished,
         );
 
+        $tasks = $event->tasks ? EventTask::where('event_id', $event->id)->orderBy('name')->get()->map(fn ($task) => [
+            'id' => $task->id,
+            'name' => $task->name,
+        ]) : null;
+
         return inertia('Admin/EventTaskManager', [
             'event' => $eventMapped,
+            'tasks' => $tasks
         ]);
     }
 
@@ -230,7 +237,6 @@ class EventController extends Controller
             ]);
 
             return redirect()->back()->with('message', 'Potwierdzono Twój udział w wydarzeniu');
-
         } else {
             unset($participants[array_search(Auth::user()->id, $participants)]);
             $event->update([
@@ -238,8 +244,6 @@ class EventController extends Controller
             ]);
 
             return redirect()->back()->with('message', 'Wypisano Cię z wydarzenia');
-
         }
-
     }
 }
