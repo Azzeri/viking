@@ -20943,6 +20943,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Layouts_AdminPanelLayout_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Layouts/AdminPanelLayout.vue */ "./resources/js/Layouts/AdminPanelLayout.vue");
 /* harmony import */ var _Jetstream_ValidationErrors_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/ValidationErrors.vue */ "./resources/js/Jetstream/ValidationErrors.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
 
 
 
@@ -20961,8 +20963,13 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById('task-details').checked = true;
     };
 
+    var finishSubtask = function finishSubtask(row) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.put(route('admin.event_sub_tasks.finish', row.id));
+    };
+
     return {
       showDetails: showDetails,
+      finishSubtask: finishSubtask,
       currentTask: currentTask
     };
   },
@@ -27583,7 +27590,7 @@ var _hoisted_20 = {
 var _hoisted_21 = {
   "class": "flex items-center space-x-2"
 };
-var _hoisted_22 = ["checked"];
+var _hoisted_22 = ["onClick", "checked"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _ctx$currentTask$date;
 
@@ -27636,6 +27643,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: task.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      onClick: function onClick($event) {
+        return _ctx.finishSubtask(task);
+      },
       checked: task.is_finished,
       type: "checkbox",
       "class": "checkbox checkbox-primary checkbox-sm"

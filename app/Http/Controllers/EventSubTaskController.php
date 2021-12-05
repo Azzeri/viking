@@ -40,4 +40,23 @@ class EventSubTaskController extends Controller
     {
         //
     }
+
+    /**
+     * Marks the specified resource as finished.
+     *
+     * @param  \App\Models\EventSubTask  $eventSubTask
+     * @return \Illuminate\Http\Response
+     */
+    public function finish(EventSubTask $eventSubTask)
+    {
+        $this->authorize('update', $eventSubTask, EventSubTask::class);
+
+        $state = $eventSubTask->is_finished ? false : true;
+
+        $eventSubTask->update([
+            'is_finished' => $state
+        ]);
+
+        return redirect()->back();
+    }
 }

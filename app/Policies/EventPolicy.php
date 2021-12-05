@@ -22,6 +22,12 @@ class EventPolicy
         return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
     }
 
+    public function view(User $user)
+    {
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+    }
+
+
     /**
      * Determine whether the user can create models.
      *

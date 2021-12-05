@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventSubTaskController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
@@ -91,8 +92,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::get('events/task_manager/{event}', [EventController::class, 'taskManager'])->name('events.task_manager');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
-        // EventTask
-        // Route::resource('/tasks', EventController::class)->only(['store', 'update', 'destroy']);
+    // EventSubTask
+    Route::put('event_sub_tasks/finish/{event_sub_task}', [EventSubTaskController::class, 'finish'])->name('event_sub_tasks.finish');
+    Route::resource('/event_sub_tasks', EventSubTaskController::class)->only(['store', 'update', 'destroy']);
 
     // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');

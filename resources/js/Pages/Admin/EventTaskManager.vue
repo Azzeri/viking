@@ -55,7 +55,7 @@
 				<ul class="menu">
 					<li v-for="task in currentTask.subtasks" :key=task.id >
 						<a class="flex items-center space-x-2">
-							<input :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+							<input @click=finishSubtask(task) :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
 							<span>{{ task.name }}</span>
 						</a>
 					</li>
@@ -73,6 +73,7 @@ import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
 
@@ -90,7 +91,11 @@ export default defineComponent({
 			document.getElementById('task-details').checked = true
 		}
 
-		return { showDetails, currentTask }
+		const finishSubtask = (row) => {
+			Inertia.put(route('admin.event_sub_tasks.finish', row.id))
+		}
+
+		return { showDetails, finishSubtask, currentTask }
 	},
 
 	components: {

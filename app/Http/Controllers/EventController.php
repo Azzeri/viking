@@ -97,6 +97,8 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        $this->authorize('view', Event::class);
+
         $eventMapped = array(
             'id' => $event->id,
             'name' => $event->name,
@@ -136,19 +138,21 @@ class EventController extends Controller
      */
     public function taskManager(Event $event)
     {
+        $this->authorize('view', Event::class);
+
         $eventMapped = array(
             'id' => $event->id,
             'name' => $event->name,
             'is_finished' => $event->is_finished,
         );
 
-        $tasks = $event->tasks ? EventTask::where('event_id', $event->id)->orderBy('name')->get()->map(fn ($task) => [
+        $tasks = $event->tasks ? EventTask::where('event_id', $event->id)->get()->map(fn ($task) => [
             'id' => $task->id,
             'name' => $task->name,
             'description' => $task->description,
             'date_due' => $task->date_due,
             'event_task_state_id' => $task->event_task_state_id,
-            'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
+            'subtasks' => $task->subtasks ? $task->subtasks->sortBy('created_at')->map(fn ($subtask) => [
                 'id' => $subtask->id,
                 'name' => $subtask->name,
                 'is_finished' => $subtask->is_finished,
