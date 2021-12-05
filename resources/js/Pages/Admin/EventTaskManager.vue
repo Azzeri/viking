@@ -8,7 +8,7 @@
 			<h1 class="text-base-200 font-bold capitalize">{{ state.name }}</h1>
 			<div class="mt-4 space-y-3">
 				<template v-for="task in tasks" :key="task.id">
-					<div v-if="task.event_task_state_id == state.id" class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
+					<div @click=showDetails(task) v-if="task.event_task_state_id == state.id" class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
 						{{task.name}}
 					</div>
 				</template>
@@ -17,13 +17,55 @@
 
 	</div>
   </admin-panel-layout>
-      <!-- // <div class="hero-content gap-8 flex-col overflow-hidden place-items-start mx-auto">
-//         <div class="flex items-center space-x-16">
-//             <h1 class="text-2xl font-bold">{{ event.name }}</h1>
-//             <button class="btn btn-sm">Zadania</button>
-//         </div>
-//         <div class="w-full flex overflow-x-scroll no-scrollbar space-x-7">
-//             <div class="flex-shrink-0 w-96"> -->
+
+	<!-- Modal -->
+	<input type="checkbox" id="task-details" class="modal-toggle"> 
+	<div id="task-details" class="modal ">
+		<div class="modal-box">
+
+			<!-- Task name and close button -->
+			<div class="flex justify-between items-center">
+				<div class="flex items-center space-x-2">
+					<i class="fas fa-thumbtack"></i>
+					<h1 class="font-bold text-lg capitalize">{{ currentTask.name }}</h1>
+				</div>
+				<label for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
+			</div>
+
+			<!-- Date due -->
+			<div class="flex items-center space-x-2 mt-3">
+				<i class="fas fa-calendar-week"></i>
+				<h1 class="font-bold">Termin</h1>
+			</div>
+			<h2 class="ml-6 mt-2">{{ currentTask.date_due ?? 'Nie określono' }}</h2>
+
+			<!-- Description -->
+			<div class="flex items-center space-x-2 mt-6">
+				<i class="fas fa-align-justify"></i>
+				<h1 class="font-bold">Opis</h1>
+			</div>
+			<p class="ml-6 mt-2">{{ currentTask.description }}</p>
+
+			<!-- Subtask list -->
+			<div class="flex items-center space-x-2 mt-6">
+				<i class="fas fa-tasks"></i>
+				<h1 class="font-bold">Zadania</h1>
+			</div>
+			<div class="mt-2">
+				<ul class="menu">
+					<li v-for="task in currentTask.subtasks" :key=task.id >
+						<a class="flex items-center space-x-2">
+							<input :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+							<span>{{ task.name }}</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+
+
 </template>
 
 <script>
@@ -40,9 +82,15 @@ export default defineComponent({
 		task_states: Object
 	},
 
-	setup() {
+	setup(props) {
+		const currentTask = props.tasks.length ? ref(props.tasks[0]) : ref({})
 
-		return {  }
+		const showDetails = (row) => {
+			currentTask.value = row
+			document.getElementById('task-details').checked = true
+		}
+
+		return { showDetails, currentTask }
 	},
 
 	components: {
