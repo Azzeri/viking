@@ -86,16 +86,13 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
 
     // Event
-    Route::prefix('events')->name('events.')->group(function () {
-        // Event
-        Route::put('/finish/{event}', [EventController::class, 'finish'])->name('finish');
-        Route::put('/participation/{event}', [EventController::class, 'confirm_participation'])->name('participation');
-        Route::get('/task_manager/{event}', [EventController::class, 'taskManager'])->name('task_manager');
-        Route::resource('/events', EventController::class)->except(['create', 'edit']);
+    Route::put('events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
+    Route::put('events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
+    Route::get('events/task_manager/{event}', [EventController::class, 'taskManager'])->name('events.task_manager');
+    Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
         // EventTask
-        Route::resource('/tasks', EventController::class)->only(['store', 'update', 'destroy']);
-    });
+        // Route::resource('/tasks', EventController::class)->only(['store', 'update', 'destroy']);
 
     // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
