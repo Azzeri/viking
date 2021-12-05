@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventSubTaskController;
+use App\Http\Controllers\EventTaskController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
+use App\Models\EventTask;
 use App\Models\StoreCategory;
 use App\Models\StoreItem;
 use App\Models\User;
@@ -91,6 +93,10 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::put('events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
     Route::get('events/task_manager/{event}', [EventController::class, 'taskManager'])->name('events.task_manager');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
+
+    // EventTask
+    Route::put('event_tasks/change_state/{eventTask}/{eventTaskState}', [EventTaskController::class, 'change_state'])->name('event_tasks.change_state');
+    Route::resource('/event_tasks', EventTaskController::class)->only(['store', 'update', 'destroy']);
 
     // EventSubTask
     Route::put('event_sub_tasks/finish/{event_sub_task}', [EventSubTaskController::class, 'finish'])->name('event_sub_tasks.finish');

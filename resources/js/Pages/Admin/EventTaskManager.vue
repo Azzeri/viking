@@ -4,11 +4,12 @@
 
 	<div class="w-full flex space-x-2">
 
-		<div v-for="state in task_states" :key=state.id class="flex-shrink-0 border w-64 p-2 bg-neutral rounded-lg">
+		<div v-for="state in task_states" :key=state.id @drop="onDrop($event, state)" @dragenter.prevent @dragover.prevent class="flex-shrink-0 border w-64 p-2 bg-neutral rounded-lg">
 			<h1 class="text-base-200 font-bold capitalize">{{ state.name }}</h1>
 			<div class="mt-4 space-y-3">
 				<template v-for="task in tasks" :key="task.id">
-					<div @click=showDetails(task) v-if="task.event_task_state_id == state.id" class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
+					<div @click=showDetails(task) v-if="task.event_task_state_id == state.id" draggable=true @dragstart="startDrag($event, task)"
+					class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
 						{{task.name}}
 					</div>
 				</template>
@@ -95,7 +96,18 @@ export default defineComponent({
 			Inertia.put(route('admin.event_sub_tasks.finish', row.id))
 		}
 
-		return { showDetails, finishSubtask, currentTask }
+		const startDrag = (event, item) => {
+			event.dataTransfer.dropEffect = 'move'
+			event.dataTransfer.effectAllowed = 'move'
+			event.dataTransfer.setData('ItemID', item.id)
+		}
+
+		const onDrop = (event, state) => {
+			const itemID = event.dataTransfer.getData('itemID')
+			Inertia.put(route('admin.event_tasks.change_state', [itemID, state]))
+		}
+
+		return { showDetails, finishSubtask, startDrag, onDrop, currentTask }
 	},
 
 	components: {
