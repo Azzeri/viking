@@ -334,14 +334,6 @@ export default defineComponent({
         CrudModal
 	},
 
-    // <div class="hero-content gap-8 flex-col overflow-hidden place-items-start mx-auto">
-//         <div class="flex items-center space-x-16">
-//             <h1 class="text-2xl font-bold">{{ event.name }}</h1>
-//             <button class="btn btn-sm">Zadania</button>
-//         </div>
-//         <div class="w-full flex overflow-x-scroll no-scrollbar space-x-7">
-//             <div class="flex-shrink-0 w-96">
-
 });
 </script>
 

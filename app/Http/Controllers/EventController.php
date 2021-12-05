@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventTask;
+use App\Models\EventTaskState;
 use App\Models\InventoryItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -144,6 +145,9 @@ class EventController extends Controller
         $tasks = $event->tasks ? EventTask::where('event_id', $event->id)->orderBy('name')->get()->map(fn ($task) => [
             'id' => $task->id,
             'name' => $task->name,
+            'description' => $task->description,
+            'date_due' => $task->date_due,
+            'event_task_state_id' => $task->event_task_state_id,
             'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
                 'id' => $subtask->id,
                 'name' => $subtask->name,
@@ -153,9 +157,12 @@ class EventController extends Controller
             ]) : null
         ]) : null;
 
+        $task_states = EventTaskState::all();
+
         return inertia('Admin/EventTaskManager', [
             'event' => $eventMapped,
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'task_states' => $task_states
         ]);
     }
 
