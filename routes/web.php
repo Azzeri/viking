@@ -88,6 +88,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     // Event
     Route::put('/events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
     Route::put('/events/participation/{event}', [EventController::class, 'confirm_participation'])->name('events.participation');
+    Route::get('/events/task_manager/{event}', [EventController::class, 'taskManager'])->name('events.task_manager');
     Route::resource('/events', EventController::class)->except(['create', 'edit']);
 
     // User

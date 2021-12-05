@@ -22,7 +22,7 @@
             <table class="w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white shadow-lg overflow-auto mt-4 sm:mt-2 sm:inline-table">
                 <thead class="text-white space-y-2">
                     <tr v-for="(index) in data.data" :key=index class="bg-gray-600 flex flex-col flex-no-wrap sm:hidden rounded-l-lg sm:mb-0 sm:last:table-row divide-y divide-gray-600 sm:divide-none">
-                        <th v-for="column in columns" :key="column" @click="sort(column.name)" 
+                        <th v-for="column in columns" :key="column" @click="sort(column)" 
                             class="px-3 py-1 sm:py-2 text-left uppercase" :class=extraClass>
                             <div class="flex justify-between items-center space-x-2">
                                 <span>{{ column.label }}</span>
@@ -71,8 +71,10 @@ export default {
         })
 
         const sort = (field) => {
-            params.field = field
-            params.direction = params.direction === 'asc' ? 'desc' : 'asc'
+            if(field.sortable) {
+                params.field = field.name
+                params.direction = params.direction === 'asc' ? 'desc' : 'asc'
+            }
         }
 
         const filterServices = (option) => {

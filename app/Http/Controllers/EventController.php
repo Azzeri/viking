@@ -127,6 +127,25 @@ class EventController extends Controller
     }
 
     /**
+     * Display the specified resource task manager
+     *
+     * @param  \App\Models\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function taskManager(Event $event)
+    {
+        $eventMapped = array(
+            'id' => $event->id,
+            'name' => $event->name,
+            'is_finished' => $event->is_finished,
+        );
+
+        return inertia('Admin/EventTaskManager', [
+            'event' => $eventMapped,
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

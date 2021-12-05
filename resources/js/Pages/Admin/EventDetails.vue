@@ -5,7 +5,7 @@
         <div class="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:justify-between w-full items-center sm:my-8">
             <h1 class="text-2xl font-bold">{{ event.name }}</h1>
             <div class="space-x-1 sm:space-x-3 flex justify-center">
-                <button class="btn btn-sm btn-primary">Zadania</button>
+                <Link :href="route('admin.events.task_manager', event)" as="button" class="btn btn-sm btn-primary">Zadania</Link>
                 <template v-if="event.is_finished == false">
                     <button v-if="!userInParticipants($page.props.user.id)" @click=confirmParticipation() class="btn btn-sm btn-secondary">Biorę udział</button>
                     <button v-else @click=confirmParticipation() class="btn btn-sm btn-secondary">Nie biorę udziału</button>
