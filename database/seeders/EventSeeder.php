@@ -27,6 +27,6 @@ class EventSeeder extends Seeder
             'items' => '[1,2,3,4]'
         ]);
 
-        Event::factory()->count(50)->create();
+        Event::factory()->count(15)->create();
     }
 }

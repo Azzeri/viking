@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             StoreItemSeeder::class,
             StoreRequestSeeder::class,
             EventTaskStateSeeder::class,
-            EventTaskSeeder::class
+            EventTaskSeeder::class,
+            EventSubTaskSeeder::class
         ]);
     }
 }

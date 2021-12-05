@@ -3292,12 +3292,6 @@ html {
 	--tw-text-opacity: 1;
 	color: hsla(var(--bc)/var(--tw-text-opacity,1));
 }
-.label-text-alt {
-	font-size: .75rem;
-	line-height: 1rem;
-	--tw-text-opacity: 1;
-	color: hsla(var(--bc)/var(--tw-text-opacity,1));
-}
 .label a:hover {
 	--tw-text-opacity: 1;
 	color: hsla(var(--bc)/var(--tw-text-opacity,1));
@@ -3747,9 +3741,6 @@ html {
 .btn-wide {
 	width: 16rem;
 }
-.btn-block {
-	width: 100%;
-}
 .btn-square.btn-xs {
 	height: 1.5rem;
 	padding: 0;
@@ -4011,9 +4002,6 @@ html {
 .mt-36 {
 	margin-top: 9rem;
 }
-.mb-5 {
-	margin-bottom: 1.25rem;
-}
 .block {
 	display: block;
 }
@@ -4175,9 +4163,6 @@ html {
 }
 .max-w-sm {
 	max-width: 24rem;
-}
-.max-w-lg {
-	max-width: 32rem;
 }
 .flex-1 {
 	flex: 1 1 0%;
@@ -4732,10 +4717,6 @@ html {
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
-.px-0 {
-	padding-left: 0px;
-	padding-right: 0px;
-}
 .pt-6 {
 	padding-top: 1.5rem;
 }
@@ -4783,9 +4764,6 @@ html {
 }
 .pl-10 {
 	padding-left: 2.5rem;
-}
-.pl-0 {
-	padding-left: 0px;
 }
 .pl-1 {
 	padding-left: 0.25rem;
@@ -5368,13 +5346,6 @@ html {
 	--tw-text-opacity: 1;
 	color: rgba(31, 41, 55, var(--tw-text-opacity));
 }
-.disabled\:bg-opacity-10:disabled {
-	--tw-bg-opacity: 0.1;
-}
-.disabled\:text-gray-500:disabled {
-	--tw-text-opacity: 1;
-	color: rgba(107, 114, 128, var(--tw-text-opacity));
-}
 .disabled\:opacity-25:disabled {
 	opacity: 0.25;
 }
@@ -5383,16 +5354,6 @@ html {
 	border-bottom-right-radius: 0px;
 }
 @media (min-width: 640px) {
-
-	.sm\:btn-square {
-		height: 3rem;
-		padding: 0;
-		width: 3rem;
-	}
-
-	.btn.loading.sm\:btn-circle:before,.btn.loading.sm\:btn-square:before {
-		margin-right: 0;
-	}
 
 	.btn.loading.sm\:btn-sm:before,.btn.loading.sm\:btn-xs:before {
 		height: .75rem;
@@ -5420,16 +5381,6 @@ html {
 		font-size: .875rem;
 	}
 
-	.sm\:btn-block {
-		width: 100%;
-	}
-
-	.btn-square.sm\:btn-xs {
-		height: 1.5rem;
-		padding: 0;
-		width: 1.5rem;
-	}
-
 	.btn-square.sm\:btn-xs {
 		height: 1.5rem;
 		padding: 0;
@@ -5440,24 +5391,6 @@ html {
 		height: 2rem;
 		padding: 0;
 		width: 2rem;
-	}
-
-	.btn-square.sm\:btn-sm {
-		height: 2rem;
-		padding: 0;
-		width: 2rem;
-	}
-
-	.btn-square.sm\:btn-md {
-		height: 3rem;
-		padding: 0;
-		width: 3rem;
-	}
-
-	.btn-square.sm\:btn-lg {
-		height: 4rem;
-		padding: 0;
-		width: 4rem;
 	}
 
 	.btn-circle.sm\:btn-xs {
@@ -5812,22 +5745,6 @@ html {
 		display: grid;
 	}
 
-	.md\:w-64 {
-		width: 16rem;
-	}
-
-	.md\:w-7 {
-		width: 1.75rem;
-	}
-
-	.md\:w-8 {
-		width: 2rem;
-	}
-
-	.md\:w-80 {
-		width: 20rem;
-	}
-
 	.md\:w-96 {
 		width: 24rem;
 	}
@@ -6051,10 +5968,6 @@ html {
 
 	.lg\:pt-16 {
 		padding-top: 4rem;
-	}
-
-	.lg\:text-left {
-		text-align: left;
 	}
 
 	.lg\:hover\:w-64:hover {

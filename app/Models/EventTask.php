@@ -21,5 +21,9 @@ class EventTask extends Model
     public function event() {
         return $this->belongsTo(Event::class, 'event_id');
     }
+
+    public function subtasks() {
+        return $this->hasMany(EventSubTask::class);
+    }
 }
 

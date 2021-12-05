@@ -26,7 +26,7 @@ class EventTaskFactory extends Factory
             'description' => $this->faker->optional()->realText($maxNbChars = 255, $indexSize = 2),
             'date_due' => $this->faker->date(),
             'user_id' => $this->faker->numberBetween(1, 5),
-            'event_id' => $this->faker->numberBetween(1, 30),
+            'event_id' => $this->faker->numberBetween(1, 15),
             'event_task_state_id' => $this->faker->numberBetween(1, 5),
         ];
     }

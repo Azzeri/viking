@@ -144,6 +144,13 @@ class EventController extends Controller
         $tasks = $event->tasks ? EventTask::where('event_id', $event->id)->orderBy('name')->get()->map(fn ($task) => [
             'id' => $task->id,
             'name' => $task->name,
+            'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
+                'id' => $subtask->id,
+                'name' => $subtask->name,
+                'is_finished' => $subtask->is_finished,
+                'date_due' => $subtask->date_due,
+                'date_created' => $subtask->created_at
+            ]) : null
         ]) : null;
 
         return inertia('Admin/EventTaskManager', [
