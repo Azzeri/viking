@@ -15,7 +15,17 @@ class EventSubTaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', EventSubTask::class);
+
+        EventSubTask::create(
+            $request->validate([
+                'name' => ['required', 'min:1'],
+                'date_due' => ['nullable', 'date', 'after_or_equal:today'],
+                'event_task_id' => ['required', 'integer']
+            ])
+        );
+
+        return redirect()->back();
     }
 
     /**
