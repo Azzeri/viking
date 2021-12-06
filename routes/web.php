@@ -11,6 +11,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 use App\Models\EventTask;
 use App\Models\StoreCategory;
 use App\Models\StoreItem;

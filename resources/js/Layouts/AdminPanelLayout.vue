@@ -74,6 +74,7 @@
                     <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')">Wydarzenia</AdminNavButton>
                     <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store.items.index')">Sklep</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory.items.index')">Sprzęt</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')">Posty</AdminNavButton>
                 </div>
                 <!-- User options -->
                 <div class="lg:hidden flex space-y-4 flex-col">

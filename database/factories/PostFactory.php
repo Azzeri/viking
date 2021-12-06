@@ -23,9 +23,8 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->words(5, true),
-            'body' => $this->faker->optional()->realText($maxNbChars = 255, $indexSize = 2),
+            'body' => $this->faker->realText($maxNbChars = 255, $indexSize = 2),
             'user_id' => $this->faker->numberBetween(1, 5),
-            'inventory_item_id' => $this->faker->numberBetween(1, 30)
         ];
     }
 }
