@@ -24,35 +24,51 @@
 
 	<!-- Modal - details -->
 	<input type="checkbox" id="task-details" class="modal-toggle"> 
-	<div class="modal overflow-y-auto modal-open">
+	<div class="modal overflow-y-auto">
 		<div class="modal-box">
 
-			<!-- Task name and close button -->
-			<div class="flex justify-between items-center">
-				<div class="flex items-center space-x-2">
-					<i class="fas fa-thumbtack"></i>
-					<h1 class="font-bold text-lg capitalize">{{ currentTask.name }}</h1>
+			<!-- Buttons -->
+			<div class="flex items-center justify-between mb-4">
+				<div class="flex space-x-2">
 					<button @click="deleteTask(currentTask)" class="btn btn-error btn-xs">
 						<i class="fas fa-times"></i>
 						<span class="ml-2">Usuń</span>
+					</button>
+					<button @click="editTask(currentTask)" class="btn btn-info btn-xs">
+						<i :class="{'fas fa-edit':!taskEditMode, 'fas fa-times':taskEditMode}"></i>
+						<span v-if=!taskEditMode class="ml-2">Edytuj</span>
 					</button>
 				</div>
 				<label @click="reset" for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
 			</div>
 
-			<!-- Date due -->
-			<div class="flex items-center space-x-2 mt-3">
-				<i class="fas fa-calendar-week"></i>
-				<h1 class="font-bold">Termin</h1>
-			</div>
-			<h2 class="ml-6 mt-2">{{ currentTask.date_due ?? 'Nie określono' }}</h2>
+			<form @submit.prevent=updateTask(currentTask.id)>
+				<!-- Task name -->
+				<div class="flex justify-between items-center">
+					<div class="flex items-center space-x-2">
+						<i class="fas fa-thumbtack"></i>
+						<h1 v-if="!taskEditMode" class="font-bold text-lg capitalize">{{ currentTask.name }}</h1>
+						<input v-else v-model="createTaskForm.name" type="text" class="input input-primary input-sm" />
+					</div>
+				</div>
 
-			<!-- Description -->
-			<div class="flex items-center space-x-2 mt-6">
-				<i class="fas fa-align-justify"></i>
-				<h1 class="font-bold">Opis</h1>
-			</div>
-			<p class="ml-6 mt-2">{{ currentTask.description }}</p>
+				<!-- Date due -->
+				<div class="flex items-center space-x-2 mt-3">
+					<i class="fas fa-calendar-week"></i>
+					<h1 class="font-bold">Termin</h1>
+				</div>
+				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ currentTask.date_due ?? 'Nie określono' }}</h2>
+				<input v-else v-model="createTaskForm.date_due" type="date" class="input input-primary input-sm ml-6" />
+
+				<!-- Description -->
+				<div class="flex items-center space-x-2 mt-6">
+					<i class="fas fa-align-justify"></i>
+					<h1 class="font-bold">Opis</h1>
+				</div>
+				<p v-if="!taskEditMode" class="ml-6 mt-2">{{ currentTask.description }}</p>
+				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary" v-model="createTaskForm.description"></textarea>
+				<button v-if=taskEditMode class="ml-6 btn btn-primary btn-sm">Zapisz</button>
+			</form>
 
 			<!-- Subtask list -->
 			<div class="flex items-center space-x-2 mt-6">
@@ -157,6 +173,7 @@ export default defineComponent({
 
 	setup(props) {
 		const currentTask = ref(props.tasks[0]) || ref({})
+		const taskEditMode = ref(false)
 
 		const createTaskForm = useForm({
 			name:null,
@@ -178,6 +195,7 @@ export default defineComponent({
 			createSubTaskForm.reset()
 			createSubTaskForm.clearErrors()
 			document.getElementById('create-subtask-form').classList.add('hidden')
+			taskEditMode.value = false
 		}
 
 		const showDetails = (row) => {
@@ -209,6 +227,24 @@ export default defineComponent({
 				} 
 			})
         }
+
+		const editTask = (row) => {
+			if(taskEditMode.value == false) {
+				createTaskForm.name = row.name
+				createTaskForm.description = row.description
+				createTaskForm.date_due = row.date_due
+
+				taskEditMode.value = true
+			}
+			else
+				reset()
+		}
+
+		const updateTask = (id) => {
+			createTaskForm.put(route('admin.event_tasks.update', id), {
+				onSuccess: () => taskEditMode = false
+			}) 
+		}
 
 		const createSubTask = (id) => {
 			toggleSubTaskEditMode({}, true)
@@ -293,7 +329,7 @@ export default defineComponent({
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		return { currentTask, showDetails, createTask, storeTask, deleteTask, createTaskForm, 
+		return { currentTask, showDetails, createTask, storeTask, deleteTask, createTaskForm, taskEditMode, editTask, updateTask,
 				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask, deleteSubTask, toggleSubTaskEditMode, updateSubTask,
 				 startDrag, onDrop, reset, currentDate,}
 	},

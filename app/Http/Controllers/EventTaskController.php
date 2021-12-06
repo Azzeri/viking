@@ -48,7 +48,18 @@ class EventTaskController extends Controller
      */
     public function update(Request $request, EventTask $eventTask)
     {
-        //
+        $this->authorize('update', $eventTask, EventTask::class);
+
+        $eventTask->update(
+            $request->validate([
+                'name' => ['required', 'string', 'min:3', 'max:128'],
+                'description' => ['nullable', 'min:3', 'max:255'],
+                'date_due' => ['nullable', 'date', 'after_or_equal:today'],
+                'event_id' => ['required', 'integer'],
+            ])
+        );
+
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano zadanie');
     }
 
     /**
@@ -59,8 +70,8 @@ class EventTaskController extends Controller
      */
     public function destroy(EventTask $eventTask)
     {
-        $this->authorize('delete', $eventTask, EventTask::class);    
-        
+        $this->authorize('delete', $eventTask, EventTask::class);
+
         $eventTask->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto zadanie');
