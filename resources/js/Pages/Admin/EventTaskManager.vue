@@ -24,7 +24,7 @@
 
 	<!-- Modal - details -->
 	<input type="checkbox" id="task-details" class="modal-toggle"> 
-	<div class="modal">
+	<div class="modal overflow-y-auto modal-open">
 		<div class="modal-box">
 
 			<!-- Task name and close button -->
@@ -72,16 +72,29 @@
 			<div class="mt-2">
 				<ul class="menu">
 					<li v-for="task in currentTask.subtasks" :key=task.id >
-						<a class="flex justify-between space-x-2">
-							<div class="flex items-center space-x-2">
-								<input @click=finishSubtask(task) :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
-								<span>{{ task.name }}</span>
-							</div>
-							<div class="flex items-center space-x-2">
+						<a>
+							<div :id="'subtask-name-'+task.id" class="flex w-full justify-between">
+								<div class="flex items-center space-x-2">
+									<input @click=finishSubtask(task) :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+									<span @click="toggleSubTaskEditMode(task)" :class="{ 'text-gray-600 line-through':task.is_finished }">{{ task.name }}</span>
+								</div>
 								<span>{{ task.date_due }}</span>
-								<button @click=deleteSubTask(task) class="btn btn-xs btn-ghost ">
-									<i class="fas fa-trash-alt text-error"></i>
-								</button>
+							</div>
+
+							<div :id="'subtask-form-'+task.id" class="hidden w-full flex flex-col space-y-2">
+								<div>
+									<form @submit.prevent="updateSubTask(task.id)" class="flex justify-between w-full space-x-2">
+										<input v-model="createSubTaskForm.name" :id="'subtask-input-'+task.id" type="text" class="input input-primary input-xs w-3/4">
+										<input v-model="createSubTaskForm.date_due" type="date" class="input input-primary input-xs">
+									</form>
+								</div>
+								<div class="flex space-x-3">
+									<button @click="updateSubTask(task.id)" class="btn btn-primary btn-xs">Zapisz</button>
+									<button @click=deleteSubTask(task) class="btn btn-error btn-xs">Usuń</button>
+									<button @click="toggleSubTaskEditMode(task, true)" class="btn btn-info btn-xs">
+										<i class="fas fa-times"></i>
+									</button>
+								</div>
 							</div>
 						</a>
 					</li>
@@ -198,6 +211,10 @@ export default defineComponent({
         }
 
 		const createSubTask = (id) => {
+			toggleSubTaskEditMode({}, true)
+			createSubTaskForm.name = null,
+			createSubTaskForm.date_due = null,
+			createSubTaskForm.vent_task_id = null,
 			createSubTaskForm.event_task_id = id
 			document.getElementById('create-subtask-form').classList.contains('hidden') ? document.getElementById('create-subtask-form').classList.remove('hidden')
 			: document.getElementById('create-subtask-form').classList.add('hidden')
@@ -218,6 +235,12 @@ export default defineComponent({
 			})
 		}
 
+		const updateSubTask = (id) => { 
+			createSubTaskForm.put(route('admin.event_sub_tasks.update', id), {
+				onSuccess: () => {toggleSubTaskEditMode({},true)}
+			}) 
+		}
+
 		const deleteSubTask = (row) => {
             if (!confirm('Na pewno?')) return;
             Inertia.delete(route('admin.event_sub_tasks.destroy', row.id), {
@@ -226,6 +249,32 @@ export default defineComponent({
 				} 
 			})
         }
+
+		const toggleSubTaskEditMode = (task, close_all) => {
+			let elements = document.querySelectorAll('*[id^="subtask-form-"]')
+			elements.forEach((element) => element.classList.add('hidden'))
+
+			elements = document.querySelectorAll('*[id^="subtask-name-"]')
+			elements.forEach((element) => element.classList.remove('hidden'))
+
+			document.getElementById('create-subtask-form').classList.add('hidden')
+
+			if(!close_all) {
+				document.getElementById('subtask-name-'+task.id).classList.contains('hidden') ? 
+				document.getElementById('subtask-name-'+task.id).classList.remove('hidden') : 
+				document.getElementById('subtask-name-'+task.id).classList.add('hidden')
+
+				document.getElementById('subtask-form-'+task.id).classList.contains('hidden') ? 
+				document.getElementById('subtask-form-'+task.id).classList.remove('hidden') : 
+				document.getElementById('subtask-form-'+task.id).classList.add('hidden')
+
+				createSubTaskForm.name = task.name
+				createSubTaskForm.date_due = task.date_due
+				createSubTaskForm.event_task_id = task.event_task_id
+
+				document.getElementById('subtask-input-'+task.id).focus()
+			}
+		}
 
 		const finishSubtask = (row) => {
 			Inertia.put(route('admin.event_sub_tasks.finish', row.id))
@@ -245,7 +294,7 @@ export default defineComponent({
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
 		return { currentTask, showDetails, createTask, storeTask, deleteTask, createTaskForm, 
-				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask, deleteSubTask,
+				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask, deleteSubTask, toggleSubTaskEditMode, updateSubTask,
 				 startDrag, onDrop, reset, currentDate,}
 	},
 

@@ -157,7 +157,8 @@ class EventController extends Controller
                 'name' => $subtask->name,
                 'is_finished' => $subtask->is_finished,
                 'date_due' => $subtask->date_due,
-                'date_created' => $subtask->created_at
+                'date_created' => $subtask->created_at,
+                'event_task_id' => $subtask->event_task_id
             ]) : null
         ]) : null;
 
