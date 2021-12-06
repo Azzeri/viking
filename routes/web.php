@@ -102,6 +102,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::put('event_sub_tasks/finish/{event_sub_task}', [EventSubTaskController::class, 'finish'])->name('event_sub_tasks.finish');
     Route::resource('/event_sub_tasks', EventSubTaskController::class)->only(['store', 'update', 'destroy']);
 
+    // Post
+    Route::resource('/posts', PostController::class)->except(['create', 'edit']);
+
     // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
