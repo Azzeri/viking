@@ -4981,6 +4981,10 @@ html {
 	--tw-text-opacity: 1;
 	color: rgba(245, 158, 11, var(--tw-text-opacity));
 }
+.text-error {
+	--tw-text-opacity: 1;
+	color: hsla(var(--er) / var(--tw-text-opacity));
+}
 .underline {
 	text-decoration: underline;
 }

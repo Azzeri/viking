@@ -77,7 +77,12 @@
 								<input @click=finishSubtask(task) :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
 								<span>{{ task.name }}</span>
 							</div>
-							<span>{{ task.date_due }}</span>
+							<div class="flex items-center space-x-2">
+								<span>{{ task.date_due }}</span>
+								<button @click=deleteSubTask(task) class="btn btn-xs btn-ghost ">
+									<i class="fas fa-trash-alt text-error"></i>
+								</button>
+							</div>
 						</a>
 					</li>
 				</ul>
@@ -213,6 +218,15 @@ export default defineComponent({
 			})
 		}
 
+		const deleteSubTask = (row) => {
+            if (!confirm('Na pewno?')) return;
+            Inertia.delete(route('admin.event_sub_tasks.destroy', row.id), {
+				onSuccess: () => {
+
+				} 
+			})
+        }
+
 		const finishSubtask = (row) => {
 			Inertia.put(route('admin.event_sub_tasks.finish', row.id))
 		}
@@ -231,7 +245,7 @@ export default defineComponent({
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
 		return { currentTask, showDetails, createTask, storeTask, deleteTask, createTaskForm, 
-				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask,
+				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask, deleteSubTask,
 				 startDrag, onDrop, reset, currentDate,}
 	},
 

@@ -48,7 +48,11 @@ class EventSubTaskController extends Controller
      */
     public function destroy(EventSubTask $eventSubTask)
     {
-        //
+        $this->authorize('delete', $eventSubTask, EventSubTask::class);    
+        
+        $eventSubTask->delete();
+
+        return redirect()->back();
     }
 
     /**
