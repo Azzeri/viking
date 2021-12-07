@@ -33,65 +33,21 @@
 		</DataTable>
 	</template>
 
-	<!-- <CrudModal :show=modalOpened @close=close>
+	<CrudModal :show=modalOpened @close=close>
 		<template #title>Nowe wydarzenie</template>
 
 		<template #content>
 			<jet-validation-errors v-if="form.hasErrors" class="my-6" />
 			<form @submit.prevent=store>
 				<div class="form-control mt-4">
-					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa wydarzenia" class="input input-primary input-bordered">
-
-					<div class="flex space-x-2 mt-4">
-						<div class="w-1/2">
-							<label class="label"><span class="label-text">Rozpoczęcie<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.date_start type="date"  class="input input-primary input-bordered w-full">
-						</div>
-						<div class="w-1/2">
-							<label class="label"><span class="label-text text-white">Rozpoczęcie</span></label> 
-							<input v-model=form.time_start type="time" class="input input-primary input-bordered w-full">
-						</div>
-					</div>
-
-					<div class="flex space-x-2">
-						<div class="w-1/2">
-							<label class="label"><span class="label-text">Zakończenie<span class="ml-1 text-red-500">*</span> (czas opcjonalny)</span></label> 
-							<input v-model=form.date_end type="date"  class="input input-primary input-bordered w-full">
-						</div>
-						<div class="w-1/2">
-							<label class="label"><span class="label-text text-white">Zakończenie (czas opcjonalny)</span></label> 
-							<input v-model=form.time_end type="time" class="input input-primary input-bordered w-full">
-						</div>
-					</div>
-
-					<div class="flex mt-4 space-x-2">
-						<div class="w-full">
-							<label class="label"><span class="label-text">Ulica<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrStreet type="text" placeholder="Ulica" class="input input-primary input-bordered w-full">
-						</div>
-						<div class="w-24">
-							<label class="label"><span class="label-text">Nr<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrNumber type="text" placeholder="Nr" class="input input-primary input-bordered w-full">
-						</div>
-					</div>
-
-					<div class="flex space-x-2">
-						<div class="w-48">
-							<label class="label"><span class="label-text">Kod pocztowy<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrPostCode type="text" placeholder="Kod pocztowy" class="input input-primary input-bordered w-full">
-						</div>
-						<div class="w-full">
-							<label class="label"><span class="label-text">Miejscowość<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrTown type="text" placeholder="Miejscowość" class="input input-primary input-bordered w-full">
-						</div>
-					</div>
+					<label class="label"><span class="label-text">Tytuł<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.title type="text" placeholder="Tytuł posta" class="input input-primary input-bordered">
 
 					<label class="label mt-4">
-						<span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
+						<span class="label-text">Treść<span class="ml-1 text-red-500">*</span></span>
 					</label> 
-					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
-					
+					<textarea v-model=form.body class="textarea h-24 textarea-bordered textarea-primary" placeholder="Treść......"></textarea>
+                    
 				</div> 
 			</form>
 		</template>
@@ -99,7 +55,7 @@
 		<template #footer>
 			<button @click=store :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn btn-info">Dodaj</button>
 		</template>
-	</CrudModal>  -->
+	</CrudModal> 
 	
   </admin-panel-layout>
 </template>
@@ -123,19 +79,9 @@ export default defineComponent({
 		const modalOpened = ref(false)
 
 		const form = useForm({
-			name:null,
-
-			date_start:null,
-			time_start:null,
-			date_end:null,
-			time_end:null,
-			
-			addrStreet:null,
-			addrNumber:null,
-			addrPostCode:null,
-			addrTown:null,
-
-			description:null
+			title:null,
+			body:null,
+			resource_link:null,
 		})
 
 		const close = _ => { 
@@ -150,8 +96,6 @@ export default defineComponent({
 			}) 
 		}
 
-		const currentDate = _ => new Date().toISOString().split('T')[0]
-
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
 			{name:'title', label:'Tytuł', sortable: true},
@@ -159,7 +103,7 @@ export default defineComponent({
 			{name:'actions', label:'Działania', sortable: false},
         ]
 
-		return { form, columns, modalOpened, close, currentDate, store }
+		return { form, columns, modalOpened, close, store }
 	},
 
 	components: {

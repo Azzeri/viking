@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -65,7 +66,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Post::class);
+
+        $request->validate([
+            'title' => ['required', 'min:3', 'max:128', 'string'],
+            'body' => ['required', 'min:3', 'max:255'],
+            'resource_link' => ['nullable', 'string']
+        ]);
+
+        Post::create([
+            'title' => request()->title,
+            'body' => request()->body,
+            'resource_link' => request()->resource_link,
+            'user_id' => Auth::user()->id
+        ]);
+
+        return redirect()->back()->with('message', 'Pomyślnie dodano post');
     }
 
     /**
