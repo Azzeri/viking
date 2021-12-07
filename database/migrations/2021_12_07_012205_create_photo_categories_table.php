@@ -19,6 +19,7 @@ class CreatePhotoCategoriesTable extends Migration
             $table->string('photo_path')->default('/images/default.png');
             $table->foreignId('photo_category_id')->nullable()->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

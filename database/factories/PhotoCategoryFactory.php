@@ -23,7 +23,7 @@ class PhotoCategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->words(3, true),
-            'photo_category_id' => $this->faker->numberBetween(1, 15),
+            'photo_category_id' => $this->faker->numberBetween(1, 1),
         ];
     }
 }

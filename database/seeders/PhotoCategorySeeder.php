@@ -14,6 +14,6 @@ class PhotoCategorySeeder extends Seeder
      */
     public function run()
     {
-        // PhotoCategory::factory()->count(15)->create();
+        PhotoCategory::factory()->count(15)->create();
     }
 }
