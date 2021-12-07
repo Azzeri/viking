@@ -1,15 +1,19 @@
 <template>
     <div id="modal" class="modal">
-        <div class="modal-box">
-            <h1 class="text-lg font-bold">
-                <slot name="title"></slot>
-            </h1>
+        <div class="modal-box max-w-sm">
+            <div class="flex items-center justify-between">
+                <h1 class="text-lg font-bold">
+                    <slot name="title"></slot>
+                </h1>
+                <button @click="close()" class="btn btn-sm btn-square btn-ghost">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             
             <slot name="content"></slot>
 
             <div class="modal-action">
                 <slot name="footer"></slot>
-                <button @click="close()" class="btn">Zamknij</button>
             </div>
         </div>
     </div>
@@ -26,10 +30,9 @@
         },
 
         setup(props) {
-            watch(() => props.show, _ => document.getElementById('modal').classList.contains('modal-open') ? 
-            document.getElementById('modal').classList.remove('modal-open') : 
-            document.getElementById('modal').classList.add('modal-open'))
-    
+            watch(() => props.show, _ => document.getElementById('modal').classList.contains('modal-open') 
+                ? document.getElementById('modal').classList.remove('modal-open') 
+                : document.getElementById('modal').classList.add('modal-open'))
         },
 
         methods: {

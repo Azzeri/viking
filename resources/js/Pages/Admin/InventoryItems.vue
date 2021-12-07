@@ -2,112 +2,149 @@
 
 <admin-panel-layout title="Sprzęt">
 	
-	<template #page-title>Sprzęt</template>
-
+	<!-- No data scenario -->
 	<template v-if="!items.data.length && filters.search == null">
 		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego przedmiotu</h1>
-		<Link as=button :href="route('admin.inventory.categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
+		<Link :href="route('admin.inventory_categories.index')" class="btn btn-wide btn-secondary mt-4">
+			Kategorie
+		</Link>
 		<button v-if="categories.length" @click="modalOpened = true" class="btn btn-wide btn-secondary mt-4">
 			<i class="fas fa-plus fa-lg mr-3"></i>
-			Dodaj wydarzenie
+			Dodaj przedmiot
 		</button>
 	</template>
 
 	<template v-else>
-		<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.inventory.items.index" extraClass="first:h-16 sm:first:h-auto flex sm:table-cell">
-
+		<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.inventory_items.index">
 			<template #buttons>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.inventory.categories.index')" class="btn btn-primary btn-sm">Kategorie</Link>
-				</div>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<button @click="modalOpened = true" class="btn btn-success btn-circle sm:btn-sm">
-						<i class="fas fa-plus fa-lg"></i>
-					</button>
-				</div>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.inventory.services.index')" class="btn btn-primary btn-sm">Serwisy</Link>
+				<button @click="modalOpened = true" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
+					<i class="fas fa-plus mr-2"></i>
+					Dodaj przedmiot
+				</button>
+				<div class="flex justify-center space-x-2">
+					<Link :href="route('admin.inventory_categories.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+						Kategorie
+					</Link>
+					<Link :href="route('admin.inventory_services.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+						Serwisy
+					</Link>
 				</div>
 			</template>
 
 			<template #content>
-				<tr v-for="row in items.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
-					<td class="px-3 py-1 flex items-center space-x-3">
-						<img @click=openPhotoModal(row) class="w-14 h-14 rounded-full cursor-pointer" :src=row.photo_path :alt=row.name>
-						<span>{{ row.name }}</span>
-					</td>
-					<td class="px-3 py-1">{{ row.category_name }}</td>
-					<td class="px-3 py-1">{{ row.quantity }}</td>
-					<td class="px-3 py-1 space-x-3">
-						<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-						<i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
+				<tr v-for="row in items.data" :key="row" class="hover">
+					<td class="font-bold">{{ row.id }}</td>
+					<td>{{ row.name }}</td>
+					<td>{{ row.category.name }}</td>
+					<td>{{ row.quantity }}</td>
+					<td class="space-x-2">
+						<button @click=showDetails(row) class="btn btn-xs btn-accent">Szczegóły</button>
+						<button @click="deleteRow(row)" class="btn btn-xs btn-error">
+							<i class="fas fa-trash cursor-pointer"></i>
+							<span class="ml-1">Usuń</span>
+						</button>
 					</td>
 				</tr>
 			</template>
-			
 		</DataTable>
 	</template>
 
 </admin-panel-layout>
 
 <CrudModal :show=modalOpened @close=close>
-	<template #title>Nowy kategoria sprzętu</template>
+	<template #title>Nowy przedmiot</template>
 
 	<template #content>
-		<jet-validation-errors class="my-6" />
-		<form @submit.prevent="store, update">
+		<jet-validation-errors v-if="form.hasErrors" />
+		<form @submit.prevent=store,update>
+			<div class="form-control mt-4">
 
-			<div class="mt-6">
-				<label for=name>Nazwa</label>
-				<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
-			</div>
-            <div class="mt-6">
-				<label for=description>Opis</label>
-				<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" required autofocus placeholder="Opis" autocomplete="description" />
-			</div>
-            <div class="mt-6">
-				<label for=quantity>Ilość</label>
-				<jet-input id="quantity" type="number" class="mt-1 block w-full" v-model="form.quantity" required autofocus placeholder="Ilość" autocomplete="quantity" />
-			</div>
-			<div class="mt-6">
-				<label for=category>Kategoria</label>
-				<select id=category class="w-full rounded-lg" v-model=form.inventory_category_id>
-					<template v-for="row in categories" :key=row>
-						<option :value="row.id"> {{ row.name }} </option>
-					</template>
+				<label class="label"><span class="label-text">Kategoria<span class="ml-1 text-red-500">*</span></span></label> 
+				<select v-model=form.inventory_category_id class="select select-bordered select-primary w-full">
+					<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
 				</select>
-			</div>
 
+				<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+				<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered">
+
+				<label class="label"><span class="label-text">Ilość<span class="ml-1 text-red-500">*</span></span></label> 
+				<input v-model=form.quantity type="number" placeholder="Ilość" class="input input-primary input-bordered">
+
+				<label class="label">
+					<span class="label-text">Opis</span>
+				</label> 
+				<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+
+			</div> 
 		</form>
 	</template>
 
 	<template #footer>
-		<jet-button type="submit" v-if=!modalEditMode @click=store class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-			Dodaj
-		</jet-button>
-
-		<jet-button type="submit" v-else @click=update class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-			Edytuj
-		</jet-button>
-
+		<button @click=store :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
 	</template>
 </CrudModal>
 
-<PhotoModal :item=itemForPhotoForm :show=photoModalOpened path='admin.inventory.items' @closePhotoModal=closePhotoModal></PhotoModal>
+<!-- Modal - details -->
+<input type="checkbox" id="modal-details" class="modal-toggle"> 
+<div class="modal overflow-y-auto">
+	<div class="modal-box max-w-2xl">
+		<jet-validation-errors v-if="form.hasErrors" />
+		<div class="flex justify-between items-center">
+			<div class="flex space-x-2">
+				<button class="btn btn-error btn-xs">
+					<i class="fas fa-trash"></i>
+					<span @click=deleteRow(currentItem) class="ml-2">Usuń</span>
+				</button>
+				<button @click="edit(currentItem)" :class="{'btn-info':!editMode, 'btn-error':editMode}" class="btn btn-xs">
+					<i :class="{'fas fa-edit':!editMode, 'fas fa-times':editMode}"></i>
+					<span v-html="editMode ? 'Anuluj' : 'Edytuj'" class="ml-2">Edytuj</span>
+				</button>
+				<button v-if="editMode" @click=update class="btn btn-xs btn-info">Zapisz</button>
+			</div>
+			<label @click=close for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
+		</div>
+		<!-- Form and labels -->
+		<form @submit.prevent=update>
+			<div class="flex items-start justify-between mb-4">
+				<div>
+					<h1 v-if=!editMode class="text-lg font-bold">{{ `${currentItem.id}. ${currentItem.name} - ${currentItem.quantity}szt.` }}</h1>
+					<h1 v-else class="text-lg font-bold">
+						{{`${currentItem.id}.`}}
+						<input v-model="form.name" type="text" class="input input-primary input-sm w-60" />
+						<input v-model="form.quantity" type="number" class="input input-primary input-sm w-20 ml-2" />
+						<span class="ml-1">szt.</span>
+					</h1>
+
+					<h2 v-if=!editMode class="text-gray-600">{{ currentItem.category.name }}</h2>
+					<select v-else v-model=form.inventory_category_id class="select select-bordered select-primary select-sm mt-2 ml-5 w-60 text-sm">
+						<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
+					</select>
+				</div>
+				
+			</div>
+
+			<!-- Content -->
+			<div class="mt-4 flex space-x-4">
+				<img :src=currentItem.photo_path :alt="currentItem.name" class="block h-32 object-fill">
+				<p v-if=!editMode class="text-justify">{{ currentItem.description ?? 'Nie dodano opisu'}}</p>
+				<textarea v-else v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- <PhotoModal :item=itemForPhotoForm :show=photoModalOpened path='admin.inventory.items' @closePhotoModal=closePhotoModal></PhotoModal> -->
 
 </template>
 
 <script>
 import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetButton from '@/Jetstream/Button.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import DataTable from '@/Components/DataTable.vue'
 import CrudModal from '@/Components/CrudModal.vue'
-import { Inertia } from '@inertiajs/inertia'
 import PhotoModal from '@/Components/PhotoModal.vue'
 import Label from '@/Jetstream/Label.vue'
 
@@ -121,10 +158,11 @@ export default defineComponent({
 
 	setup(props) {
 		const modalOpened = ref(false)
-		const modalEditMode = ref(false)
+		const editMode = ref(false)
 		const photoModalOpened = ref(false)
 		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : ref({})
-		
+		const currentItem = ref(props.items.data[0]) ?? ref({})
+
 		const form = useForm({
             id: null,
 			name: null,
@@ -143,60 +181,65 @@ export default defineComponent({
 
 		const reset = _ => { 
 			form.reset()
-			modalEditMode.value = false 
+			editMode.value = false 
 		}
 
 		const close = _ => { 
 			modalOpened.value = false
-			reset() 
+			editMode.value = false
+			document.getElementById('modal-details').checked = false
+			form.reset()
+			form.clearErrors()
 		}
 
 		const edit = (row) => { 
-			modalEditMode.value = true
+			editMode.value = !editMode.value
 
 			form.id = row.id
 			form.name = row.name
             form.description = row.description
 			form.inventory_category_id = row.inventory_category_id
             form.quantity = row.quantity
-
-			modalOpened.value = true 
 		}
 
         const store = _ => { 
-			form.post(route('admin.inventory.items.store'), {
+			form.post(route('admin.inventory_items.store'), {
 				onSuccess: () => close()
 			}) 
 		}
 
 		const update = _ => { 
-			form.put(route('admin.inventory.items.update', form.id), {
+			form.put(route('admin.inventory_items.update', form.id), {
 				onSuccess: () => close()
 			}) 
 		}
 
         const deleteRow = (row) => {
             if (!confirm('Na pewno? Wszystkie konserwacje związane z przedmiotem również zostaną usunięte!')) return;
-            Inertia.delete(route('admin.inventory.items.destroy', row.id))
+            Inertia.delete(route('admin.inventory_items.destroy', row.id), { onSuccess: () => close() })
         }
 
+		const showDetails = (item) => {
+			currentItem.value = item
+			document.getElementById('modal-details').checked = true
+		}
+
 		const columns = [
+			{name:'id', label:'ID', sortable: true},
 			{name:'name', label:'Przedmiot', sortable: true},
             {name:'inventory_category_id', label:'Kategoria', sortable: true},
 			{name:'quantity', label:'Ilość', sortable: true},
-			{name:'actions', label:'Działania'}
+			{name:'actions', label:''}
         ]
 
-		return { form, columns, modalOpened, modalEditMode, itemForPhotoForm, 
-				 close, store, edit, update, deleteRow, photoModalOpened, closePhotoModal, openPhotoModal }
+		return { form, columns, modalOpened, editMode, itemForPhotoForm, 
+				 close, store, edit, update, deleteRow, photoModalOpened, closePhotoModal, openPhotoModal,
+				 currentItem, showDetails }
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetButton,
-		JetInput,
-		JetLabel,
 		JetValidationErrors,
 		DataTable,
 		CrudModal,

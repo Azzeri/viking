@@ -56,7 +56,7 @@
         <!-- Drawer content -->
         <div class="flex flex-col drawer-content">
             <!-- Main content -->
-            <main class="lg:ml-20">
+            <main class="lg:ml-20 text-base-content">
                 <div class="hero min-h-screen -mt-16 pt-16 place-items-start">
                     <div class="hero-content flex-col w-full mx-auto">
                         <slot></slot>
@@ -74,7 +74,7 @@
                     <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')" :active="route().current('admin.users.index')">Użytkownicy</AdminNavButton>
                     <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')" :active="route().current('admin.events.index')">Wydarzenia</AdminNavButton>
                     <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store.items.index')" :active="route().current('admin.store.items.index')">Sklep</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory.items.index')" :active="route().current('admin.inventory.items.index')">Sprzęt</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index')">Sprzęt</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index')">Posty</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photo_categories.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>
                 </div>

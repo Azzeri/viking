@@ -20,7 +20,7 @@ class InventoryItemController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name,inventory_category_id,quantity']
+            'field' => ['in:id,name,inventory_category_id,quantity']
         ]);
 
         $query = InventoryItem::query();
@@ -32,7 +32,7 @@ class InventoryItemController extends Controller
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('name');
+            $query->orderBy('id');
 
         $items = $query->paginate()->withQueryString()
             ->through(fn ($inventoryItem) => [
@@ -42,8 +42,10 @@ class InventoryItemController extends Controller
                 'description' => $inventoryItem->description,
                 'quantity' => $inventoryItem->quantity,
                 'inventory_category_id' => $inventoryItem->inventory_category_id,
-                'category_name' => $inventoryItem->category ? $inventoryItem->category->name : null,
-                'category_id' => $inventoryItem->category ? $inventoryItem->category->id : null,
+                'category' => array(
+                    'id' => $inventoryItem->category->id,
+                    'name' => $inventoryItem->category->name,
+                ),
             ]);
 
         $categories = InventoryCategory::orderBy('name')->get()->map(fn ($category) => [
@@ -87,14 +89,14 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $InventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryItem $item)
+    public function update(Request $request, InventoryItem $inventory_item)
     {
-        $this->authorize('update', $item, InventoryItem::class);
+        $this->authorize('update', $inventory_item, InventoryItem::class);
 
-        $item->update($request->validate([
+        $inventory_item->update($request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('inventory_items')->ignore(InventoryItem::find($item->id))
+                Rule::unique('inventory_items')->ignore(InventoryItem::find($inventory_item->id))
             ],
             'inventory_category_id' => ['required', 'integer'],
             'description' => ['nullable', 'min:3', 'max:255'],
@@ -111,15 +113,14 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $InventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InventoryItem $item)
+    public function destroy(InventoryItem $inventory_item)
     {
-        $this->authorize('delete', $item, InventoryItem::class);
+        $this->authorize('delete', $inventory_item, InventoryItem::class);
+        // $photoName = ltrim($item->photo_path, '/images/');
+        // if ($photoName != 'default.png')
+        //     unlink(public_path('images') . '/' . $photoName);
 
-        $photoName = ltrim($item->photo_path, '/images/');
-        if ($photoName != 'default.png')
-            unlink(public_path('images') . '/' . $photoName);
-
-        $item->delete();
+        $inventory_item->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
     }

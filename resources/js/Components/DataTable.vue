@@ -1,10 +1,10 @@
 <template>
-    <div class="">
+    <section class="">
 
         <!-- Table heading -->
-        <div class="space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4 sm:space-x-5">
+        <div class="space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4 sm:space-x-5 w-screen sm:w-auto pr-9 sm:pr-0">
             <!-- Buttons -->
-            <div class="flex justify-between items-center sm:space-x-3">
+            <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-2">
                 <slot name="buttons"></slot>
             </div>
 
@@ -39,11 +39,12 @@
                     <slot name="content"></slot>
                 </tbody>
             </table> -->
+
             <div class="overflow-x-auto mt-4">
                 <table class="table sm:table-compact w-full">
                     <thead>
                         <tr>
-                            <th v-for="column in columns" :key="column" @click="column.sortable ? sort(column) : true">
+                            <th v-for="column in columns" :key="column" @click="column.sortable ? sort(column) : true" class="text-neutral-content" style="background-color:#3d4451;">
                                 <div class="flex justify-between items-center space-x-2">
                                     <span>{{ column.label }}</span>
                                     <i v-if="params.field === column.name && params.direction === 'asc'" class="fas fa-sort-up"></i>
@@ -58,7 +59,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th v-for="column in columns" :key="column">{{ column.label }}</th>
+                            <th v-for="column in columns" :key="column" class="text-neutral-content" style="background-color:#3d4451;">{{ column.label }}</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -66,11 +67,11 @@
             
 
         <!-- Table footer -->
-        <div class="w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center sm:text-sm">
+        <div class="w-screen sm:w-auto pr-9 sm:pr-0 flex-col flex sm:flex-row-reverse justify-between py-3 text-center space-y-4 sm:space-y-0 pl-1 items-center sm:text-sm">
             <pagination :links=data.links></pagination>
             <span>Wyniki od {{data.from}} do {{data.to}}. Łącznie {{data.total}} wyników.</span>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>

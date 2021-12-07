@@ -78,7 +78,6 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
 
 
-    Route::post('/inventoryservicesfinish', [InventoryServiceController::class, 'finish']);
 
     Route::post('/storeCategories/StorePhoto/{id}', [StoreCategoryController::class, 'storePhoto']);
     Route::post('/storeCategories/DeletePhoto/{id}', [StoreCategoryController::class, 'deletePhoto']);
@@ -104,6 +103,16 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::put('event_sub_tasks/finish/{event_sub_task}', [EventSubTaskController::class, 'finish'])->name('event_sub_tasks.finish');
     Route::resource('/event_sub_tasks', EventSubTaskController::class)->only(['store', 'update', 'destroy']);
 
+    // InventoryCategory
+    Route::resource('/inventory_categories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
+    
+    // InventoryItem
+    Route::resource('/inventory_items', InventoryItemController::class)->except(['create', 'edit', 'show']);
+
+    // InventoryService
+    Route::put('/inventory_services/finish', [InventoryServiceController::class, 'finish'])->name('inventory_services.finish');
+    Route::resource('/inventory_services', InventoryServiceController::class)->except(['create', 'edit', 'show']);
+
     // PhotoCategory
     Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show']);
 
@@ -115,16 +124,10 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
 
 
-    // Inventory
-    Route::prefix('inventory')->name('inventory.')->group(function () {
-        Route::resource('/categories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
         
-        Route::post('/items/photo_store/{item}', [InventoryItemController::class, 'storePhoto'])->name('items.photo.store');
-        Route::post('/items/photo_delete/{item}', [InventoryItemController::class, 'deletePhoto'])->name('items.photo.delete');
-        Route::resource('/items', InventoryItemController::class)->except(['create', 'edit', 'show']);
+        // Route::post('/items/photo_store/{item}', [InventoryItemController::class, 'storePhoto'])->name('items.photo.store');
+        // Route::post('/items/photo_delete/{item}', [InventoryItemController::class, 'deletePhoto'])->name('items.photo.delete');
 
-        Route::resource('/services', InventoryServiceController::class)->except(['create', 'edit', 'show']);
-    });
     
     // Store
     Route::prefix('store')->name('store.')->group(function () {
