@@ -92,7 +92,27 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $this->authorize('view', $post, Post::class);
+
+        $postMapped = array(
+            'id' => $post->id,
+            'title' => $post->title,
+            'photo_path' => $post->photo_path,
+            'body' => $post->body,
+            'resource_link' => $post->resource_link,
+            'time_created' => Carbon::parse($post->created_at)->format('H:i'),
+            'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+            'user' => array(
+                'id' => $post->user->id,
+                'name' => $post->user->name,
+                'surname' => $post->user->surname,
+                'nickname' => $post->user->nickname,
+            )
+        );
+
+        return inertia('Admin/PostDetails', [
+            'post' => $postMapped,
+        ]);
     }
 
     /**
