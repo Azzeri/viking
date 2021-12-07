@@ -19264,15 +19264,14 @@ __webpack_require__.r(__webpack_exports__);
     data: Object,
     filters: Object,
     frontFilters: Array,
-    sortRoute: String,
-    extraClass: String
+    sortRoute: String
   },
   setup: function setup(props) {
     var params = (0,vue__WEBPACK_IMPORTED_MODULE_2__.reactive)({
       search: props.filters.search,
       field: props.filters.field,
       direction: props.filters.direction,
-      filter: props.filters.filter ? props.filters.filter : (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(0)
+      filter: props.filters.filter || (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(0)
     });
 
     var sort = function sort(field) {
@@ -19283,7 +19282,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var filterServices = function filterServices(option) {
-      params.filter = option;
+      return params.filter = option;
     };
 
     return {
@@ -24013,7 +24012,7 @@ var _hoisted_6 = {
 };
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "absolute top-0 right-0 rounded-l-none btn sm:btn-sm btn-primary hover:bg-primary cursor-default"
+  "class": "absolute top-0 right-0 rounded-l-none btn sm:btn-sm btn-primary hover:bg-primary cursor-default no-animation"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-lg fa-search"
 })], -1
@@ -24021,10 +24020,10 @@ var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_8 = {
-  "class": "w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white shadow-lg overflow-auto mt-4 sm:mt-2 sm:inline-table"
+  "class": "overflow-x-auto"
 };
 var _hoisted_9 = {
-  "class": "text-white space-y-2"
+  "class": "w-full table"
 };
 var _hoisted_10 = ["onClick"];
 var _hoisted_11 = {
@@ -24042,11 +24041,13 @@ var _hoisted_14 = {
   key: 2,
   "class": "fas fa-sort"
 };
-var _hoisted_15 = {
-  "class": "flex-1 sm:flex-none sm:divide-y sm:divide-gray-300 space-y-2"
-};
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <slot name=\"content\"></slot> ")], -1
+/* HOISTED */
+);
+
 var _hoisted_16 = {
-  "class": "flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center"
+  "class": "w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
@@ -24077,28 +24078,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "text"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.params.search]]), _hoisted_7])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", _hoisted_9, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data.data, function (index) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
-      key: index,
-      "class": "bg-gray-600 flex flex-col flex-no-wrap sm:hidden rounded-l-lg sm:mb-0 sm:last:table-row divide-y divide-gray-600 sm:divide-none"
-    }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.columns, function (column) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
-        key: column,
-        onClick: function onClick($event) {
-          return $setup.sort(column);
-        },
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["px-3 py-1 sm:py-2 text-left uppercase", $props.extraClass])
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(column.label), 1
-      /* TEXT */
-      ), $setup.params.field === column.name && $setup.params.direction === 'asc' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_12)) : $setup.params.field === column.name && $setup.params.direction === 'desc' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_13)) : column.sortable ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_14)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 10
-      /* CLASS, PROPS */
-      , _hoisted_10);
-    }), 128
-    /* KEYED_FRAGMENT */
-    ))]);
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.params.search]]), _hoisted_7])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <table class=\"w-full flex flex-row flex-no-wrap rounded-lg sm:bg-white shadow-lg overflow-auto mt-4 sm:mt-2 sm:inline-table\">\n                <thead class=\"text-white space-y-2\">\n                    <tr v-for=\"(index) in data.data\" :key=index class=\"bg-gray-600 flex flex-col flex-no-wrap sm:hidden rounded-l-lg sm:mb-0 sm:last:table-row divide-y divide-gray-600 sm:divide-none\">\n                        <th v-for=\"column in columns\" :key=\"column\" @click=\"sort(column)\" \n                            class=\"px-3 py-1 sm:py-2 text-left uppercase\" :class=extraClass>\n                            <div class=\"flex justify-between items-center space-x-2\">\n                                <span>{{ column.label }}</span>\n                                <i v-if=\"params.field === column.name && params.direction === 'asc'\" class=\"fas fa-sort-up\"></i>\n                                <i v-else-if=\"params.field === column.name && params.direction === 'desc'\" class=\"fas fa-sort-down\"></i>\n                                <i v-else-if=\"column.sortable\" class=\"fas fa-sort\"></i>\n                            </div>\n                        </th>\n                    </tr>\n                </thead> \n                <tbody class=\"flex-1 sm:flex-none sm:divide-y sm:divide-gray-300 space-y-2\">\n                    <slot name=\"content\"></slot>\n                </tbody>\n            </table> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.columns, function (column) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
+      key: column,
+      onClick: function onClick($event) {
+        return $setup.sort(column);
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(column.label), 1
+    /* TEXT */
+    ), $setup.params.field === column.name && $setup.params.direction === 'asc' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_12)) : $setup.params.field === column.name && $setup.params.direction === 'desc' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_13)) : column.sortable ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", _hoisted_14)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 8
+    /* PROPS */
+    , _hoisted_10);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "content")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table footer "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+  ))])]), _hoisted_15])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table footer "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
     links: $props.data.links
   }, null, 8
   /* PROPS */
@@ -30297,7 +30290,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         columns: _ctx.columns,
         data: _ctx.categories,
         filters: _ctx.filters,
-        sortRoute: "admin.categories.index",
+        sortRoute: "admin.photo_categories.index",
         extraClass: "first:h-20 sm:first:h-auto flex sm:table-cell"
       }, {
         buttons: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {

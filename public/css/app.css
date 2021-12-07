@@ -2540,6 +2540,14 @@ html {
 .link-hover:hover {
 	text-decoration: underline;
 }
+.mask {
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+}
 .menu {
 	display: flex;
 	flex-direction: column;
@@ -3442,6 +3450,10 @@ html {
 .link:focus-visible {
 	box-shadow: 0 0 0 2px currentColor;
 }
+.mask-squircle {
+	-webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAwIDBDMjAgMCAwIDIwIDAgMTAwczIwIDEwMCAxMDAgMTAwIDEwMC0yMCAxMDAtMTAwUzE4MCAwIDEwMCAweiIvPjwvc3ZnPg==);
+	mask-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAwIDBDMjAgMCAwIDIwIDAgMTAwczIwIDEwMCAxMDAgMTAwIDEwMC0yMCAxMDAtMTAwUzE4MCAwIDEwMCAweiIvPjwvc3ZnPg==);
+}
 .menu.horizontal li.bordered>a,.menu.horizontal li.bordered>span {
 	--tw-border-opacity: 1;
 	border-color: hsla(var(--p)/var(--tw-border-opacity,1));
@@ -3810,8 +3822,20 @@ html {
 	box-shadow: 0 0 0 1px rgb(255 255 255/var(--glass-border-opacity,10%)) inset,0 0 0 2px rgb(0 0 0/5%);
 	text-shadow: 0 1px rgb(0 0 0/var(--glass-text-shadow-opacity,5%));
 }
+.no-animation {
+	--btn-focus-scale: 1;
+	--animation-btn: 0;
+	--animation-input: 0;
+}
 .artboard.phone {
 	width: 320px;
+}
+.badge-sm {
+	height: 1rem;
+	font-size: .75rem;
+	line-height: 1rem;
+	padding-left: .438rem;
+	padding-right: .438rem;
 }
 .btn-xs {
 	height: 1.5rem;
@@ -3928,6 +3952,25 @@ html {
 	top: 7%;
 	right: 7%;
 	box-shadow: 0 0 0 2px hsl(var(--b1));
+}
+.badge-outline {
+	background-color: transparent;
+	border-color: currentColor;
+	--tw-border-opacity: 0.5;
+	--tw-text-opacity: 1;
+	color: hsla(var(--bc)/var(--tw-text-opacity,1));
+}
+.badge-outline.badge-primary {
+	--tw-text-opacity: 1;
+	color: hsla(var(--p)/var(--tw-text-opacity,1));
+}
+.badge-outline.badge-secondary {
+	--tw-text-opacity: 1;
+	color: hsla(var(--s)/var(--tw-text-opacity,1));
+}
+.badge-outline.badge-accent {
+	--tw-text-opacity: 1;
+	color: hsla(var(--a)/var(--tw-text-opacity,1));
 }
 .visible {
 	visibility: visible;
@@ -4474,6 +4517,9 @@ html {
 }
 .overflow-hidden {
 	overflow: hidden;
+}
+.overflow-x-auto {
+	overflow-x: auto;
 }
 .overflow-y-auto {
 	overflow-y: auto;
@@ -5826,6 +5872,10 @@ html {
 
 	.sm\:pb-4 {
 		padding-bottom: 1rem;
+	}
+
+	.sm\:pt-4 {
+		padding-top: 1rem;
 	}
 
 	.sm\:text-left {

@@ -10,7 +10,7 @@
 	</template>
 
 	<template v-else>
-		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.categories.index" extraClass="first:h-20 sm:first:h-auto flex sm:table-cell">
+		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.photo_categories.index" extraClass="first:h-20 sm:first:h-auto flex sm:table-cell">
 
 			<template #buttons>
 				<button @click="modalOpened = true" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
