@@ -20,8 +20,14 @@
 			</template>
 
 			<template #content>
-				<tr v-for="row in categories.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
-					<td class="px-3 py-1 ">{{ row.id }}</td>
+				<tr v-for="row in categories.data" :key="row" class="hover">
+					<td class="font-bold">{{ row.id }}</td>
+					<td>{{ row.name }}</td>
+					<td>
+                        <button class="btn btn-xs btn-primary">Szczegóły</button>
+                    </td>
+
+                    <!-- <td class="px-3 py-1 ">{{ row.id }}</td>
                     <td class="px-3 py-1 flex items-center space-x-3 h-20">
 						<img @click="openPhotoModal(row)" class="w-14 h-14 cursor-pointer rounded-full" :src=row.photo_path :alt=row.name>
 						<div>
@@ -41,7 +47,7 @@
 					<td class="px-3 py-1 space-x-3">
 						<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
 						<i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
-					</td>
+					</td> -->
 				</tr>
 			</template>
 			
@@ -114,7 +120,7 @@ export default defineComponent({
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
 			{name:'name', label:'Nazwa', sortable: true},
-			{name:'actions', label:'Działania', sortable: false},
+			{name:'actions', label:'', sortable: false},
         ]
 
 		return { form, columns, modalOpened, close, store }

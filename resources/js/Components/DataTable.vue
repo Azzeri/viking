@@ -1,8 +1,8 @@
 <template>
-    <div class="w-full">
+    <div class="">
 
         <!-- Table heading -->
-        <div class="w-full space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4">
+        <div class="space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4 sm:space-x-5">
             <!-- Buttons -->
             <div class="flex justify-between items-center sm:space-x-3">
                 <slot name="buttons"></slot>
@@ -39,11 +39,11 @@
                     <slot name="content"></slot>
                 </tbody>
             </table> -->
-            <div class="overflow-x-auto">
-                <table class="w-full table">
+            <div class="overflow-x-auto mt-4">
+                <table class="table sm:table-compact w-full">
                     <thead>
                         <tr>
-                            <th v-for="column in columns" :key="column" @click="sort(column)">
+                            <th v-for="column in columns" :key="column" @click="column.sortable ? sort(column) : true">
                                 <div class="flex justify-between items-center space-x-2">
                                     <span>{{ column.label }}</span>
                                     <i v-if="params.field === column.name && params.direction === 'asc'" class="fas fa-sort-up"></i>
@@ -54,14 +54,19 @@
                         </tr>
                     </thead> 
                     <tbody>
-                        <!-- <slot name="content"></slot> -->
+                        <slot name="content"></slot>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th v-for="column in columns" :key="column">{{ column.label }}</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             
 
         <!-- Table footer -->
-        <div class="w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center">
+        <div class="w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center sm:text-sm">
             <pagination :links=data.links></pagination>
             <span>Wyniki od {{data.from}} do {{data.to}}. Łącznie {{data.total}} wyników.</span>
         </div>
@@ -91,10 +96,8 @@ export default {
         })
 
         const sort = (field) => {
-            if (field.sortable) {
-                params.field = field.name
-                params.direction = params.direction === 'asc' ? 'desc' : 'asc'
-            }
+            params.field = field.name
+            params.direction = params.direction === 'asc' ? 'desc' : 'asc'
         }
 
         const filterServices = (option) => params.filter = option

@@ -19275,10 +19275,8 @@ __webpack_require__.r(__webpack_exports__);
     });
 
     var sort = function sort(field) {
-      if (field.sortable) {
-        params.field = field.name;
-        params.direction = params.direction === 'asc' ? 'desc' : 'asc';
-      }
+      params.field = field.name;
+      params.direction = params.direction === 'asc' ? 'desc' : 'asc';
     };
 
     var filterServices = function filterServices(option) {
@@ -21804,7 +21802,7 @@ __webpack_require__.r(__webpack_exports__);
       sortable: true
     }, {
       name: 'actions',
-      label: 'Działania',
+      label: '',
       sortable: false
     }];
     return {
@@ -23995,10 +23993,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "w-full"
+  "class": ""
 };
 var _hoisted_2 = {
-  "class": "w-full space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4"
+  "class": "space-y-4 sm:space-y-0 sm:flex justify-between sm:mt-4 sm:space-x-5"
 };
 var _hoisted_3 = {
   "class": "flex justify-between items-center sm:space-x-3"
@@ -24020,10 +24018,10 @@ var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_8 = {
-  "class": "overflow-x-auto"
+  "class": "overflow-x-auto mt-4"
 };
 var _hoisted_9 = {
-  "class": "w-full table"
+  "class": "table sm:table-compact w-full"
 };
 var _hoisted_10 = ["onClick"];
 var _hoisted_11 = {
@@ -24041,13 +24039,8 @@ var _hoisted_14 = {
   key: 2,
   "class": "fas fa-sort"
 };
-
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <slot name=\"content\"></slot> ")], -1
-/* HOISTED */
-);
-
-var _hoisted_16 = {
-  "class": "w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center"
+var _hoisted_15 = {
+  "class": "w-full flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 sm:space-y-0 px-3 items-center sm:text-sm"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
@@ -24082,7 +24075,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
       key: column,
       onClick: function onClick($event) {
-        return $setup.sort(column);
+        return column.sortable ? $setup.sort(column) : true;
       }
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(column.label), 1
     /* TEXT */
@@ -24091,7 +24084,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , _hoisted_10);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])]), _hoisted_15])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table footer "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+  ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "content")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tfoot", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.columns, function (column) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
+      key: column
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(column.label), 1
+    /* TEXT */
+    );
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Table footer "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
     links: $props.data.links
   }, null, 8
   /* PROPS */
@@ -30248,25 +30249,15 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 
 var _hoisted_7 = [_hoisted_5, _hoisted_6];
 var _hoisted_8 = {
-  "class": "px-3 py-1"
+  "class": "font-bold"
 };
-var _hoisted_9 = {
-  "class": "px-3 py-1 flex items-center space-x-3 h-20"
-};
-var _hoisted_10 = ["onClick", "src", "alt"];
-var _hoisted_11 = {
-  "class": "text-sm text-gray-500"
-};
-var _hoisted_12 = {
-  key: 0
-};
-var _hoisted_13 = ["onClick"];
-var _hoisted_14 = ["id"];
-var _hoisted_15 = {
-  "class": "px-3 py-1 space-x-3"
-};
-var _hoisted_16 = ["onClick"];
-var _hoisted_17 = ["onClick"];
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "btn btn-xs btn-primary"
+}, "Szczegóły")], -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
 
@@ -30305,57 +30296,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.categories.data, function (row) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: row,
-              "class": "flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white"
+              "class": "hover"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.id), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-              onClick: function onClick($event) {
-                return _ctx.openPhotoModal(row);
-              },
-              "class": "w-14 h-14 cursor-pointer rounded-full",
-              src: row.photo_path,
-              alt: row.name
-            }, null, 8
-            /* PROPS */
-            , _hoisted_10), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.name), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.name), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.parent_category.name), 1
-            /* TEXT */
-            ), row.subcategories.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-              onClick: function onClick($event) {
-                return _ctx.showSubcategories(row.id);
-              },
-              "class": "px-1 rounded-lg bg-green-500 text-white"
-            }, "Podkategorie", 8
-            /* PROPS */
-            , _hoisted_13), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-              id: 'category-' + row.id,
-              "class": "absolute bg-red-500 p-3 h-32 w-64 mt-2 rounded-lg overflow-y-scroll hidden left-1"
-            }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(row.subcategories, function (sub) {
-              return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-                key: sub
-              }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub), 1
-              /* TEXT */
-              );
-            }), 128
-            /* KEYED_FRAGMENT */
-            ))], 8
-            /* PROPS */
-            , _hoisted_14)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-              onClick: function onClick($event) {
-                return _ctx.edit(row);
-              },
-              "class": "fas fa-edit cursor-pointer"
-            }, null, 8
-            /* PROPS */
-            , _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-              onClick: function onClick($event) {
-                return _ctx.deleteRow(row);
-              },
-              "class": "fas fa-trash cursor-pointer text-red-700"
-            }, null, 8
-            /* PROPS */
-            , _hoisted_17)])]);
+            ), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <td class=\"px-3 py-1 \">{{ row.id }}</td>\n                    <td class=\"px-3 py-1 flex items-center space-x-3 h-20\">\n\t\t\t\t\t\t<img @click=\"openPhotoModal(row)\" class=\"w-14 h-14 cursor-pointer rounded-full\" :src=row.photo_path :alt=row.name>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div>{{ row.name }}</div>\n\t\t\t\t\t\t\t<div class=\"text-sm text-gray-500\">{{ row.parent_category.name }}</div>\n\t\t\t\t\t\t\t<div v-if=\"row.subcategories.length\">\n\t\t\t\t\t\t\t\t<button @click=\"showSubcategories(row.id)\" class=\"px-1 rounded-lg bg-green-500 text-white\">Podkategorie</button>\t\t\n\t\t\t\t\t\t\t\t<div :id=\"'category-'+row.id\" class=\"absolute bg-red-500 p-3 h-32 w-64 mt-2 rounded-lg overflow-y-scroll hidden left-1\">\n\t\t\t\t\t\t\t\t\t<div v-for=\"sub in row.subcategories\" :key=\"sub\">\n\t\t\t\t\t\t\t\t\t\t{{sub}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\t\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\n\t\t\t\t\t<td class=\"px-3 py-1 space-x-3\">\n\t\t\t\t\t\t<i @click=\"edit(row)\" class=\"fas fa-edit cursor-pointer\"></i>\n\t\t\t\t\t\t<i @click=\"deleteRow(row)\" class=\"fas fa-trash cursor-pointer text-red-700\"></i>\n\t\t\t\t\t</td> ")]);
           }), 128
           /* KEYED_FRAGMENT */
           ))];

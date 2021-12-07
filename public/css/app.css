@@ -3668,6 +3668,23 @@ html {
 	--tw-bg-opacity: 1;
 	background-color: hsla(var(--b1)/var(--tw-bg-opacity,1));
 }
+.table-zebra tbody tr td:first-child,.table-zebra tbody tr th:first-child {
+	border-top-left-radius: .5rem;
+	border-bottom-left-radius: .5rem;
+}
+.table-zebra tbody tr td:last-child,.table-zebra tbody tr th:last-child {
+	border-top-right-radius: .5rem;
+	border-bottom-right-radius: .5rem;
+}
+.table-zebra tbody tr:nth-child(2n) td,.table-zebra tbody tr:nth-child(2n) th {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--b2)/var(--tw-bg-opacity,1));
+}
+.table-compact td,.table-compact th {
+	font-size: .875rem;
+	line-height: 1.25rem;
+	padding: .5rem;
+}
 .textarea-bordered {
 	--tw-border-opacity: 0.2;
 }
@@ -4495,6 +4512,11 @@ html {
 	--tw-space-y-reverse: 0;
 	margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+}
+.space-x-5 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(1.25rem * var(--tw-space-x-reverse));
+	margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .divide-y > :not([hidden]) ~ :not([hidden]) {
 	--tw-divide-y-reverse: 0;
@@ -5533,6 +5555,18 @@ html {
 		width: .75rem;
 	}
 
+	.sm\:table-compact td,.sm\:table-compact th {
+		font-size: .875rem;
+		line-height: 1.25rem;
+		padding: .5rem;
+	}
+
+	.sm\:table-compact td,.sm\:table-compact th {
+		font-size: .875rem;
+		line-height: 1.25rem;
+		padding: .5rem;
+	}
+
 	.sm\:btn-xs {
 		height: 1.5rem;
 		padding-left: .5rem;
@@ -5793,6 +5827,12 @@ html {
 		margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
 	}
 
+	.sm\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
+		--tw-space-x-reverse: 0;
+		margin-right: calc(1.25rem * var(--tw-space-x-reverse));
+		margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
+	}
+
 	.sm\:divide-y > :not([hidden]) ~ :not([hidden]) {
 		--tw-divide-y-reverse: 0;
 		border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -5884,6 +5924,11 @@ html {
 
 	.sm\:text-right {
 		text-align: right;
+	}
+
+	.sm\:text-sm {
+		font-size: 0.875rem;
+		line-height: 1.25rem;
 	}
 
 	.sm\:first\:h-auto:first-child {
