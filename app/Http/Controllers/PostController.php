@@ -124,7 +124,17 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post, Post::class);
+
+        $post->update(
+            $request->validate([
+                'title' => ['required', 'min:3', 'max:128', 'string'],
+                'body' => ['required', 'min:3', 'max:255'],
+                'resource_link' => ['nullable', 'string']
+            ])
+        );
+
+        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano post');
     }
 
     /**
@@ -135,6 +145,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $this->authorize('delete', $post, Post::class);
+
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('message', 'Pomyślnie usunięto post');
     }
 }

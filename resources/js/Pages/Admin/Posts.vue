@@ -35,7 +35,7 @@
 	</template>
 
 	<CrudModal :show=modalOpened @close=close>
-		<template #title>Nowe wydarzenie</template>
+		<template #title>Nowy post</template>
 
 		<template #content>
 			<jet-validation-errors v-if="form.hasErrors" class="my-6" />
