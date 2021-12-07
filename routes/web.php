@@ -6,6 +6,7 @@ use App\Http\Controllers\EventTaskController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
+use App\Http\Controllers\PhotoCategoryController;
 use App\Http\Controllers\StoreCategoryController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
@@ -102,6 +103,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     // EventSubTask
     Route::put('event_sub_tasks/finish/{event_sub_task}', [EventSubTaskController::class, 'finish'])->name('event_sub_tasks.finish');
     Route::resource('/event_sub_tasks', EventSubTaskController::class)->only(['store', 'update', 'destroy']);
+
+    // PhotoCategory
+    Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show']);
 
     // Post
     Route::resource('/posts', PostController::class)->except(['create', 'edit']);

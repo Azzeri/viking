@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PhotoCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +27,8 @@ class DatabaseSeeder extends Seeder
             EventTaskStateSeeder::class,
             EventTaskSeeder::class,
             EventSubTaskSeeder::class,
-            PostSeeder::class
+            PostSeeder::class,
+            PhotoCategorySeeder::class
         ]);
     }
 }
