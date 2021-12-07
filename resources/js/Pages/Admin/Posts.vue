@@ -23,7 +23,8 @@
 				<tr v-for="row in posts.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
 					<td class="px-3 py-1">{{ row.id }}</td>
 					<td class="px-3 py-1">{{ row.title }}</td>
-					<td class="px-3 py-1">{{ row.user.name }}</td>
+					<td class="px-3 py-1">{{ `${row.date_created}, ${row.time_created}` }}</td>
+					<td class="px-3 py-1">{{ `${row.user.name} "${row.user.nickname}" ${row.user.surname}` }}</td>
 					<td class="px-3 py-1">
 						<Link :href="route('admin.posts.show', row.id)" class="btn btn-primary btn-xs">Szczegóły</Link> 
 					</td>
@@ -47,7 +48,7 @@
 						<span class="label-text">Treść<span class="ml-1 text-red-500">*</span></span>
 					</label> 
 					<textarea v-model=form.body class="textarea h-24 textarea-bordered textarea-primary" placeholder="Treść......"></textarea>
-                    
+
 				</div> 
 			</form>
 		</template>
@@ -99,6 +100,7 @@ export default defineComponent({
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
 			{name:'title', label:'Tytuł', sortable: true},
+			{name:'created_at', label:'Dodano', sortable: true},
 			{name:'user_id', label:'Autor', sortable: true},
 			{name:'actions', label:'Działania', sortable: false},
         ]

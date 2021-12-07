@@ -20,7 +20,7 @@ class PostController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:id,title,user_id']
+            'field' => ['in:id,title,user_id,created_at']
         ]);
 
         $query = Post::query();

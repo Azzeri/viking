@@ -21859,6 +21859,10 @@ __webpack_require__.r(__webpack_exports__);
       label: 'Tytuł',
       sortable: true
     }, {
+      name: 'created_at',
+      label: 'Dodano',
+      sortable: true
+    }, {
       name: 'user_id',
       label: 'Autor',
       sortable: true
@@ -30191,16 +30195,19 @@ var _hoisted_10 = {
 var _hoisted_11 = {
   "class": "px-3 py-1"
 };
+var _hoisted_12 = {
+  "class": "px-3 py-1"
+};
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Szczegóły");
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Szczegóły");
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Nowe wydarzenie");
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Nowe wydarzenie");
 
-var _hoisted_14 = {
+var _hoisted_15 = {
   "class": "form-control mt-4"
 };
 
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "label"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "label-text"
@@ -30210,7 +30217,7 @@ var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "label mt-4"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "label-text"
@@ -30220,7 +30227,7 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_17 = ["disabled"];
+var _hoisted_18 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
@@ -30269,14 +30276,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.title), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.user.name), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.date_created, ", ").concat(row.time_created)), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.user.name, " \"").concat(row.user.nickname, "\" ").concat(row.user.surname)), 1
+            /* TEXT */
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
               href: _ctx.route('admin.posts.show', row.id),
               "class": "btn btn-primary btn-xs"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                return [_hoisted_12];
+                return [_hoisted_13];
               }),
               _: 2
               /* DYNAMIC */
@@ -30298,7 +30307,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClose: _ctx.close
       }, {
         title: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_13];
+          return [_hoisted_14];
         }),
         content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [_ctx.form.hasErrors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_validation_errors, {
@@ -30308,7 +30317,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
               return _ctx.store && _ctx.store.apply(_ctx, arguments);
             }, ["prevent"]))
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
             "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
               return _ctx.form.title = $event;
             }),
@@ -30317,7 +30326,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "class": "input input-primary input-bordered"
           }, null, 512
           /* NEED_PATCH */
-          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.form.title]]), _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.form.title]]), _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
             "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
               return _ctx.form.body = $event;
             }),
@@ -30340,7 +30349,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, "btn btn-info"])
           }, "Dodaj", 10
           /* CLASS, PROPS */
-          , _hoisted_17)];
+          , _hoisted_18)];
         }),
         _: 1
         /* STABLE */
