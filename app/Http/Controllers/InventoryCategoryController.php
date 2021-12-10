@@ -19,7 +19,7 @@ class InventoryCategoryController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name']
+            'field' => ['in:id,name']
         ]);
 
         $query = InventoryCategory::query();
@@ -31,18 +31,23 @@ class InventoryCategoryController extends Controller
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('name');
+            $query->orderBy('id');
 
         $categories = $query->paginate()->withQueryString()
-            ->through(fn ($inventoryCategory) => [
-                'id' => $inventoryCategory->id,
-                'name' => $inventoryCategory->name,
-                'photo_path' => $inventoryCategory->photo_path,
-                'inventory_category_id' => $inventoryCategory->inventory_category_id,
-                'subcategories' => array_column($inventoryCategory->subcategories->toArray(), 'name'),
-                'subcategoriesIds' => array_column($inventoryCategory->subcategories->toArray(), 'id'),
-                'parentCategoryName' => $inventoryCategory->parentCategory ? $inventoryCategory->parentCategory->name : null,
-                'parentCategoryId' => $inventoryCategory->parentCategory ? $inventoryCategory->parentCategory->id : null
+            ->through(fn ($inventory_category) => [
+                'id' => $inventory_category->id,
+                'name' => $inventory_category->name,
+                'photo_path' => $inventory_category->photo_path,
+                'inventory_category_id' => $inventory_category->inventory_category_id,
+                'category' => $inventory_category->parentCategory
+                    ? array(
+                        'id' => $inventory_category->parentCategory->id,
+                        'name' => $inventory_category->parentCategory->name,
+                    ) : [],
+                'subcategories' => $inventory_category->subcategories ? $inventory_category->subcategories->sortBy('name')->map(fn ($subcategory) => [
+                    'id' => $subcategory->id,
+                    'name' => $subcategory->name,
+                ]) : null
             ]);
 
         return inertia('Admin/InventoryCategories', [
@@ -61,16 +66,11 @@ class InventoryCategoryController extends Controller
     {
         $this->authorize('create', InventoryCategory::class);
 
-        $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_categories'],
-            'parentCategoryId' => ['nullable', 'integer']
-        ]);
-
-        $parentCategory = $request->parentCategoryId == -1 ? null : $request->parentCategoryId;
-
         InventoryCategory::create([
-            'name' => $request->name,
-            'inventory_category_id' => $parentCategory
+            $request->validate([
+                'name' => ['required', 'string', 'min:3', 'max:32', 'unique:inventory_categories'],
+                'inventory_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id']
+            ])
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano kategorię');
@@ -80,29 +80,23 @@ class InventoryCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\InventoryCategory  $inventoryCategory
+     * @param  \App\Models\InventoryCategory  $inventory_category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryCategory $inventoryCategory)
+    public function update(Request $request, InventoryCategory $inventory_category)
     {
-        $this->authorize('update', $inventoryCategory, InventoryCategory::class);
+        $this->authorize('update', $inventory_category, InventoryCategory::class);
 
-        $inventoryCategory = InventoryCategory::find($request->id);
-        $subcats = array_column( $inventoryCategory->subcategories->toArray(), 'id');
+        $currentParent = $inventory_category->inventory_category_id;
 
-        $request->validate([
-            'name' => [
-                'required', 'string', 'min:3', 'max:64', 'alpha_dash',
-                Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventoryCategory->id))
-            ],
-            'parentCategoryId' => ['nullable', 'integer', Rule::notIn([$request->id]), Rule::notIn($subcats)]
-        ]);
-
-        $parentCategory = $request->parentCategoryId == -1 ? null : $request->parentCategoryId;
-
-        $inventoryCategory->update([
-            'name' => $request->name,
-            'inventory_category_id' => $parentCategory
+        $inventory_category->update([
+            $request->validate([
+                'name' => [
+                    'required', 'string', 'min:3', 'max:32',
+                    Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
+                ],
+                'parentCategoryId' => ['nullable', 'integer', Rule::in($currentParent)]
+            ])
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
@@ -111,24 +105,23 @@ class InventoryCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\InventoryCategory  $inventoryCategory
+     * @param  \App\Models\InventoryCategory  $inventory_category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($inventoryCategory)
+    public function destroy(InventoryCategory $inventory_category)
     {
-        $cat = InventoryCategory::find($inventoryCategory);
-        $this->authorize('delete', $cat, InventoryCategory::class);
+        $this->authorize('delete', $inventory_category, InventoryCategory::class);
 
-        $photoName = ltrim($cat->photo_path, '/images/');
-        if ($photoName != 'default.png') 
-            unlink(public_path('images') . '/' . $photoName);     
-        
-        $cat->delete();
+        // $photoName = ltrim($cat->photo_path, '/images/');
+        // if ($photoName != 'default.png')
+        //     unlink(public_path('images') . '/' . $photoName);
+
+        $inventory_category->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }
 
-    public function storePhoto(Request $request, $id) 
+    public function storePhoto(Request $request, $id)
     {
         $category = InventoryCategory::find($id);
 
@@ -154,7 +147,7 @@ class InventoryCategoryController extends Controller
     public function deletePhoto($id)
     {
         $category = InventoryCategory::find($id);
-        
+
         $this->authorize('update', $category, InventoryCategory::class);
 
         $photoName = ltrim($category->photo_path, '/images/');
@@ -166,6 +159,5 @@ class InventoryCategoryController extends Controller
         }
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
-
     }
 }

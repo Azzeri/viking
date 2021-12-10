@@ -1,10 +1,10 @@
 <template>
-    <div id="modal" class="modal">
-        <div class="modal-box max-w-sm">
+    <div :id="id" class="modal">
+        <div class="modal-box" :class="maxWidth">
             <div class="flex items-center justify-between">
-                <h1 class="text-lg font-bold">
-                    <slot name="title"></slot>
-                </h1>
+                <div>
+                    <slot name="side"></slot>
+                </div>
                 <button @click="close()" class="btn btn-sm btn-square btn-ghost">
                     <i class="fas fa-times"></i>
                 </button>
@@ -26,13 +26,15 @@
         emits: ['close'],
 
         props: {
-            show: Boolean
+            show: Boolean,
+            id: String,
+            maxWidth: String
         },
 
         setup(props) {
-            watch(() => props.show, _ => document.getElementById('modal').classList.contains('modal-open') 
-                ? document.getElementById('modal').classList.remove('modal-open') 
-                : document.getElementById('modal').classList.add('modal-open'))
+            watch(() => props.show, _ => document.getElementById(props.id).classList.contains('modal-open') 
+                ? document.getElementById(props.id).classList.remove('modal-open') 
+                : document.getElementById(props.id).classList.add('modal-open'))
         },
 
         methods: {

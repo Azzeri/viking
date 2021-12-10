@@ -3,7 +3,7 @@
 <admin-panel-layout title="Sprzęt">
 	
 	<!-- No data scenario -->
-	<template v-if="!items.data.length && filters.search == null">
+	<template v-if="(!items.data.length || !categories.length) && filters.search == null">
 		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego przedmiotu</h1>
 		<Link :href="route('admin.inventory_categories.index')" class="btn btn-wide btn-secondary mt-4">
 			Kategorie
@@ -47,91 +47,91 @@
 				</tr>
 			</template>
 		</DataTable>
-	</template>
 
-</admin-panel-layout>
+		<!-- Modal - details -->
+		<input type="checkbox" id="modal-details" class="modal-toggle"> 
+		<div class="modal overflow-y-auto">
+			<div class="modal-box max-w-2xl">
+				<jet-validation-errors v-if="form.hasErrors" />
+				<div class="flex justify-between items-center">
+					<div class="flex space-x-2">
+						<button class="btn btn-error btn-xs">
+							<i class="fas fa-trash"></i>
+							<span @click=deleteRow(currentItem) class="ml-2">Usuń</span>
+						</button>
+						<button @click="edit(currentItem)" :class="{'btn-info':!editMode, 'btn-error':editMode}" class="btn btn-xs">
+							<i :class="{'fas fa-edit':!editMode, 'fas fa-times':editMode}"></i>
+							<span v-html="editMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
+						</button>
+						<button v-if="editMode" @click=update class="btn btn-xs btn-info">Zapisz</button>
+					</div>
+					<label @click=close for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
+				</div>
+				<!-- Form and labels -->
+				<form @submit.prevent=update>
+					<div class="flex items-start justify-between mb-4">
+						<div>
+							<h1 v-if=!editMode class="text-lg font-bold">{{ `${currentItem.id}. ${currentItem.name} - ${currentItem.quantity}szt.` }}</h1>
+							<h1 v-else class="text-lg font-bold">
+								{{`${currentItem.id}.`}}
+								<input v-model="form.name" type="text" class="input input-primary input-sm w-60" />
+								<input v-model="form.quantity" type="number" class="input input-primary input-sm w-20 ml-2" />
+								<span class="ml-1">szt.</span>
+							</h1>
 
-<CrudModal :show=modalOpened @close=close>
-	<template #title>Nowy przedmiot</template>
+							<h2 v-if=!editMode class="text-gray-600">{{ currentItem.category.name }}</h2>
+							<select v-else v-model=form.inventory_category_id class="select select-bordered select-primary select-sm mt-2 ml-5 w-60 text-sm">
+								<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
+							</select>
+						</div>
+						
+					</div>
 
-	<template #content>
-		<jet-validation-errors v-if="form.hasErrors" />
-		<form @submit.prevent=store,update>
-			<div class="form-control mt-4">
-
-				<label class="label"><span class="label-text">Kategoria<span class="ml-1 text-red-500">*</span></span></label> 
-				<select v-model=form.inventory_category_id class="select select-bordered select-primary w-full">
-					<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
-				</select>
-
-				<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-				<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered">
-
-				<label class="label"><span class="label-text">Ilość<span class="ml-1 text-red-500">*</span></span></label> 
-				<input v-model=form.quantity type="number" placeholder="Ilość" class="input input-primary input-bordered">
-
-				<label class="label">
-					<span class="label-text">Opis</span>
-				</label> 
-				<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
-
-			</div> 
-		</form>
-	</template>
-
-	<template #footer>
-		<button @click=store :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
-	</template>
-</CrudModal>
-
-<!-- Modal - details -->
-<input type="checkbox" id="modal-details" class="modal-toggle"> 
-<div class="modal overflow-y-auto">
-	<div class="modal-box max-w-2xl">
-		<jet-validation-errors v-if="form.hasErrors" />
-		<div class="flex justify-between items-center">
-			<div class="flex space-x-2">
-				<button class="btn btn-error btn-xs">
-					<i class="fas fa-trash"></i>
-					<span @click=deleteRow(currentItem) class="ml-2">Usuń</span>
-				</button>
-				<button @click="edit(currentItem)" :class="{'btn-info':!editMode, 'btn-error':editMode}" class="btn btn-xs">
-					<i :class="{'fas fa-edit':!editMode, 'fas fa-times':editMode}"></i>
-					<span v-html="editMode ? 'Anuluj' : 'Edytuj'" class="ml-2">Edytuj</span>
-				</button>
-				<button v-if="editMode" @click=update class="btn btn-xs btn-info">Zapisz</button>
+					<!-- Content -->
+					<div class="mt-4 flex space-x-4">
+						<img :src=currentItem.photo_path :alt="currentItem.name" class="block h-32 object-fill">
+						<p v-if=!editMode class="text-justify">{{ currentItem.description ?? 'Nie dodano opisu'}}</p>
+						<textarea v-else v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+					</div>
+				</form>
 			</div>
-			<label @click=close for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
 		</div>
-		<!-- Form and labels -->
-		<form @submit.prevent=update>
-			<div class="flex items-start justify-between mb-4">
-				<div>
-					<h1 v-if=!editMode class="text-lg font-bold">{{ `${currentItem.id}. ${currentItem.name} - ${currentItem.quantity}szt.` }}</h1>
-					<h1 v-else class="text-lg font-bold">
-						{{`${currentItem.id}.`}}
-						<input v-model="form.name" type="text" class="input input-primary input-sm w-60" />
-						<input v-model="form.quantity" type="number" class="input input-primary input-sm w-20 ml-2" />
-						<span class="ml-1">szt.</span>
-					</h1>
+	</template>
 
-					<h2 v-if=!editMode class="text-gray-600">{{ currentItem.category.name }}</h2>
-					<select v-else v-model=form.inventory_category_id class="select select-bordered select-primary select-sm mt-2 ml-5 w-60 text-sm">
+	<CrudModal :show=modalOpened @close=close>
+		<template #title>Nowy przedmiot</template>
+
+		<template #content>
+			<jet-validation-errors v-if="form.hasErrors" />
+			<form @submit.prevent=store,update>
+				<div class="form-control mt-4">
+
+					<label class="label"><span class="label-text">Kategoria<span class="ml-1 text-red-500">*</span></span></label> 
+					<select v-model=form.inventory_category_id class="select select-bordered select-primary w-full">
 						<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
 					</select>
-				</div>
-				
-			</div>
 
-			<!-- Content -->
-			<div class="mt-4 flex space-x-4">
-				<img :src=currentItem.photo_path :alt="currentItem.name" class="block h-32 object-fill">
-				<p v-if=!editMode class="text-justify">{{ currentItem.description ?? 'Nie dodano opisu'}}</p>
-				<textarea v-else v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
-			</div>
-		</form>
-	</div>
-</div>
+					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered">
+
+					<label class="label"><span class="label-text">Ilość<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.quantity type="number" placeholder="Ilość" class="input input-primary input-bordered">
+
+					<label class="label">
+						<span class="label-text">Opis</span>
+					</label> 
+					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
+
+				</div> 
+			</form>
+		</template>
+
+		<template #footer>
+			<button @click=store :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
+		</template>
+	</CrudModal>
+
+</admin-panel-layout>
 
 <!-- <PhotoModal :item=itemForPhotoForm :show=photoModalOpened path='admin.inventory.items' @closePhotoModal=closePhotoModal></PhotoModal> -->
 
@@ -149,7 +149,6 @@ import PhotoModal from '@/Components/PhotoModal.vue'
 import Label from '@/Jetstream/Label.vue'
 
 export default defineComponent({
-
 	props: {
 		categories: Object,
         items: Object,
