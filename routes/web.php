@@ -75,10 +75,8 @@ Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeM
 
 // Administrator and Coordinators routes
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
-
-    Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
-    Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 
     // Event
     Route::put('events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
@@ -114,12 +112,6 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
 
-
-        
-        // Route::post('/items/photo_store/{item}', [InventoryItemController::class, 'storePhoto'])->name('items.photo.store');
-        // Route::post('/items/photo_delete/{item}', [InventoryItemController::class, 'deletePhoto'])->name('items.photo.delete');
-
-    
     // Store
     Route::prefix('store')->name('store.')->group(function () {
         Route::resource('/categories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
@@ -127,4 +119,6 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
         Route::resource('/items', StoreItemController::class)->except(['create', 'edit', 'show']);
         Route::resource('/requests', StoreRequestController::class)->except(['create', 'edit', 'show']);
     });
+    Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
+    Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 });

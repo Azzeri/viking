@@ -59,7 +59,7 @@
 						<i :class="{'fas fa-edit':!editCategoryMode, 'fas fa-times':editCategoryMode}"></i>
 						<span v-html="editCategoryMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
 					</button>
-					<button v-if="editCategoryMode" @click=update(selectedCategory) class="btn btn-xs btn-success">Zapisz</button>
+					<button v-if="editCategoryMode" @click=update(selectedCategory) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 			</template>
 
@@ -67,7 +67,7 @@
 				<!-- Form and content -->
 				<form>
 					<div class="flex items-start space-x-2 my-3">
-						<input type="file" id="upload-file-update" @change="previewImage" ref="photo" @input="form.image = $event.target.files[0]" class="hidden" />
+						<input type="file" id="upload-file-update" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 						<div v-if="url && form.image" class="mx-auto indicator">
 							<div class="indicator-item indicator-start">
 								<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
@@ -80,7 +80,8 @@
 								<div class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</div>
 								<div v-if=!editCategoryMode class="font-semibold text-lg">{{ `${selectedCategory.name}` }}</div>
 								<span v-else class="text-lg font-bold">
-									<input v-model="form.name" type="text" class="input input-primary input-sm" />
+									<input v-model="form.name" type="text" class="input input-primary input-sm" required/>
+									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 								</span>
 							</div>
 							<div v-if="editCategoryMode" class="flex flex-col space-y-2 mt-2 ml-6">
@@ -99,24 +100,25 @@
 						<i :class="{'fas fa-plus':!createSubcategoryMode, 'fas fa-times':createSubcategoryMode}"></i>
 						<span v-html="createSubcategoryMode ? 'Anuluj' : 'Dodaj'" class="ml-2"></span>
 					</button>
-					<button @click=store(true) v-if="createSubcategoryMode" class="btn btn-xs btn-success">Zapisz</button>
+					<button @click=store(true) v-if="createSubcategoryMode" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 
 				<form v-show="createSubcategoryMode" class="mt-4" id="form-subcategory">
-					<input v-model="form.name" id="form-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" />
+					<input v-model="form.name" id="form-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</form>
 
-				<ul v-if="selectedCategory.subcategories != null" class="menu">
+				<div v-if="selectedCategory.subcategories != null" class="overflow-y-auto max-h-64">
+				<ul class="menu">
 					<li v-for="row in selectedCategory.subcategories" :key="row.id" class="hover-bordered"> 
 						<a class="flex justify-between">
 							<template v-if="editSubcategoryMode && subcategoryIndex == row.id">
-								<form @submit.prevent=update>
-									<input v-model="form.name" type="text" class="input input-primary input-sm" placeholder="Nazwa" />
+								<form>
+									<input v-model="form.name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 								</form>
 								<div class="flex space-x-2 items-center">
-									<button @click="update(row)" class="btn btn-xs btn-success">Zapisz</button>
+									<button @click="update(row)" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 									<i @click="editSubcategory(row, false)" class="fas fa-times text-error"></i>
 								</div>
 							</template>
@@ -130,7 +132,8 @@
 						</a>
 					</li>
 				</ul>
-				<h1 v-else class="ml-2">Kategoria nie ma podkategorii</h1>{{form.errors}}
+				</div>
+				<h1 v-else class="ml-2">Kategoria nie ma podkategorii</h1>
 			</template>
 		</Modal>
 	</template>
@@ -145,12 +148,12 @@
 			<form>
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered">
+					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</div> 
 
 				<div class="form-control mt-4 space-y-3">
-					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" @input="form.image = $event.target.files[0]" class="hidden" />
+					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 					<div v-if="url && form.image" class="mx-auto indicator">
 						<div class="indicator-item">
 							<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
@@ -167,6 +170,7 @@
 			<button @click=store(false) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full">Dodaj</button>
 		</template>
 	</Modal>
+
 </admin-panel-layout>
 </template>
 
@@ -187,7 +191,7 @@ export default defineComponent({
 
 	setup(props) {
 		// Show details of this category
-		const selectedCategory = ref(props.categories.data[0]) ?? ref(null)
+		const selectedCategory = ref({'photo_path':''})
 
 		// Image upload
 		const url = ref(null)
@@ -297,7 +301,10 @@ export default defineComponent({
             if (!confirm('Na pewno? Wszystkie przedmioty należące do kategorii również zostaną usunięte!')) return;
 			resetModes(true, true, true)
             Inertia.delete(route('admin.inventory_categories.destroy', id), {
-				onSuccess: () => selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
+				onSuccess: () => {
+					selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
+					if (props.categories.data.length === 0) selectedCategory.value = ref({'photo_path':''})
+				}
 			})
         }
 

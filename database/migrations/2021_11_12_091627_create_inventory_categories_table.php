@@ -15,7 +15,7 @@ class CreateInventoryCategoriesTable extends Migration
     {
         Schema::create('inventory_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 32)->unique();
+            $table->string('name', 64)->unique();
             $table->string('photo_path')->default('/images/default.png');
             $table->foreignId('inventory_category_id')->nullable()->constrained();
             $table->timestamps();

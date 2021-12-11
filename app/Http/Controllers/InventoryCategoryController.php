@@ -34,7 +34,7 @@ class InventoryCategoryController extends Controller
         } else
             $query->orderBy('id');
 
-        $categories = $query->paginate()->withQueryString()
+        $categories = $query->where('inventory_category_id', null)->paginate()->withQueryString()
             ->through(fn ($inventory_category) => [
                 'id' => $inventory_category->id,
                 'name' => $inventory_category->name,
@@ -68,7 +68,7 @@ class InventoryCategoryController extends Controller
         $this->authorize('create', InventoryCategory::class);
 
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32', 'unique:inventory_categories'],
+            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_categories'],
             'inventory_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
@@ -95,17 +95,17 @@ class InventoryCategoryController extends Controller
     {
         $this->authorize('update', $inventory_category, InventoryCategory::class);
 
-        $currentParent = $inventory_category->inventory_category_id;
+        $request->validate([
+            'name' => [
+                'required', 'string', 'min:3', 'max:64',
+                Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
+            ],
+            'parentCategoryId' => ['nullable', 'integer', Rule::in($inventory_category->inventory_category_id)],
+            // 'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+        ]);
 
         $inventory_category->update([
-            $request->validate([
-                'name' => [
-                    'required', 'string', 'min:3', 'max:32',
-                    Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
-                ],
-                'parentCategoryId' => ['nullable', 'integer', Rule::in($currentParent)],
-                'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
-            ])
+            'name' => $request->name
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
