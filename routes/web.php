@@ -73,21 +73,8 @@ Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeM
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
 
-    Route::post('/inventoryCategories/StorePhoto/{id}', [InventoryCategoryController::class, 'storePhoto']);
-    Route::post('/inventoryCategories/DeletePhoto/{id}', [InventoryCategoryController::class, 'deletePhoto']);
-
-
-
-
-    Route::post('/storeCategories/StorePhoto/{id}', [StoreCategoryController::class, 'storePhoto']);
-    Route::post('/storeCategories/DeletePhoto/{id}', [StoreCategoryController::class, 'deletePhoto']);
-
-    Route::post('/storeItems/StorePhoto/{id}', [StoreItemController::class, 'storePhoto']);
-    Route::post('/storeItems/DeletePhoto/{id}', [StoreItemController::class, 'deletePhoto']);
-
     Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
     Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
-
 
     // Event
     Route::put('events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');

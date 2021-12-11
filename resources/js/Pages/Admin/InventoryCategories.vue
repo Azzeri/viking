@@ -65,17 +65,30 @@
 
 			<template #content>
 				<!-- Form and content -->
-				<form @submit.prevent=update>
+				<form>
 					<div class="flex items-start space-x-2 my-3">
-						<img :src=selectedCategory.photo_path :alt="selectedCategory.name" class="block h-24 object-fill">
-						<div class="flex space-x-2 items-center">
-							<div class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</div>
-							<div v-if=!editCategoryMode class="font-semibold text-lg">{{ `${selectedCategory.name}` }}</div>
-							<span v-else class="text-lg font-bold">
-								<input v-model="form.name" type="text" class="input input-primary input-sm" />
-							</span>
+						<input type="file" id="upload-file-update" @change="previewImage" ref="photo" @input="form.image = $event.target.files[0]" class="hidden" />
+						<div v-if="url && form.image" class="mx-auto indicator">
+							<div class="indicator-item indicator-start">
+								<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
+							</div> 
+							<img :src="url" class="block h-24 w-24 object-cover mask mask-squircle" />
 						</div>
-						
+						<img v-else :src="selectedCategory.photo_path" :alt="selectedCategory.name" id="category-image" class="block h-24 w-24 object-cover mask mask-squircle">
+						<div class="flex flex-col">
+							<div class="flex space-x-2 items-center">
+								<div class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</div>
+								<div v-if=!editCategoryMode class="font-semibold text-lg">{{ `${selectedCategory.name}` }}</div>
+								<span v-else class="text-lg font-bold">
+									<input v-model="form.name" type="text" class="input input-primary input-sm" />
+								</span>
+							</div>
+							<div v-if="editCategoryMode" class="flex flex-col space-y-2 mt-2 ml-6">
+								<label for="upload-file-update" refs="upload-file" class="btn btn-xs btn-primary">Zmień zdjęcie</label>
+								<label v-if="selectedCategory.photo_path != '/images/default.png'" @click=removeImage class="btn btn-xs btn-error">Usuń zdjęcie</label>
+								<label v-if="form.hasErrors && form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
+							</div>
+						</div>
 					</div>
 				</form>
 					
@@ -117,7 +130,7 @@
 						</a>
 					</li>
 				</ul>
-				<h1 v-else class="ml-2">Kategoria nie ma podkategorii</h1>
+				<h1 v-else class="ml-2">Kategoria nie ma podkategorii</h1>{{form.errors}}
 			</template>
 		</Modal>
 	</template>
@@ -129,17 +142,29 @@
 		</template>
 
 		<template #content>
-			<form @submit.prevent=store>
+			<form>
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
 					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered">
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</div> 
+
+				<div class="form-control mt-4 space-y-3">
+					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" @input="form.image = $event.target.files[0]" class="hidden" />
+					<div v-if="url && form.image" class="mx-auto indicator">
+						<div class="indicator-item">
+							<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
+						</div> 
+						<img :src="url" class="block h-24 w-24 object-cover mask mask-squircle" />
+					</div>
+					<label for="upload-file-store" refs="upload-file" class="btn btn-primary">Wybierz zdjęcie</label>
+					<label v-if="form.hasErrors && form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
+				</div>
 			</form>
 		</template>
 
 		<template #footer>
-			<button @click=store(false) :disabled="form.processing" :class="{ 'opacity-25': form.processing }" class="btn btn-info w-full">Dodaj</button>
+			<button @click=store(false) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full">Dodaj</button>
 		</template>
 	</Modal>
 </admin-panel-layout>
@@ -164,6 +189,9 @@ export default defineComponent({
 		// Show details of this category
 		const selectedCategory = ref(props.categories.data[0]) ?? ref(null)
 
+		// Image upload
+		const url = ref(null)
+
 		// Modals visibility
 		const createModalOpened = ref(false)
 		const detailsModalOpened = ref(false)
@@ -178,6 +206,7 @@ export default defineComponent({
 		// Data form
 		const form = useForm({
 			name: null,
+			image: null,
             inventory_category_id: null
 		})
 
@@ -200,6 +229,7 @@ export default defineComponent({
 		const reset = _ => {
 			form.reset()
 			form.clearErrors()
+			url.value = null
 		}
 
 		// Close modals and reset data and modes
@@ -236,6 +266,7 @@ export default defineComponent({
 			resetModes(false, true, true)
 			editCategoryMode.value = ! editCategoryMode.value
 			form.name = category.name
+			document.getElementById('category-image').src = category.photo_path
 
 			// focus
 		}
@@ -270,6 +301,14 @@ export default defineComponent({
 			})
         }
 
+		// Images
+		const previewImage = (e) => url.value = URL.createObjectURL(e.target.files[0])
+
+		const removeImage = _ => {
+			form.image = null
+			document.getElementById('category-image').src = "/images/default.png"
+		}
+
 		// Columns for data table
 		const columns = [
 			{ name:'id', label:'ID', sortable: true },
@@ -277,6 +316,7 @@ export default defineComponent({
 			{ name:'actions', label:'' }
         ]
 
+		// Returned data
 		return { 
 			selectedCategory,
 			createModalOpened, 
@@ -294,7 +334,10 @@ export default defineComponent({
 			store,
 			update,
 			deleteRow ,
-			columns
+			columns,
+			url,
+			previewImage,
+			removeImage
 		}
 	},
 

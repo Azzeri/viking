@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class InventoryCategoryController extends Controller
@@ -66,11 +67,18 @@ class InventoryCategoryController extends Controller
     {
         $this->authorize('create', InventoryCategory::class);
 
+        $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:32', 'unique:inventory_categories'],
+            'inventory_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+        ]);
+
+        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+
         InventoryCategory::create([
-            $request->validate([
-                'name' => ['required', 'string', 'min:3', 'max:32', 'unique:inventory_categories'],
-                'inventory_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id']
-            ])
+           'name' => $request->name,
+           'inventory_category_id' => $request->inventory_category_id,
+           'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano kategorię');
@@ -95,7 +103,8 @@ class InventoryCategoryController extends Controller
                     'required', 'string', 'min:3', 'max:32',
                     Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
                 ],
-                'parentCategoryId' => ['nullable', 'integer', Rule::in($currentParent)]
+                'parentCategoryId' => ['nullable', 'integer', Rule::in($currentParent)],
+                'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
             ])
         ]);
 
@@ -112,52 +121,10 @@ class InventoryCategoryController extends Controller
     {
         $this->authorize('delete', $inventory_category, InventoryCategory::class);
 
-        // $photoName = ltrim($cat->photo_path, '/images/');
-        // if ($photoName != 'default.png')
-        //     unlink(public_path('images') . '/' . $photoName);
+        Storage::delete('public/'.ltrim($inventory_category->photo_path, '/storage'));
 
         $inventory_category->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
-    }
-
-    public function storePhoto(Request $request, $id)
-    {
-        $category = InventoryCategory::find($id);
-
-        $this->authorize('update', $category, InventoryCategory::class);
-
-        $request->validate([
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg'
-        ]);
-
-        $photoName = ltrim($category->photo_path, '/images/');
-        if ($photoName != 'default.png')
-            unlink(public_path('images') . '/' . $photoName);
-
-        $imageName = time() . '.' . $request->avatar->extension();
-        $request->avatar->move(public_path('images'), $imageName);
-
-        $category->photo_path = '/images/' . $imageName;
-        $category->save();
-
-        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano zdjęcie');
-    }
-
-    public function deletePhoto($id)
-    {
-        $category = InventoryCategory::find($id);
-
-        $this->authorize('update', $category, InventoryCategory::class);
-
-        $photoName = ltrim($category->photo_path, '/images/');
-
-        if ($photoName != 'default.png') {
-            unlink(public_path('images') . '/' . $photoName);
-            $category->photo_path = '/images/default.png';
-            $category->save();
-        }
-
-        return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
     }
 }
