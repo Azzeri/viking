@@ -13,7 +13,9 @@ use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SitePostController;
 use App\Models\EventTask;
+use App\Models\Post;
 use App\Models\StoreCategory;
 use App\Models\StoreItem;
 use App\Models\User;
@@ -50,6 +52,8 @@ Route::get('/about', function () {
         ])
     ]);
 })->name('about');
+
+Route::get('/posts', [SitePostController::class, '__invoke'])->name('posts');
 
 Route::get('/store', [StoreController::class, 'index'])->name('store');
 Route::get('/storeItem/{id}', [StoreController::class, 'itemDetails'])->name('item.details');

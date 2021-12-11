@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'navigation' => [
-                ['label' => 'Aktualności', 'link' => 'dashboard', 'icon' => 'fas fa-newspaper'],
+                ['label' => 'Aktualności', 'link' => 'posts', 'icon' => 'fas fa-newspaper'],
                 ['label' => 'Galeria', 'link' => 'dashboard', 'icon' => 'far fa-images'],
                 ['label' => 'Sklep', 'link' => 'store', 'icon' => 'fas fa-shopping-basket'],
                 ['label' => 'Wydarzenia', 'link' => 'dashboard', 'icon' => 'far fa-calendar-alt'],

@@ -1,7 +1,7 @@
 <template>
     <Head :title="title" />
 
-    <div class="flex flex-col bg-base-200 min-h-screen">
+    <div class="flex flex-col bg-base-100 min-h-screen">
 
         <!-- Navbar -->
         <Navbar></Navbar>
