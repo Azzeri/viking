@@ -121,9 +121,8 @@ class InventoryCategoryController extends Controller
     {
         $this->authorize('delete', $inventory_category, InventoryCategory::class);
 
-        Storage::delete('public/'.ltrim($inventory_category->photo_path, '/storage'));
-
         $inventory_category->delete();
+        Storage::delete('public/'.ltrim($inventory_category->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }

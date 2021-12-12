@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class InventoryItemController extends Controller
@@ -48,7 +49,7 @@ class InventoryItemController extends Controller
                 ),
             ]);
 
-        $categories = InventoryCategory::orderBy('name')->get()->map(fn ($category) => [
+        $categories = InventoryCategory::where('inventory_category_id', '!=', null)->orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
         ]);
@@ -70,14 +71,23 @@ class InventoryItemController extends Controller
     {
         $this->authorize('create', InventoryItem::class);
 
-        InventoryItem::create(
-            $request->validate([
-                'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
-                'inventory_category_id' => ['required', 'integer'],
-                'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
-                'description' => ['nullable', 'min:3', 'max:255']
-            ])
-        );
+        $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
+            'inventory_category_id' => ['required', 'integer'],
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+            'description' => ['nullable', 'min:3', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+        ]);
+
+        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+
+        InventoryItem::create([
+            'name' => $request->name,
+            'inventory_category_id' => $request->inventory_category_id,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'photo_path' => $image_path ? $image_path : '/images/default.png'
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano przedmiot');
     }
@@ -103,7 +113,6 @@ class InventoryItemController extends Controller
             'quantity' => ['required', 'integer', 'min:0', 'max:9999']
         ]));
 
-
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
     }
 
@@ -116,48 +125,10 @@ class InventoryItemController extends Controller
     public function destroy(InventoryItem $inventory_item)
     {
         $this->authorize('delete', $inventory_item, InventoryItem::class);
-        // $photoName = ltrim($item->photo_path, '/images/');
-        // if ($photoName != 'default.png')
-        //     unlink(public_path('images') . '/' . $photoName);
 
         $inventory_item->delete();
+        Storage::delete('public/'.ltrim($inventory_item->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
-    }
-
-    public function storePhoto(Request $request, InventoryItem $item)
-    {
-        $this->authorize('update', $item, InventoryItem::class);
-
-        $request->validate([
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg'
-        ]);
-
-        $photoName = ltrim($item->photo_path, '/images/');
-        if ($photoName != 'default.png')
-            unlink(public_path('images') . '/' . $photoName);
-
-        $imageName = time() . '.' . $request->avatar->extension();
-        $request->avatar->move(public_path('images'), $imageName);
-
-        $item->photo_path = '/images/' . $imageName;
-        $item->save();
-
-        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano zdjęcie');
-    }
-
-    public function deletePhoto(InventoryItem $item)
-    {
-        $this->authorize('update', $item, InventoryItem::class);
-
-        $photoName = ltrim($item->photo_path, '/images/');
-
-        if ($photoName != 'default.png') {
-            unlink(public_path('images') . '/' . $photoName);
-            $item->photo_path = '/images/default.png';
-            $item->save();
-        }
-
-        return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
     }
 }
