@@ -15,7 +15,7 @@ class CreateStoreCategoriesTable extends Migration
     {
         Schema::create('store_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 64);
+            $table->string('name', 64)->unique();
             $table->string('photo_path')->default('/images/default.png');
             $table->foreignId('store_category_id')->nullable()->constrained();
             $table->timestamps();

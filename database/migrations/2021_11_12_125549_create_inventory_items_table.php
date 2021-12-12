@@ -19,7 +19,7 @@ class CreateInventoryItemsTable extends Migration
             $table->string('photo_path')->default('/images/default.png');
             $table->text('description', 255)->nullable();
             $table->unsignedSmallInteger('quantity')->default(0);
-            $table->foreignId('inventory_category_id')->nullable()->constrained();
+            $table->foreignId('inventory_category_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

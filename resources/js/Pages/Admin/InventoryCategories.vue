@@ -36,7 +36,7 @@
 						<td>{{ row.name }}</td>
 						<td class="space-x-2 text-center"> 
 							<button @click=showDetails(row) class="btn btn-xs btn-accent">Szczegóły</button>
-							<button @click="deleteRow(row.id)" class="btn btn-xs btn-error">
+							<button @click="deleteRow(row.id, false)" class="btn btn-xs btn-error">
 								<i class="fas fa-trash cursor-pointer"></i>
 								<span class="ml-1">Usuń</span>
 							</button>
@@ -51,7 +51,7 @@
 
 			<template #side>
 				<div class="flex space-x-2">
-					<button @click=deleteRow(selectedCategory.id) class="btn btn-error btn-xs">
+					<button @click="deleteRow(selectedCategory.id, false)" class="btn btn-error btn-xs">
 						<i class="fas fa-trash"></i>
 						<span class="ml-2">Usuń</span>
 					</button>
@@ -126,7 +126,7 @@
 								<div>{{ `${row.name}` }}</div>
 								<div class="flex space-x-2 items-center">
 									<i @click="editSubcategory(row, true)" class="fas fa-edit text-info"></i>
-									<i @click="deleteRow(row.id)" class="fas fa-trash text-error"></i>
+									<i @click="deleteRow(row.id, true)" class="fas fa-trash text-error"></i>
 								</div>
 							</template>
 						</a>
@@ -297,12 +297,14 @@ export default defineComponent({
 			}) 
 		}
 
-        const deleteRow = (id) => {
+        const deleteRow = (id, is_subcategory) => {
             if (!confirm('Na pewno? Wszystkie przedmioty należące do kategorii również zostaną usunięte!')) return;
 			resetModes(true, true, true)
             Inertia.delete(route('admin.inventory_categories.destroy', id), {
 				onSuccess: () => {
-					selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
+					if (is_subcategory)
+						selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
+					else close()
 					if (props.categories.data.length === 0) selectedCategory.value = ref({'photo_path':''})
 				}
 			})

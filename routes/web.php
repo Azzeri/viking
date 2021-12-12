@@ -94,7 +94,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
     // InventoryCategory
     Route::resource('/inventory_categories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
-    
+
     // InventoryItem
     Route::resource('/inventory_items', InventoryItemController::class)->except(['create', 'edit', 'show']);
 
@@ -108,17 +108,18 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     // Post
     Route::resource('/posts', PostController::class)->except(['create', 'edit']);
 
+    // StoreCategory
+    Route::resource('/store_categories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
+
+    // StoreItem
+    Route::resource('/store_items', StoreItemController::class)->except(['create', 'edit', 'show']);
+
+    // StoreRequest
+    Route::put('/store_requests/accept/{id}', [StoreRequestController::class, 'accept']);
+    Route::put('/store_requests/finish/{id}', [StoreRequestController::class, 'finish']);
+    Route::resource('/store_requests', StoreRequestController::class)->except(['create', 'edit', 'show']);
+
     // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
-
-    // Store
-    Route::prefix('store')->name('store.')->group(function () {
-        Route::resource('/categories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
-        
-        Route::resource('/items', StoreItemController::class)->except(['create', 'edit', 'show']);
-        Route::resource('/requests', StoreRequestController::class)->except(['create', 'edit', 'show']);
-    });
-    Route::post('/storeRequests/accept/{id}', [StoreRequestController::class, 'accept']);
-    Route::post('/storeRequests/finish/{id}', [StoreRequestController::class, 'finish']);
 });
