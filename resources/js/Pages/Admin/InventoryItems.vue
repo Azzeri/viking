@@ -217,6 +217,9 @@ export default defineComponent({
 		// Edit item
 		const edit = (row) => { 
 			editMode.value = !editMode.value
+
+			form.reset()
+			form.clearErrors()
 			
 			form.id = row.id
 			form.name = row.name

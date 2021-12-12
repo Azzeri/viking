@@ -2,130 +2,180 @@
 
 <admin-panel-layout title="Sklep">
 	
-	<template #page-title>Sklep</template>
+	<!-- Data not present -->
+	<template v-if="(!items.data.length || !categories.length) && filters.search == null">
+		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego przedmiotu</h1>
+		<Link :href="route('admin.store_categories.index')" class="btn btn-wide btn-secondary mt-4">
+			Kategorie
+		</Link>
+		<button v-if="categories.length" @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
+			<i class="fas fa-plus fa-lg mr-3"></i>
+			Dodaj przedmiot
+		</button>
+	</template>
 
-	<div v-if="!items.data.length && filters.search == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-		<h1>Brak danych</h1>
-		<div class="flex space-x-2">
-			<Link as=button :href="route('admin.store_categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
-			<button v-if="categories.length" @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-			<button v-if="categories.length" @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-				<i class="fas fa-plus fa-lg"></i>
-			</button>
-		</div>
-		
-	</div>
-
-	<div v-else>
-		<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.store_items.index" extraClass="first:h-16 sm:first:h-auto flex sm:table-cell">
-
+	<!-- Data present -->
+	<template v-else>
+		<DataTable :columns=columns :data=items :filters=filters sortRoute="admin.store_items.index">
 			<template #buttons>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.store_categories.index')" class="px-2 py-1 bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full border-2">Kategorie</Link>
-				</div>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<button @click="modalOpened = true" class="sm:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-						<i class="fas fa-plus fa-lg"></i>
-					</button>
-					<button @click="modalOpened = true" class="hidden sm:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-						<i class="fas fa-plus fa-lg"></i>
-					</button>
-				</div>
-				<div class="w-1/3 sm:w-auto flex justify-center">
-					<Link as=button :href="route('admin.store_requests.index')" class="bg-white bg-opacity-70 text-gray-800 font-semibold px-2 py-1 rounded-full border-2">Zamówienia</Link>
+				<button @click="createModalOpened = true" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
+					<i class="fas fa-plus mr-2"></i>
+					Dodaj przedmiot
+				</button>
+				<div class="flex justify-center space-x-2">
+					<Link :href="route('admin.store_categories.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+						Kategorie
+					</Link>
+					<Link :href="route('admin.store_requests.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+						Serwisy
+					</Link>
 				</div>
 			</template>
 
 			<template #content>
-				<tr v-for="row in items.data" :key="row" class="flex flex-col flex-no-wrap rounded-r-lg sm:rounded-l-lg sm:table-row sm:mb-0 truncate sm:hover:bg-gray-100 divide-y divide-gray-300 sm:divide-none bg-white">
-					<td class="px-3 py-1 flex items-center space-x-3">
-						<img @click=openPhotoModal(row) class="w-14 h-14 rounded-full cursor-pointer" :src=row.photo_path :alt=row.name>
-						<span>{{ row.name }}</span>
-					</td>
-					<td class="px-3 py-1">{{ row.category_name }}</td>
-					<td class="px-3 py-1">{{ row.price }}</td>
-					<td class="px-3 py-1">{{ row.quantity }}</td>
-					<td class="px-3 py-1 space-x-3">
-						<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-						<i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
+				<tr v-for="row in items.data" :key="row" class="hover">
+					<td class="font-bold">{{ row.id }}</td>
+					<td>{{ row.name }}</td>
+					<td>{{ row.category.name }}</td>
+					<td>{{ row.quantity }}</td>
+					<td>{{ row.price }}</td>
+					<td class="space-x-2 text-center">
+						<button @click=showDetails(row) class="btn btn-xs btn-accent">Szczegóły</button>
+						<button @click="deleteRow(row)" class="btn btn-xs btn-error">
+							<i class="fas fa-trash cursor-pointer"></i>
+							<span class="ml-1">Usuń</span>
+						</button>
 					</td>
 				</tr>
 			</template>
-			
 		</DataTable>
-	</div>
+
+		<!-- Modal - details -->
+		<Modal :show=detailsModalOpened @close=close :id="'modal-2'">
+
+			<template #side>
+				<div class="flex space-x-2">
+					<button @click=deleteRow(selectedItem) class="btn btn-error btn-xs">
+						<i class="fas fa-trash"></i>
+						<span class="ml-2">Usuń</span>
+					</button>
+					<button @click="edit(selectedItem)" :class="{'btn-info':!editMode, 'btn-error':editMode}" class="btn btn-xs">
+						<i :class="{'fas fa-edit':!editMode, 'fas fa-times':editMode}"></i>
+						<span v-html="editMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
+					</button>
+					<button v-if="editMode" @click=update :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
+				</div>
+			</template>
+
+			<template #content>
+				<!-- Form and labels -->
+				<form>
+					<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+					<label v-if="form.errors.price" class="label label-text-alt text-error text-sm">{{ form.errors.price }}</label>
+					<div class="flex items-start justify-between my-4">
+						<div>
+							<template v-if=!editMode>
+								<span class="font-bold text-lg">{{ selectedItem.id }}.</span>
+								<span class="mx-2 text-lg">{{ selectedItem.name }}</span>
+							</template>
+							
+							<h1 v-else class="text-lg font-bold">
+								{{`${selectedItem.id}.`}}
+								<input v-model="form.name" type="text" class="input input-primary input-sm w-60" required/>
+								<input v-model="form.quantity" type="number" class="input input-primary input-sm w-24 ml-2" min=0 max=9999 required />
+								<span class="ml-1">szt.</span>
+							</h1>
+
+							<h2 v-if=!editMode class="text-gray-600">{{ selectedItem.category.name }}</h2>
+							<select v-else v-model=form.store_category_id class="select select-bordered select-primary select-sm mt-2 ml-5 w-60 text-sm">
+								<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
+							</select>
+							<input v-if=editMode v-model="form.price" type="number" step=".01" class="input input-primary input-sm w-24 ml-2" min=0 max=9999 required />
+							<span v-if=editMode class="font-bold ml-2 text-lg">zł</span>
+
+							<div v-if=!editMode class="flex space-x-3">
+								<span class="font-bold">{{ selectedItem.price }}zł</span>
+								<span class="font-bold">{{ selectedItem.quantity }}szt.</span>
+							</div>
+						</div>						
+					</div>
+
+					<!-- Content -->
+					<div class="mt-4 flex space-x-4">
+						<img :src="selectedItem.photo_path" :alt="selectedItem.name" class="block h-24 w-24 object-cover mask mask-squircle" />
+						<p v-if=!editMode class="text-justify">{{ selectedItem.description ?? 'Nie dodano opisu'}}</p>
+						<textarea v-else v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..."></textarea>
+					</div>
+				</form>
+			</template>
+
+		</Modal>
+	</template>
+
+	<!-- Create item modal -->
+	<Modal :show=createModalOpened @close=close :id="'modal-1'" :maxWidth="'max-w-sm'">
+		<template #side>
+			<h1 class="text-lg font-semibold">Nowy przedmiot</h1>
+		</template>
+
+		<template #content>
+			<form>
+				<div class="form-control mt-4">
+
+					<label class="label"><span class="label-text">Kategoria<span class="ml-1 text-red-500">*</span></span></label> 
+					<select v-model=form.store_category_id class="select select-bordered select-primary w-full">
+						<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
+					</select>
+
+					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required>
+					<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+
+					<label class="label"><span class="label-text">Ilość<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.quantity type="number" placeholder="Ilość" class="input input-primary input-bordered" min=0 max=9999 required>
+					<label v-if="form.errors.quantity" class="label label-text-alt text-error text-sm">{{ form.errors.quantity }}</label>
+
+					<label class="label"><span class="label-text">Cena<span class="ml-1 text-red-500">*</span></span></label> 
+					<input v-model=form.price type="number" step=".01" placeholder="Cena" class="input input-primary input-bordered" min=0 max=9999 required>
+					<label v-if="form.errors.price" class="label label-text-alt text-error text-sm">{{ form.errors.price }}</label>
+
+					<label class="label">
+						<span class="label-text">Opis</span>
+					</label> 
+					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." max=255 min=3></textarea>
+					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+
+					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
+					<div v-if="url && form.image" class="mx-auto indicator mt-6">
+						<div class="indicator-item">
+							<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
+						</div> 
+						<img :src="url" class="block h-24 w-24 object-cover mask mask-squircle" />
+					</div>
+					<label for="upload-file-store" refs="upload-file" class="btn btn-primary mt-4">Wybierz zdjęcie</label>
+					<label v-if="form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
+
+				</div> 
+			</form>
+		</template>
+
+		<template #footer>
+			<button @click=store :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
+		</template>
+	</Modal>
 
 </admin-panel-layout>
-
-<CrudModal :show=modalOpened @close=close>
-	<template #title>Nowy przedmiot w sklepie</template>
-
-	<template #content>
-		<jet-validation-errors class="my-6" />
-		<form @submit.prevent="store, update">
-
-			<div class="mt-6">
-				<label for=name>Nazwa</label>
-				<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
-			</div>
-            <div class="mt-6">
-				<label for=description>Opis</label>
-				<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" required placeholder="Opis" autocomplete="description" />
-			</div>
-            <div class="mt-6">
-				<label for=price>Cena</label>
-				<jet-input id="price" type="number" class="mt-1 block w-full" v-model="form.price" required  placeholder="Cena" autocomplete="price" />
-			</div>
-            <div class="mt-6">
-				<label for=quantity>Ilość</label>
-				<jet-input id="quantity" type="number" class="mt-1 block w-full" v-model="form.quantity" required placeholder="Ilość" autocomplete="quantity" />
-			</div>
-			<div class="mt-6">
-				<label for=category>Kategoria</label>
-				<select id=category class="w-full rounded-lg" v-model=form.store_category_id>
-					<template v-for="row in categories" :key=row>
-						<option :value="row.id"> {{ row.name }} </option>
-					</template>
-				</select>
-			</div>
-
-		</form>
-	</template>
-
-	<template #footer>
-		<jet-button type="submit" v-if=!modalEditMode @click=store class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-			Dodaj
-		</jet-button>
-
-		<jet-button type="submit" v-else @click=update class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-			Edytuj
-		</jet-button>
-
-	</template>
-</CrudModal>
-
-<PhotoModal :item_id=itemForPhotoForm.id :show=photoModalOpened :src=itemForPhotoForm.photo_path path='storeItems' @closePhotoModal=closePhotoModal></PhotoModal>
-
 </template>
 
 <script>
 import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
-import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetButton from '@/Jetstream/Button.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-import DataTable from '@/Components/DataTable.vue'
-import CrudModal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
-import PhotoModal from '@/Components/PhotoModal.vue'
-import Label from '@/Jetstream/Label.vue'
+import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
+import DataTable from '@/Components/DataTable.vue'
+import Modal from '@/Components/CrudModal.vue'
 
 export default defineComponent({
-
 	props: {
 		categories: Object,
         items: Object,
@@ -133,91 +183,134 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const modalOpened = ref(false)
-		const modalEditMode = ref(false)
-		const photoModalOpened = ref(false)
-		const itemForPhotoForm = props.items.length ? ref(props.items.data[0]) : ref(0)
-		
+		// Show details of this item
+		const selectedItem =  ref({'photo_path':'', 'id':'', 'name':'', 'category':{}})
+
+		// Image upload
+		const url = ref(null)
+
+		// Modals visibility
+		const createModalOpened = ref(false)
+		const detailsModalOpened = ref(false)
+
+		// Details modal edit mode
+		const editMode = ref(false)
+
+		// Data form
 		const form = useForm({
             id: null,
 			name: null,
-			photo: null,
+			price: null,
+			image: null,
             description: null,
-            price: null,
             quantity: null,
             store_category_id: props.categories.length ? props.categories[0].id : 0
 		})
 
-		const closePhotoModal = _ => photoModalOpened.value = false
-
-		const openPhotoModal = (row) => {
-			itemForPhotoForm.value = row
-			photoModalOpened.value = true
-		}
-
-		const reset = _ => { 
+		// Reset form
+		const reset = _ => {
 			form.reset()
-			modalEditMode.value = false 
+			form.clearErrors()
+			url.value = null
+			editMode.value = null
 		}
 
+		// Close modals and reset data 
 		const close = _ => { 
-			modalOpened.value = false
-			reset() 
+			createModalOpened.value = false
+			detailsModalOpened.value = false
+			reset()
 		}
 
-		const edit = (row) => { 
-			modalEditMode.value = true
+		// Show item details
+		const showDetails = (item) => {
+			selectedItem.value = item
+			detailsModalOpened.value = true
+		}
 
+		// Edit item
+		const edit = (row) => { 
+			editMode.value = !editMode.value
+
+			form.reset()
+			form.clearErrors()
+			
 			form.id = row.id
 			form.name = row.name
             form.description = row.description
+			form.price = row.price
 			form.store_category_id = row.store_category_id
             form.quantity = row.quantity
-            form.price = row.price
-
-			modalOpened.value = true 
 		}
 
+		// Store item
         const store = _ => { 
-			form.post('storeitems/', {
-				onSuccess: () => close()
+			form.post(route('admin.store_items.store'), {
+				onSuccess: () => reset()
 			}) 
 		}
 
+		// Update item
 		const update = _ => { 
-			form.put('storeitems/' + form.id, {
-				onSuccess: () => close()
+			form.put(route('admin.store_items.update', form.id), {
+				onSuccess: () => {
+					reset()
+					selectedItem.value = props.items.data.find(element => element.id == selectedItem.value.id)
+				}
 			}) 
 		}
 
+		// Delete item
         const deleteRow = (row) => {
-            if (!confirm('Na pewno? Wszystkie zamówienia związane z przedmiotem również zostaną usunięte!')) return;
-            Inertia.delete('storeitems/' + row.id)
-        }
+            if (!confirm('Na pewno? Wszystkie konserwacje związane z przedmiotem również zostaną usunięte!')) return;
+            Inertia.delete(route('admin.store_items.destroy', row.id), { 
+				onSuccess: () => close()
+			})
+		}
+		
+		// Images
+		const previewImage = (e) => url.value = URL.createObjectURL(e.target.files[0])
 
+		const removeImage = _ => {
+			form.image = null
+			document.getElementById('category-image').src = "/images/default.png"
+		}
+
+		// Datatable columns
 		const columns = [
+			{name:'id', label:'ID', sortable: true},
 			{name:'name', label:'Przedmiot', sortable: true},
             {name:'store_category_id', label:'Kategoria', sortable: true},
-			{name:'price', label:'Cena', sortable: true},
 			{name:'quantity', label:'Ilość', sortable: true},
-			{name:'actions', label:'Działania'}
+			{name:'price', label:'Cena', sortable: true},
+			{name:'actions', label:''}
         ]
 
-		return { form, columns, modalOpened, modalEditMode, itemForPhotoForm, 
-				 close, store, edit, update, deleteRow, photoModalOpened, closePhotoModal, openPhotoModal }
+		// Returned data
+		return { 
+			selectedItem,
+			url,
+			createModalOpened,
+			detailsModalOpened,
+			editMode, 
+			form, 
+			showDetails,
+			close,
+			store,
+			edit,
+			update,
+			deleteRow,
+			previewImage,
+			removeImage,
+			columns
+		}
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetButton,
-		JetInput,
-		JetLabel,
-		JetValidationErrors,
 		DataTable,
-		CrudModal,
-		PhotoModal,
-		Label
+		Modal,
 	},
 
 });

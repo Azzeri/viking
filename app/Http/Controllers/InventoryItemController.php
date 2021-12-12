@@ -27,7 +27,8 @@ class InventoryItemController extends Controller
         $query = InventoryItem::query();
 
         if (request('search')) {
-            $query->where('name', 'ILIKE', '%' . request('search') . '%');
+            $query->where('name', 'ILIKE', '%' . request('search') . '%')
+            ->orWhere('description', 'ILIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -73,7 +74,7 @@ class InventoryItemController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
-            'inventory_category_id' => ['required', 'integer'],
+            'inventory_category_id' => ['required', 'integer', 'exists:inventory_categories,id'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
@@ -108,7 +109,7 @@ class InventoryItemController extends Controller
                 'required', 'string', 'min:3', 'max:64',
                 Rule::unique('inventory_items')->ignore(InventoryItem::find($inventory_item->id))
             ],
-            'inventory_category_id' => ['required', 'integer'],
+            'inventory_category_id' => ['required', 'integer', 'exists:inventory_categories,id'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999']
         ]));

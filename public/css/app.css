@@ -2732,6 +2732,25 @@ html {
 	cursor: not-allowed;
 	--tw-text-opacity: 0.2;
 }
+.steps .step {
+	display: grid;
+	place-items: center;
+	text-align: center;
+	grid-template-columns: repeat(1,minmax(0,1fr));
+	grid-template-rows: repeat(2,minmax(0,1fr));
+	grid-template-rows: 40px 1fr;
+	min-width: 4rem;
+}
+.steps-vertical .step {
+	display: grid;
+	grid-template-columns: repeat(2,minmax(0,1fr));
+	grid-template-columns: 40px 1fr;
+	grid-template-rows: repeat(1,minmax(0,1fr));
+	grid-template-rows: auto;
+	gap: .5rem;
+	min-height: 4rem;
+	justify-items: start;
+}
 .tab {
 	cursor: pointer;
 	display: inline-flex;
@@ -3627,6 +3646,60 @@ html {
 	--tw-placeholder-opacity: 1;
 	--tw-placeholder-opacity: 0.2;
 	color: hsla(var(--bc)/var(--tw-placeholder-opacity,1));
+}
+.steps .step:before {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--b3)/var(--tw-bg-opacity,1));
+	height: .5rem;
+	top: 0;
+	--tw-text-opacity: 1;
+	color: hsla(var(--bc)/var(--tw-text-opacity,1));
+	width: 100%;
+	grid-column-start: 1;
+	grid-row-start: 1;
+	content: "";
+	margin-left: -100%;
+}
+.steps .step:after {
+	content: counter(step);
+	counter-increment: step;
+	z-index: 1;
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--b3)/var(--tw-bg-opacity,1));
+	border-radius: 9999px;
+	display: block;
+	display: grid;
+	place-items: center;
+	place-self: center;
+	height: 2rem;
+	position: relative;
+	--tw-text-opacity: 1;
+	color: hsla(var(--bc)/var(--tw-text-opacity,1));
+	width: 2rem;
+	grid-column-start: 1;
+	grid-row-start: 1;
+}
+.steps .step:first-child:before {
+	content: none;
+}
+.steps .step[data-content]:after {
+	content: attr(data-content);
+}
+.steps-vertical .step:before {
+	height: 100%;
+	top: 0;
+	width: .5rem;
+	--tw-translate-x: 0;
+	--tw-translate-x: -50%;
+	--tw-translate-y: 0;
+	--tw-translate-y: -50%;
+	--tw-rotate: 0;
+	--tw-skew-x: 0;
+	--tw-skew-y: 0;
+	--tw-scale-x: 1;
+	--tw-scale-y: 1;
+	transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+	margin-left: 50%;
 }
 .tab:hover {
 	--tw-text-opacity: 1;
