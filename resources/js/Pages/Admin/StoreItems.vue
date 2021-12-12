@@ -27,7 +27,7 @@
 						Kategorie
 					</Link>
 					<Link :href="route('admin.store_requests.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
-						Serwisy
+						Zamówienia
 					</Link>
 				</div>
 			</template>
