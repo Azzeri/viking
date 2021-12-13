@@ -6,7 +6,7 @@
 		<div v-if="!services.data.length && filters.search == null && filters.filter == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 			<h1>Brak danych</h1>
 			<div class="flex space-x-2">
-				<Link as=button :href="route('admin.inventory.items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<Link as=button :href="route('admin.inventory_items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 					<i class="fas fa-arrow-left fa-lg"></i>
 				</Link>
 				<button @click="modalOpened = true" class="lg:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
@@ -22,7 +22,7 @@
 			<ServicesDisplay :columns=columns :links=services.links :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory.services.index">
 
 				<template #buttons>
-					<Link as=button :href="route('admin.inventory.items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<Link as=button :href="route('admin.inventory_items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 						<i class="fas fa-arrow-left fa-lg"></i>
 					</Link>
 
@@ -69,7 +69,7 @@
 
 	</admin-panel-layout>
 
-	<CrudModal :show=modalOpened @close=close>
+	<CrudModal :show=modalOpened @close=close :id="'modal'">
 		<template #title>Nowy serwis</template>
 
 		<template #content>
@@ -212,7 +212,7 @@ export default defineComponent({
 		}
 
         const store = _ => { 
-			form.post('inventoryservices/', {
+			form.post(route('admin.inventory_services.store'), {
 				onSuccess: () => close()
 			}) 
 		}

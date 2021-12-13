@@ -73,7 +73,7 @@
                     <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">Panel</AdminNavButton>
                     <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')" :active="route().current('admin.users.index')">Użytkownicy</AdminNavButton>
                     <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')" :active="route().current('admin.events.index')">Wydarzenia</AdminNavButton>
-                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store.items.index')">Sklep</AdminNavButton>
+                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store_items.index')">Sklep</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index')">Sprzęt</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index')">Posty</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photo_categories.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>

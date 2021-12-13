@@ -6,7 +6,7 @@
 		<div v-if="!requests.data.length && filters.search == null && filters.filter == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
 			<h1>Brak danych</h1>
 			<div class="flex space-x-2">
-				<Link as=button :href="route('admin.store.items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+				<Link as=button :href="route('admin.store_items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 					<i class="fas fa-arrow-left fa-lg"></i>
 				</Link>
 			</div>
@@ -16,7 +16,7 @@
 			<ServicesDisplay :columns=columns :links=requests.links :filters=filters :frontFilters=frontFilters sortRoute="admin.store.requests.index">
 
 				<template #buttons>
-					<Link as=button :href="route('admin.store.items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
+					<Link as=button :href="route('admin.store_items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
 						<i class="fas fa-arrow-left fa-lg"></i>
 					</Link>
 				</template>
