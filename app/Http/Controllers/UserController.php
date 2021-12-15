@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Privilege;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class UserController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:id,surname,email,date_birth,role']
+            'field' => ['in:id,surname,email,role']
         ]);
 
         $query = User::with('privilege');
@@ -52,6 +53,8 @@ class UserController extends Controller
                 'nickname' => $user->nickname,
                 'email' => $user->email,
                 'date_birth' => $user->date_birth,
+                'date_birth_formatted' => Carbon::parse($user->date_birth)->toFormattedDateString(),
+                'age' => Carbon::parse($user->date_birth)->age,
                 'role' => $user->role,
                 'privilege_id' => $user->privilege_id,
                 'description' => $user->description
@@ -72,12 +75,12 @@ class UserController extends Controller
     public function storeMember(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'role' => ['required', 'string', 'min:3', 'max:128'],
+            'name' => ['required', 'string', 'min:3', 'max:32'],
+            'surname' => ['required', 'string', 'min:3', 'max:32'],
+            'nickname' => ['nullable', 'string', 'min:3', 'max:32'],
+            'role' => ['required', 'string', 'min:3', 'max:64'],
             'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
-            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'exists:allowed_mails'],
+            'email' => ['required', 'string', 'email:filter', 'max:64', 'unique:users', 'exists:allowed_mails'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -109,12 +112,13 @@ class UserController extends Controller
         $this->authorize('update', $user, User::class);
         
         $user->update($request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'surname' => ['required', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'nickname' => ['nullable', 'string', 'min:3', 'max:32', 'alpha_dash'],
-            'role' => ['required', 'string', 'min:3', 'max:128'],
+            'name' => ['required', 'string', 'min:3', 'max:32'],
+            'surname' => ['required', 'string', 'min:3', 'max:32'],
+            'nickname' => ['nullable', 'string', 'min:3', 'max:32'],
+            'role' => ['required', 'string', 'min:3', 'max:64'],
             'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
-            'email' => ['required', 'string', 'email:filter', 'max:255', Rule::unique('users')->ignore(User::find($user->id))],
+            'description' => ['nullable', 'min:3', 'max:255'],
+            'email' => ['required', 'string', 'email:filter', 'max:64', Rule::unique('users')->ignore(User::find($user->id))],
         ]));
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano użytkownika');
@@ -146,8 +150,8 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         
         $request->validate([
-            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users', 'unique:allowed_mails'],
-            'role' => ['required', 'string', 'min:3', 'max:128']
+            'email' => ['required', 'string', 'email:filter', 'max:64', 'unique:users', 'unique:allowed_mails'],
+            'role' => ['required', 'string', 'min:3', 'max:64']
         ]);
 
         DB::table('allowed_mails')->insert(['email' => $request->email]);
