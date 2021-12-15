@@ -1,143 +1,118 @@
 <template>
-	<admin-panel-layout title="Serwisy">
-	
-		<template #page-title>Serwisy</template>
-		
-		<div v-if="!requests.data.length && filters.search == null && filters.filter == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-			<h1>Brak danych</h1>
-			<div class="flex space-x-2">
-				<Link as=button :href="route('admin.store_items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-					<i class="fas fa-arrow-left fa-lg"></i>
+	<admin-panel-layout title="Zamówienia">
+
+		<RequestsDisplay :columns=columns :links=requests.links :filters=filters :frontFilters=frontFilters sortRoute="admin.store_requests.index">
+
+			<template #buttons>
+				<Link :href="route('admin.store_items.index')">
+					<button class="btn btn-sm btn-primary w-full space-x-2">
+						<i class="fas fa-arrow-left"></i>
+						<span>Powrót</span>
+					</button>
 				</Link>
-			</div>
-		</div>
+			</template>
 
-		<div v-else>
-			<ServicesDisplay :columns=columns :links=requests.links :filters=filters :frontFilters=frontFilters sortRoute="admin.store.requests.index">
+			<template #content v-if="requests.data.length">
+				<div class="overflow-y-auto mt-4" style="height: 75vh;">
+					<ul class="menu">
+						<li v-for="row in requests.data" :key="row.id" @click="showDetails(row)" class="hover-bordered">
+							<a class="flex flex-col" style="align-items:flex-start;">
+								<h1>{{ `Zamówienie nr ${row.id} - ${row.store_item_name}` }}</h1>
+								<h3 class="text-xs text-gray-500">{{ row.created_at }}</h3>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</template>
+			<template #content v-else>
+				<h1 class="ml-2 text-lg font-semibold mt-2">Brak danych</h1>
+			</template>
+			
+		</RequestsDisplay>
 
-				<template #buttons>
-					<Link as=button :href="route('admin.store_items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-						<i class="fas fa-arrow-left fa-lg"></i>
-					</Link>
-				</template>
+		<!-- Modal - details -->
+		<Modal :show=detailsModalOpened @close=close :id="'modal-1'">
 
-				<template #content>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 my-4">
-                        <div v-for="row in requests.data" :key="row" class="rounded-lg bg-white p-3 flex flex-col justify-between text-justify overflow-hidden">
-                            <div>
-                                <div class="flex justify-between">
-                                    <div class="font-bold text-lg">{{row.store_item_name}}</div>
-                                    <!-- <div><i @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i></div> -->
-                                </div>
-                                <div class="my-2 text-gray-500 italic">
-                                    <div class="flex space-x-2 items-center">
-                                        <i class="fas fa-user cursor-pointer"></i>
-                                        <div>{{ row.client_name }}</div>
-                                    </div>
-                                    <div class="flex space-x-2 items-center">
-                                        <i class="fas fa-phone cursor-pointer"></i>
-                                        <div v-if="row.client_phone">{{ row.client_phone }}</div>
-                                        <div v-else>Nie podano</div>
-                                    </div>
-                                    <div class="flex space-x-2 items-center">
-                                        <i class="fas fa-envelope cursor-pointer"></i>
-                                        <div>{{ row.client_email }}</div>
-                                    </div>
-                                </div>
-                                <div>{{ row.description }}</div>
-                            </div>
-                            
-                            <div v-if="!row.is_finished" class="mt-4">
-                                <div v-if="!row.is_accepted" class="flex justify-between space-x-2">
-                                    <button @click=acceptRow(row) class="w-1/2 px-3 py-1 bg-green-500 text-white font-bold rounded-full">Zaakceptuj</button>
-                                    <button @click=deleteRow(row) class="w-1/2 px-3 py-1 bg-red-500 text-white font-bold rounded-full">Odrzuć</button>
-                                </div>
-                                <div v-else>
-                                    <button @click=finishRow(row) class="w-1/2 px-3 py-1 bg-blue-500 text-white font-bold rounded-full">Zakończ</button>
-                                </div>
-                            </div>
+			<template #side>
+				<div class="flex space-x-2">
+					<template v-if="!selectedRequest.is_accepted && !selectedRequest.is_finished">
+						<button @click="acceptRequestMode = !acceptRequestMode" :class="{'btn-success':!acceptRequestMode, 'btn-error':acceptRequestMode}" class="btn btn-xs">
+							<i :class="{'fas fa-check':!acceptRequestMode, 'fas fa-times':acceptRequestMode}"></i>
+							<span v-html="acceptRequestMode ? 'Anuluj' : 'Zaakceptuj'" class="ml-2"></span>
+						</button>
+						<button v-if="acceptRequestMode" @click="acceptRequest(selectedRequest.id)" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-info">Zapisz</button>
+					</template>
+					<button @click="deleteRow(selectedRequest.id)" class="btn btn-error btn-xs">
+						<i class="fas fa-trash"></i>
+						<span class="ml-2">{{ selectedRequest.is_accepted || selectedRequest.is_finished ? 'Usuń' : "Odrzuć" }}</span>
+					</button>
+					<button v-if="selectedRequest.is_accepted && !selectedRequest.is_finished" @click="finishRequest(selectedRequest.id)" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zakończ</button>
+				</div>
+			</template>
 
-					    </div>
-                    </div>
-					
-				</template>
-				
-			</ServicesDisplay>
-		</div>
+			<template #content>
+				<ul class="mt-3">
+					<li v-if="acceptRequestMode">
+						<textarea v-model=form.note class="textarea h-24 textarea-bordered textarea-primary resize-none w-full" placeholder="Notatka..." max=255 min=3></textarea>
+						<label v-if="form.errors.note" class="label label-text-alt text-error text-sm">{{ form.errors.note }}</label>
+					</li>
+					<li>
+						<h1 class="mt-4 font-semibold text-lg">{{ `Zamówienie nr ${selectedRequest.id}`}}</h1>
+						<h2 class="text-sm text-gray-600">{{ selectedRequest.store_item_name }}</h2>
+					</li>
+					<li class="flex flex-col mt-3">
+						<span class="font-semibold">Dodano</span>
+						<span class="text-sm">{{ `${selectedRequest.created_at}`}}</span>
+					</li>
+					<li v-if="selectedRequest.date_due" class="mt-2 flex flex-col">
+						<span class="font-semibold">Termin</span>
+						<div class="text-sm">
+							<span>{{ `${selectedRequest.date_due}, przypomnienie ` }}</span>
+							<span v-if="selectedRequest.notification">włączone</span>
+							<span v-else>wyłączone</span>
+						</div>
+					</li>
+					<li v-if="selectedRequest.is_finished" class="mt-2 flex flex-col">
+						<span class="font-semibold">Zakończono</span>
+						<span class="text-sm">{{ `${selectedRequest.date_finished}` }}</span>
+					</li>
+					<li v-if="selectedRequest.description" class="mt-2 flex flex-col">
+						<span class="font-semibold">Opis</span>
+						<p class="text-sm">{{ selectedRequest.description }}</p>
+					</li>
+					<li v-if="selectedRequest.note" class="mt-2 flex flex-col">
+						<span class="font-semibold">Notatka</span>
+						<p class="text-sm">{{ selectedRequest.note }}</p>
+					</li>
+					<li class="mt-2 flex flex-col space-y-2">
+						<span class="font-semibold">Dane klienta</span>
+						<div class="ml-2 flex items-center space-x-2">
+							<i class="fas fa-user"></i>
+							<span class="text-sm">{{ selectedRequest.client_name }}</span>
+						</div>
+						<div class="ml-2 flex items-center space-x-2">
+							<i class="fas fa-at"></i>
+							<span class="text-sm">{{ selectedRequest.client_email }}</span>
+						</div>
+						<div class="ml-2 flex items-center space-x-2">
+							<i class="fas fa-phone"></i>
+							<span class="text-sm">{{ selectedRequest.client_phone ?? 'Nie podano' }}</span>
+						</div>
+					</li>
+				</ul>
+			</template>
+		</Modal>
 
 	</admin-panel-layout>
-
-	<!-- <CrudModal :show=modalOpened @close=close>
-		<template #title>Nowy serwis</template>
-
-		<template #content>
-			<jet-validation-errors class="my-6" />
-			<form @submit.prevent="store, update">
-
-				<div class="mt-6">
-					<label for=item>Przedmiot</label>
-					<select id=item class="w-full rounded-lg" v-model=form.store_item_id>
-						<template v-for="row in items" :key=row>
-							<option :value="row.id"> {{ row.name }} </option>
-						</template>
-					</select>
-				</div>
-
-				<div class="mt-6">
-					<label for=name>Nazwa</label>
-					<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
-				</div>
-				<div class="mt-6">
-					<label for=description>Opis</label>
-					<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" placeholder="Opis" autocomplete="description" />
-				</div>
-				<div class="mt-6">
-					<label for=date_due>Termin</label>
-					<jet-input id="date_due" type="date" class="mt-1 block w-full" v-model="form.date_due" placeholder="Termin" autocomplete="date_due" :min=currentDate() />
-				</div>								
-
-				<div v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" class="mt-6">
-					<label for=assigned_user>Przydziel użytkownikowi</label>
-					<select id=assigned_user class="w-full rounded-lg" v-model=form.assigned_user>
-						<template v-for="row in users" :key=row>
-							<option :value="row.id"> {{ row.name }} </option>
-						</template>
-					</select>
-				</div>
-
-				<div class="mt-6" v-if="form.date_due">
-					<checkbox id=notification v-model="form.notification" :checked="form.notification">asd</checkbox>
-					<span class="ml-2">Przypomnienie</span>
-				</div>
-
-			</form>
-		</template>
-
-		<template #footer>
-			<jet-button type="submit" v-if=!modalEditMode @click=store class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Dodaj
-			</jet-button>
-
-			<jet-button type="submit" v-else @click=update class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Edytuj
-			</jet-button>
-		</template>
-	</CrudModal> -->
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { Link, useForm } from '@inertiajs/inertia-vue3'
-import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetButton from '@/Jetstream/Button.vue'
-import Checkbox from '@/Jetstream/Checkbox.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-import ServicesDisplay from '@/Components/ServicesDisplay.vue'
-import CrudModal from '@/Components/CrudModal.vue'
+import { defineComponent, ref, computed } from "vue";
+import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
-import Label from '@/Jetstream/Label.vue'
+import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
+import RequestsDisplay from '@/Components/ServicesDisplay.vue'
+import Modal from '@/Components/CrudModal.vue'
 
 export default defineComponent({
 
@@ -146,126 +121,98 @@ export default defineComponent({
 		filters: Object
 	},
 
-	setup(props) {
-		// const modalOpened = ref(false)
-		// const modalEditMode = ref(false)
+	setup() {
+		// Modal visibility
+		const detailsModalOpened = ref(false)
 
-		// const currentDate = _ => new Date().toISOString().split('T')[0]
+		// Request for details modal
+		const selectedRequest = ref({'is_accepted':''})
 
-		// const finish = (row) => {
-        //     if (!confirm('Czy potwierdzasz wykonanie serwisu?')) return;
-        //     Inertia.post('storerequestsfinish/', row)
-        // }
+		// Serivice edit mode
+		const acceptRequestMode = ref(false)
 
-		// const showDetails = (id) => {
-		// 	let element = document.getElementById('details-'+id)
-		// 	let arrow = document.getElementById('arrow-'+id)
+		// Edit form
+		const form = useForm({
+			note: null
+		})
 
-		// 	element.classList.contains('hidden') ? element.classList.remove('hidden') : element.classList.add('hidden')
-		// 	arrow.innerHTML.indexOf('down') != -1 ? arrow.innerHTML = '<i class="fas fa-arrow-up"></i>' : arrow.innerHTML = '<i class="fas fa-arrow-down"></i>'
-		// }
+		// Shows details modal
+		const showDetails = (request) => {
+			selectedRequest.value = request
+			detailsModalOpened.value = true
+		}
 
-        // const booleanIcon = (notification) => notification == true ? '<i class="fas fa-check text-green-500">' : '<i class="fas fa-times text-red-500">'
+		// Close modals and reset form
+		const close = _ => { 
+			detailsModalOpened.value = false
+			acceptRequestMode.value = false
+			form.reset()
+			form.clearErrors()
+		}
 
-		// const checkDateDue = (date_due) => {
-		// 	if(date_due < currentDate()) return 'text-red-500';
-		// 	else if (date_due == currentDate()) return 'text-yellow-500';
-		// 	else return 'text-green-500'
-		// }
-
-		// const form = useForm({
-        //     id: null,
-		// 	name: null,
-        //     description: null,
-		// 	date_due: null,
-		// 	store_item_id: props.items.length ? props.items[0].id : 0,
-		// 	assigned_user: props.users.length ? props.users[0].id : 0,
-		// 	notification: false
-		// })
-
-		// const reset = _ => { 
-		// 	form.reset()
-		// 	modalEditMode.value = false 
-		// }
-
-		// const close = _ => { 
-		// 	modalOpened.value = false
-		// 	reset() 
-		// }
-
-		// const edit = (row) => { 
-		// 	modalEditMode.value = true
-
-		// 	form.id = row.id
-		// 	form.name = row.name
-        //     form.description = row.description
-		// 	form.date_due = row.date_due
-        //     form.store_item_id = row.store_item_id
-        //     form.assigned_user = row.assigned_user_id
-        //     form.notification = row.notification
-
-		// 	modalOpened.value = true 
-		// }
-
-        // const store = _ => { 
-		// 	form.post('storerequests/', {
-		// 		onSuccess: () => close()
-		// 	}) 
-		// }
-
-		// const update = _ => { 
-		// 	form.put('storerequests/' + form.id, {
-		// 		onSuccess: () => close()
-		// 	}) 
-		// }
-
+		// Delete request
         const deleteRow = (row) => {
             if (!confirm('Na pewno?')) return;
-            Inertia.delete('storerequests/' + row.id)
+            Inertia.delete(route('admin.store_requests.destroy', row), {
+				onSuccess: () => close()
+			}) 
         }
 
-        const acceptRow = (row) => {
-            Inertia.post('storeRequests/accept/' + row.id)
+		// Mark the request as finished
+		const finishRequest = (row) => {
+            if (!confirm('Czy potwierdzasz wykonanie serwisu?')) return;
+            form.put(route('admin.store_requests.finish', row), {
+				onSuccess: () => close()
+			}) 
         }
 
-        const finishRow = (row) => {
-            if (!confirm('Na pewno?')) return;
-            Inertia.post('storeRequests/finish/' + row.id)
+		// Mark the request as accepted
+		const acceptRequest = (row) => {
+            form.put(route('admin.store_requests.accept', row), {
+				onSuccess: () => close()
+			}) 
         }
 
+		// Sort options
 		const columns = [
-			{ name:'store_item_id', label:'Przedmiot', sortable: true },
-			{ name:'description', label:'Opis'},
-			{ name:'created_at', label:'Data utworzenia', sortable: true },
-			{ name:'client_name', label:'Klient', sortable: true },
-			{ name:'client_phone', label:'Telefon klienta', sortable: true },
-			{ name:'client_email', label:'Email klienta', sortable: true },
-			{ name:'is_finished', label:'Zakończone'},
-			{ name:'is_accepted', label:'Zaakceptowane'},
+			{ name:'created_at', label:'Data malejąco', direction: 'desc' },
+			{ name:'created_at', label:'Data rosnąco', direction: 'asc' },
+			{ name:'store_item_id', label:'Przedmiot malejąco', direction: 'desc' },
+			{ name:'store_item_id', label:'Przedmiot rosnąco', direction: 'asc' },
+			{ name:'client_name', label:'Klient malejąco', direction: 'desc' },
+			{ name:'client_name', label:'Klient rosnąco', direction: 'asc' },
+			{ name:'id', label:'ID zamówienia malejąco', direction: 'desc' },
+			{ name:'id', label:'ID zamówienia rosnąco', direction: 'asc' },
         ]
 
-        const frontFilters = [
-			{ label: 'Oczekujące', value: 0 },
-			{ label: 'Zaakceptowane', value: 1 },
+		// Available filters
+		const frontFilters = [
+			{ label: 'Zaakceptowane', value: 0 },
+			{ label: 'Oczekujące', value: 1 },
 			{ label: 'Wykonane', value: 2 },
 		]
-
-		return { columns, frontFilters, deleteRow, acceptRow, finishRow }
-
-		// return { form, columns, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
+		
+		// Returned data
+		return { 
+			form, 
+			columns, 
+			frontFilters, 
+			acceptRequestMode, 
+			selectedRequest, 
+			detailsModalOpened ,
+			close, 
+			deleteRow, 
+			finishRequest, 
+			showDetails, 
+			acceptRequest
+		}
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetButton,
-		JetInput,
-		JetLabel,
-		JetValidationErrors,
-		CrudModal,
-		ServicesDisplay,
-		Checkbox,
-		Label
+		Modal,
+		RequestsDisplay,
 	},
 
 });

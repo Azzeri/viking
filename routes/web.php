@@ -116,8 +116,8 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/store_items', StoreItemController::class)->except(['create', 'edit', 'show']);
 
     // StoreRequest
-    Route::put('/store_requests/accept/{id}', [StoreRequestController::class, 'accept']);
-    Route::put('/store_requests/finish/{id}', [StoreRequestController::class, 'finish']);
+    Route::put('/store_requests/accept/{store_request}', [StoreRequestController::class, 'accept'])->name('store_requests.accept');
+    Route::put('/store_requests/finish/{store_request}', [StoreRequestController::class, 'finish'])->name('store_requests.finish');
     Route::resource('/store_requests', StoreRequestController::class)->except(['create', 'edit', 'show']);
 
     // User

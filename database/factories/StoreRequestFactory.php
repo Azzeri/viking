@@ -26,8 +26,7 @@ class StoreRequestFactory extends Factory
             'client_name' => $this->faker->name(),
             'client_phone' => $this->faker->optional()->phoneNumber(),
             'client_email' => $this->faker->safeEmail(),
-            'store_item_id' => $this->faker->numberBetween(1, 30),
-            'is_accepted' => $this->faker->boolean(),
+            'store_item_id' => $this->faker->numberBetween(1, 1),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StoreRequestController extends Controller
@@ -18,6 +19,7 @@ class StoreRequestController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
+            'field' => ['in:created_at,store_item_id,client_name,id']
         ]);
 
         $query = StoreRequest::query();
@@ -29,31 +31,38 @@ class StoreRequestController extends Controller
                 ->orWhere('client_phone', 'ILIKE', '%' . request('search') . '%');
         }
 
-        if (request('filter') && request('filter') != 2) {
-            $query->where('is_accepted', request('filter'))->where('is_finished', false);
-        } else if (request('filter') && request('filter') == 2)
-            $query->where('is_finished', true);
-        else    
-            $query->where('is_accepted', false);
-
+        switch (request('filter')) {
+            case 0:
+            default:
+                $query->where('is_accepted', true)->where('is_finished', false);
+                break;
+            case 1:
+                $query->where('is_accepted', false)->where('is_finished', false);
+                break;
+            case 2:
+                $query->where('is_finished', true);
+                break;
+        }
 
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('created_at');
+            $query->orderBy('created_at', 'desc');
 
-        $requests = $query->paginate()->withQueryString()
+        $requests = $query->paginate(9)->withQueryString()
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,
-                'created_at' => $storeRequest->created_at,
+                'created_at' => Carbon::parse($storeRequest->created_at)->format('Y-m-d'),
                 'client_name' => $storeRequest->client_name,
                 'client_phone' => $storeRequest->client_phone,
                 'client_email' => $storeRequest->client_email,
                 'is_finished' => $storeRequest->is_finished,
                 'is_accepted' => $storeRequest->is_accepted,
                 'store_item_id' => $storeRequest->store_item_id,
-                'store_item_name' => $storeRequest->item->name
+                'store_item_name' => $storeRequest->item->name,
+                'note' => $storeRequest->note,
+                'date_finished' => $storeRequest->date_finished
             ]);
 
         return inertia('Admin/StoreRequests', [
@@ -89,36 +98,53 @@ class StoreRequestController extends Controller
      * @param  \App\Models\StoreRequest  $storeRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StoreRequest $store_request)
     {
-        $storeRequest = StoreRequest::find($id);
-        $this->authorize('delete', $storeRequest, StoreRequest::class);
+        $this->authorize('delete', $store_request, StoreRequest::class);
 
-        $storeRequest->delete();
+        $store_request->delete();
 
-        return redirect()->back()->with('message', 'Pomyślnie odrzucono zamówienie');
+        return redirect()->back()->with('message', 'Pomyślnie usunięto zamówienie');
     }
 
-    public function accept($id)
+    /**
+     * Marks the specified resource as accepted
+     *
+     * @param  \App\Models\StoreRequest  $storeRequest
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function accept(Request $request, StoreRequest $store_request)
     {
-        $storeRequest = StoreRequest::find($id);
+        $this->authorize('update', $store_request, StoreRequest::class);
 
-        $this->authorize('update', $storeRequest, StoreRequest::class);
+        $request->validate([
+            'note' => ['nullable', 'min:1', 'max:255'],
+        ]);
 
-        $storeRequest->is_accepted = true;
-        $storeRequest->save();
+        $store_request->update([
+            'note' => $request->note,
+            'is_accepted' => true
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaakceptowano zamówienie');
     }
 
-    public function finish($id)
+    /**
+     * Marks the specified resource as finished
+     *
+     * @param  \App\Models\StoreRequest  $storeRequest
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function finish(StoreRequest $store_request)
     {
-        $storeRequest = StoreRequest::find($id);
+        $this->authorize('update', $store_request, StoreRequest::class);
 
-        $this->authorize('update', $storeRequest, StoreRequest::class);
-
-        $storeRequest->is_finished = true;
-        $storeRequest->save();
+        $store_request->update([
+            'date_finished' => Carbon::now(),
+            'is_finished' => true
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zakończono zamówienie');
     }

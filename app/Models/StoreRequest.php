@@ -10,7 +10,7 @@ class StoreRequest extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['description', 'client_name', 'client_phone', 'client_email', 'is_accepted', 'is_finished', 'store_item_id'];
+    protected $fillable = ['description', 'client_name', 'client_phone', 'client_email', 'is_accepted', 'is_finished', 'store_item_id', 'note', 'date_finished'];
 
     public function item()
     {

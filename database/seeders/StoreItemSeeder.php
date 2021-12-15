@@ -14,6 +14,12 @@ class StoreItemSeeder extends Seeder
      */
     public function run()
     {
-        StoreItem::factory()->count(30)->create();
+        // StoreItem::factory()->count(30)->create();
+        StoreItem::create([
+            'name' => 'Miecz Seax na sprzedaż',
+            'quantity' => 1,
+            'store_category_id' => 7,
+            'description' => 'Taki miecz.'
+        ]);
     }
 }

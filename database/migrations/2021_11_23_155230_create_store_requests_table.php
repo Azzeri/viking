@@ -15,7 +15,9 @@ class CreateStoreRequestsTable extends Migration
     {
         Schema::create('store_requests', function (Blueprint $table) {
             $table->id();
-            $table->text('description')->nullable();
+            $table->text('description', 255)->nullable();
+            $table->text('note', 255)->nullable();
+            $table->date('date_finished')->nullable();
             $table->string('client_name', 64);
             $table->string('client_phone', 64)->nullable();
             $table->string('client_email', 64);

@@ -192,16 +192,10 @@
 <script>
 import { defineComponent, ref, computed } from "vue";
 import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetButton from '@/Jetstream/Button.vue'
-import Checkbox from '@/Jetstream/Checkbox.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import ServicesDisplay from '@/Components/ServicesDisplay.vue'
 import Modal from '@/Components/CrudModal.vue'
-import { Inertia } from '@inertiajs/inertia'
-import Label from '@/Jetstream/Label.vue'
 
 export default defineComponent({
 
@@ -352,14 +346,8 @@ export default defineComponent({
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetButton,
-		JetInput,
-		JetLabel,
-		JetValidationErrors,
 		Modal,
 		ServicesDisplay,
-		Checkbox,
-		Label
 	},
 
 });
