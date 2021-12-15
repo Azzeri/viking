@@ -62442,6 +62442,27 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/Pages/Admin/Photos.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/Pages/Admin/Photos.vue ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _var_www_html_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+const script = {}
+
+;
+const __exports__ = /*#__PURE__*/(0,_var_www_html_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"])(script, [['__file',"resources/js/Pages/Admin/Photos.vue"]])
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/Pages/Admin/PostDetails.vue":
 /*!**************************************************!*\
   !*** ./resources/js/Pages/Admin/PostDetails.vue ***!
@@ -65778,6 +65799,7 @@ var map = {
 	"./Admin/InventoryItems.vue": "./resources/js/Pages/Admin/InventoryItems.vue",
 	"./Admin/InventoryServices.vue": "./resources/js/Pages/Admin/InventoryServices.vue",
 	"./Admin/PhotoCategories.vue": "./resources/js/Pages/Admin/PhotoCategories.vue",
+	"./Admin/Photos.vue": "./resources/js/Pages/Admin/Photos.vue",
 	"./Admin/PostDetails.vue": "./resources/js/Pages/Admin/PostDetails.vue",
 	"./Admin/Posts.vue": "./resources/js/Pages/Admin/Posts.vue",
 	"./Admin/StoreCategories.vue": "./resources/js/Pages/Admin/StoreCategories.vue",

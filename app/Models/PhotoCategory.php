@@ -13,7 +13,7 @@ class PhotoCategory extends Model
 
     protected $fillable = ['name', 'photo_path', 'photo_category_id'];
 
-    protected $cascadeDeletes = ['subcategories'];//PHOTOS
+    protected $cascadeDeletes = ['subcategories', 'photos'];
 
     public function subcategories()
     {
@@ -25,8 +25,8 @@ class PhotoCategory extends Model
         return $this->belongsTo(PhotoCategory::class, 'photo_category_id');
     }
 
-    // public function photos()
-    // {
-    //     return $this->hasMany(InventoryItem::class);
-    // }
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }

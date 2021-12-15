@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
 use App\Http\Controllers\PhotoCategoryController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\StoreCategoryController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
@@ -103,6 +104,9 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::put('/inventory_services/assign/{inventory_service}', [InventoryServiceController::class, 'assign_auth'])->name('inventory_services.assign');
     Route::resource('/inventory_services', InventoryServiceController::class)->except(['create', 'edit', 'show']);
 
+    //Photo
+    Route::resource('/photos', PhotoController::class)->except(['create', 'edit', 'show', 'update']);
+    
     // PhotoCategory
     Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show']);
 

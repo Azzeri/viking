@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             EventTaskSeeder::class,
             EventSubTaskSeeder::class,
             PostSeeder::class,
-            PhotoCategorySeeder::class
+            PhotoCategorySeeder::class,
+            PhotoSeeder::class
         ]);
     }
 }
