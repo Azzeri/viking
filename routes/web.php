@@ -99,7 +99,8 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/inventory_items', InventoryItemController::class)->except(['create', 'edit', 'show']);
 
     // InventoryService
-    Route::put('/inventory_services/finish', [InventoryServiceController::class, 'finish'])->name('inventory_services.finish');
+    Route::put('/inventory_services/finish/{inventory_service}', [InventoryServiceController::class, 'finish'])->name('inventory_services.finish');
+    Route::put('/inventory_services/assign/{inventory_service}', [InventoryServiceController::class, 'assign_auth'])->name('inventory_services.assign');
     Route::resource('/inventory_services', InventoryServiceController::class)->except(['create', 'edit', 'show']);
 
     // PhotoCategory

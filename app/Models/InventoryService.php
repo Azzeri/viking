@@ -9,7 +9,7 @@ class InventoryService extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'date_due', 'date_performed', 'notification', 'is_finished', 'inventory_item_id', 'assigned_user', 'performed_by'];
+    protected $fillable = ['name', 'description', 'date_due', 'date_performed', 'notification', 'is_finished', 'inventory_item_id', 'assigned_user', 'performed_by', 'created_by'];
 
     public function item()
     {
@@ -19,6 +19,12 @@ class InventoryService extends Model
     public function assignedUser()
     {
         return $this->belongsTo(User::class, 'assigned_user');
+        
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
         
     }
 

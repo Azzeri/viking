@@ -14,6 +14,12 @@ class InventoryItemSeeder extends Seeder
      */
     public function run()
     {
-        InventoryItem::factory()->count(30)->create();
+        // InventoryItem::factory()->count(30)->create();
+        InventoryItem::create([
+            'name' => 'Miecz Seax',
+            'quantity' => 1,
+            'inventory_category_id' => 7,
+            'description' => 'Taki miecz.'
+        ]);
     }
 }

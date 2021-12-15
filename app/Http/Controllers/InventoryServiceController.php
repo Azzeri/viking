@@ -24,7 +24,7 @@ class InventoryServiceController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            // 'field' => ['in:id,name, privilege_id']
+            'field' => ['in:date_due,name,inventory_item_id']
         ]);
 
         $query = InventoryService::query();
@@ -37,34 +37,47 @@ class InventoryServiceController extends Controller
                 ->orWhere('date_performed', 'ILIKE', '%' . request('search') . '%');
         }
 
-        if (request('filter') && request('filter') != 2) {
-            $query->where('is_finished', request('filter'));
-        } else if (request('filter') && request('filter') == 2)
-            $query->where('assigned_user', Auth::user()->id)->where('is_finished', 0);
-        else
-            $query->where('is_finished', false);
-
+        switch (request('filter')) {
+            case 0:
+                $query->where('assigned_user', null)->where('is_finished', false);
+                break;
+            case 1:
+                $query->where('assigned_user', '!=', null)->where('is_finished', false);
+                break;
+            case 2:
+                $query->where('assigned_user', Auth::user()->id)->where('is_finished', false);
+                break;
+            case 3:
+                $query->where('is_finished', true);
+                break;
+            default:
+                $query->where('assigned_user', null)->where('is_finished', false);
+                break;
+        }
 
         if (request()->has(['field', 'direction'])) {
             $query->orderBy(request('field'), request('direction'));
         } else
-            $query->orderBy('name');
+            $query->orderBy('date_due', 'desc');
 
-        $services = $query->paginate()->withQueryString()
+        $services = $query->paginate(9)->withQueryString()
             ->through(fn ($inventoryItem) => [
                 'id' => $inventoryItem->id,
                 'name' => $inventoryItem->name,
                 'description' => $inventoryItem->description,
                 'created_at' => $inventoryItem->created_at,
+                'created_by' => $inventoryItem->created_by,
+                'created_by_name' =>  $inventoryItem->createdBy->name . ' ' . $inventoryItem->createdBy->surname,
                 'date_due' => $inventoryItem->date_due,
                 'date_performed' => $inventoryItem->date_performed,
                 'notification' => $inventoryItem->notification,
                 'is_finished' => $inventoryItem->is_finished,
-                'assigned_user' => $inventoryItem->assignedUser ? $inventoryItem->assignedUser->name . ' ' . $inventoryItem->assignedUser->surname : null,
+                'assigned_user' => $inventoryItem->assigned_user,
+                'assigned_user_name' => $inventoryItem->assignedUser ? $inventoryItem->assignedUser->name . ' ' . $inventoryItem->assignedUser->surname : null,
                 'assigned_user_id' => $inventoryItem->assignedUser ? $inventoryItem->assignedUser->id : null,
                 'performed_by' => $inventoryItem->performedBy ? $inventoryItem->performedBy->name . ' ' . $inventoryItem->performedBy->surname : null,
                 'inventory_item_id' => $inventoryItem->item->id,
-                'inventory_item_name' => $inventoryItem->item->name
+                'inventory_item_name' => $inventoryItem->item->name,
             ]);
 
         $items = InventoryItem::orderBy('name')->get()->map(fn ($item) => [
@@ -74,14 +87,14 @@ class InventoryServiceController extends Controller
 
         $users = User::orderBy('name')->get()->map(fn ($user) => [
             'id' => $user->id,
-            'name' => $user->name . ' ' . $user->surname,
+            'name' => $user->name . ' ' . $user->surname
         ]);
 
-        $sortedItems = $items->sortBy('name');
+        if (!$items) return redirect()->route('admin.dashboard');
 
         return inertia('Admin/InventoryServices', [
             'services' => $services,
-            'items' => $sortedItems,
+            'items' => $items,
             'users' => $users,
             'filters' => request()->all(['search', 'field', 'direction', 'filter']),
         ]);
@@ -101,20 +114,22 @@ class InventoryServiceController extends Controller
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_services'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'date_due' => ['nullable', 'date', 'after:today'],
-            'inventory_item_id' => ['required', 'integer'],
-            'assigned_user' => ['required', 'integer'],
             'notification' => ['boolean'],
+            'inventory_item_id' => ['required', 'integer', 'exists:inventory_items,id'],
+            'assigned_user' => ['nullable', 'integer', 'exists:users,id'],
         ]);
 
-        $assignedUser = Auth::user()->privilege_id == Privilege::IS_ADMIN ? $request->assigned_user : Auth::user()->id;
+        if (Auth::user()->privilege_id != Privilege::IS_ADMIN && $request->assigned_user != null && $request->assigned_user != Auth::user()->id)
+            return redirect()->back();
 
         InventoryService::create([
             'name' => $request->name,
             'description' => $request->description,
             'date_due' => $request->date_due,
             'inventory_item_id' => $request->inventory_item_id,
-            'assigned_user' => $assignedUser,
-            'notification' => $request->notification
+            'assigned_user' => $request->assigned_user,
+            'notification' => $request->notification,
+            'created_by' => Auth::user()->id
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano serwis');
@@ -127,20 +142,30 @@ class InventoryServiceController extends Controller
      * @param  \App\Models\InventoryService  $InventoryService
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryService $inventoryService)
+    public function update(Request $request, InventoryService $inventory_service)
     {
-        $this->authorize('update', $inventoryService, InventoryService::class);
+        $this->authorize('update', $inventory_service, InventoryService::class);
 
-        $inventoryService = InventoryService::find($request->id);
-
-        $inventoryService->update($request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64'], Rule::unique('inventory_services')->ignore(InventoryService::find($inventoryService->id)),
+        $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:64'], Rule::unique('inventory_services')->ignore(InventoryService::find($inventory_service->id)),
             'description' => ['nullable', 'min:3', 'max:255'],
             'date_due' => ['nullable', 'date', 'after:today'],
-            'inventory_item_id' => ['required', 'integer'],
-            'assigned_user' => ['required', 'integer'],
             'notification' => ['boolean'],
-        ]));
+            'inventory_item_id' => ['required', 'integer', 'exists:inventory_items,id'],
+            'assigned_user' => ['nullable', 'integer', 'exists:users,id'],
+        ]);
+
+        if (Auth::user()->privilege_id != Privilege::IS_ADMIN && $request->assigned_user != null && $request->assigned_user != Auth::user()->id)
+            return redirect()->back();
+
+        $inventory_service->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'date_due' => $request->date_due,
+            'notification' => $request->notification,
+            'inventory_item_id' => $request->inventory_item_id,
+            'assigned_user' => $request->assigned_user,
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano serwis');
     }
@@ -151,28 +176,48 @@ class InventoryServiceController extends Controller
      * @param  \App\Models\InventoryService  $InventoryService
      * @return \Illuminate\Http\Response
      */
-    public function destroy($inventoryService)
+    public function destroy(InventoryService $inventory_service)
     {
-        $service = InventoryService::find($inventoryService);
-        $this->authorize('delete', $service, InventoryService::class);
+        $this->authorize('delete', $inventory_service, InventoryService::class);
 
-        $service->delete();
+        $inventory_service->delete();
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto serwis');
     }
 
-    public function finish(Request $request)
+    /**
+     * Mark the specified service as finished
+     *
+     * @param  \App\Models\InventoryService  $InventoryService
+     * @return \Illuminate\Http\Response
+     */
+    public function finish(InventoryService $inventory_service)
     {
-        $this->authorize('create', InventoryService::class); //tak wiem, pojde za to do piekła. Zmienić
+        $this->authorize('finish', $inventory_service, InventoryService::class);
 
-        $service = InventoryService::find($request->id);
-
-        $service->update([
+        $inventory_service->update([
             'is_finished' => true,
             'performed_by' => Auth::user()->id,
             'date_performed' => Carbon::now(),
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Pomyślnie zakończono serwis');;
+    }
+
+    /**
+     * Assign authenticated user to the specified service
+     *
+     * @param  \App\Models\InventoryService  $InventoryService
+     * @return \Illuminate\Http\Response
+     */
+    public function assign_auth(InventoryService $inventory_service)
+    {
+        $this->authorize('assign', $inventory_service, InventoryService::class);
+
+        $inventory_service->update([
+            'assigned_user' => Auth::user()->id,
+        ]);
+
+        return redirect()->back()->with('message', 'Przypisano Cię do serwisu');;
     }
 }

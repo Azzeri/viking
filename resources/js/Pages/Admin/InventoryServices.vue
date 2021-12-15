@@ -1,135 +1,197 @@
 <template>
 	<admin-panel-layout title="Serwisy">
-	
-		<template #page-title>Serwisy</template>
-		
-		<div v-if="!services.data.length && filters.search == null && filters.filter == null" class="m-4 text-gray-100 p-5 glass-admin-content rounded-3xl">
-			<h1>Brak danych</h1>
-			<div class="flex space-x-2">
-				<Link as=button :href="route('admin.inventory_items.index')" class="sm:flex bg-white items-center bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-					<i class="fas fa-arrow-left fa-lg"></i>
+
+		<ServicesDisplay :columns=columns :links=services.links :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory_services.index">
+
+			<template #buttons>
+				<Link :href="route('admin.inventory_items.index')" class="w-1/4 md:w-auto">
+					<button class="btn btn-sm btn-primary w-full space-x-2">
+						<i class="fas fa-arrow-left"></i>
+						<span class="hidden md:inline">Powrót</span>
+					</button>
 				</Link>
-				<button @click="modalOpened = true" class="lg:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-					<i class="fas fa-plus fa-lg"></i>
-				</button>
-				<button @click="modalOpened = true" class="hidden lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-					<i class="fas fa-plus fa-lg"></i>
-				</button>
-			</div>
-		</div>
-
-		<div v-else>
-			<ServicesDisplay :columns=columns :links=services.links :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory.services.index">
-
-				<template #buttons>
-					<Link as=button :href="route('admin.inventory_items.index')" class="lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-						<i class="fas fa-arrow-left fa-lg"></i>
-					</Link>
-
-					<button @click="modalOpened = true" class="lg:hidden bg-white bg-opacity-70 text-gray-800 font-semibold rounded-full w-12 h-12 border-2 flex justify-center items-center">
-						<i class="fas fa-plus fa-lg"></i>
+				<div class="w-3/4 md:w-auto">
+					<button @click="createModalOpened = true" class="btn btn-sm btn-primary w-full space-x-2">
+						<i class="fas fa-plus"></i>
+						<span>Nowy serwis</span>
 					</button>
-					<button @click="modalOpened = true" class="hidden lg:flex bg-white bg-opacity-70 text-gray-800 font-semibold px-3 py-2 rounded-full border-2">
-						<i class="fas fa-plus fa-lg"></i>
-					</button>
-				</template>
+				</div>
+			</template>
 
-				<template #content>
-					<div v-for="row in services.data" :key="row" class="w-full rounded-lg bg-white p-3 mt-3">
-						<div @click=showDetails(row.id) class="flex justify-between cursor-pointer">
-							<div class="font-semibold"> {{ row.name }} </div>
-							<div :id="'arrow-' + row.id">
-								<i class="fas fa-arrow-down"></i>
+			<template #content v-if="services.data.length">
+				<div class="overflow-y-auto mt-4" style="height: 75vh;">
+					<ul class="menu">
+						<li v-for="row in services.data" :key="row.id" @click="showDetails(row)" class="hover-bordered">
+							<a class="flex flex-col" style="align-items:flex-start;">
+								<h1>{{ row.name }}</h1>
+								<h2 class="text-sm text-gray-600">{{ row.inventory_item_name }}</h2>
+								<h3 v-if="row.date_due" class="text-xs" 
+									:class="{'text-error':row.date_due < currentDate(), 'text-info': row.date_due == currentDate(), 
+									'text-success': row.date_due > currentDate() }">{{ row.date_due }}</h3>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</template>
+			<template #content v-else>
+				<h1 class="ml-2 text-lg font-semibold mt-2">Brak danych</h1>
+			</template>
+			
+		</ServicesDisplay>
+
+		<!-- Modal - details -->
+		<Modal :show=detailsModalOpened @close=close :id="'modal-2'">
+
+			<template #side>
+				<div class="flex space-x-2">
+					<template v-if="isAuthAdmin || ($page.props.user.id == selectedService.created_by && (selectedService.assigned_user == null || selectedService.assigned_user == $page.props.user.id))">
+						<button @click="deleteRow(selectedService.id)" class="btn btn-error btn-xs">
+							<i class="fas fa-trash"></i>
+							<span class="ml-2">Usuń</span>
+						</button>
+						<button v-if="!selectedService.is_finished" @click="edit(selectedService)" :class="{'btn-info':!editServiceMode, 'btn-error':editServiceMode}" class="btn btn-xs">
+							<i :class="{'fas fa-edit':!editServiceMode, 'fas fa-times':editServiceMode}"></i>
+							<span v-html="editServiceMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
+						</button>
+						<button v-if="editServiceMode" @click=update(selectedService.id) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
+					</template>
+				</div>
+			</template>
+
+			<template #content>
+				<ul class="mt-3">
+					<template v-if="!editServiceMode">
+						<li>
+							<h1 class="mt-4 font-semibold text-lg">{{ selectedService.name }}</h1>
+							<h2 class="text-sm text-gray-600">{{ selectedService.inventory_item_name }}</h2>
+						</li>
+						<li class="flex flex-col mt-3">
+							<span class="font-semibold">Dodano</span>
+							<span class="text-sm">{{ `${selectedService.created_at.split('T')[0]}, ${selectedService.created_by_name}` }}</span>
+						</li>
+						<li v-if="selectedService.date_due" class="mt-2 flex flex-col">
+							<span class="font-semibold">Termin</span>
+							<div class="text-sm">
+								<span>{{ `${selectedService.date_due}, przypomnienie ` }}</span>
+								<span v-if="selectedService.notification">włączone</span>
+								<span v-else>wyłączone</span>
 							</div>
-						</div>
-						
-						<div class="text-sm text-gray-600"> {{ row.inventory_item_name }} </div>
-						<div class="hidden my-3" :id="'details-' + row.id">
-							<ul>
-								<li><span class="font-semibold">Utworzono: </span>{{ row.created_at.split('T')[0] }}</li>
-								<li v-if="row.date_due"><span class="font-semibold">Termin: </span><span :class="checkDateDue(row.date_due)">{{ row.date_due }}</span></li>
-								<li v-if="!row.is_finished && row.date_due"><span class="font-semibold">Przypomnienie: </span><span v-html="booleanIcon(row.notification)"></span></li>
-								<li v-if=row.assigned_user><span class="font-semibold">Przydzielone użytkownikowi: {{ row.assigned_user }}</span></li>
-								<li v-if=row.is_finished><span class="font-semibold">Wykonane przez: {{ row.performed_by }}</span></li>
-								<li v-if=row.is_finished><span class="font-semibold">Wykonano: {{ row.date_performed }}</span></li>
+						</li>
+						<li class="mt-2 flex flex-col">
+							<span class="font-semibold">Przydzielono</span>
+							<span v-if="selectedService.assigned_user" class="text-sm">{{ selectedService.assigned_user_name }}</span>
+							<span v-else>Zadanie nie zostało jeszcze przydzielone</span>
+						</li>
+						<li v-if="selectedService.is_finished" class="mt-2 flex flex-col">
+							<span class="font-semibold">Wykonano</span>
+							<span class="text-sm">{{ `${selectedService.date_performed}, ${selectedService.performed_by}` }}</span>
+						</li>
+						<li v-if="selectedService.description" class="mt-2 flex flex-col">
+							<span class="font-semibold">Opis</span>
+							<p class="text-sm">{{ selectedService.description }}</p>
+						</li>
+					</template>
 
-								<li v-if="!row.is_finished" class="space-x-3">
-									<i @click="edit(row)" class="fas fa-edit cursor-pointer"></i>
-									<i v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" @click="deleteRow(row)" class="fas fa-trash cursor-pointer text-red-700"></i>
-								</li>
-							</ul>
-						</div>
-						<div v-if=row.description>{{ row.description }}</div>
-						<button v-if="row.is_finished == false" @click="finish(row)" class="font-semibold mt-2 px-2 py-1 bg-green-500 rounded-full text-white" >Zrobione!</button>
-					</div>
+					<template v-else>
+						<form class="form-control">
+							<label class="label"><span class="label-text">Przedmiot<span class="ml-1 text-error">*</span></span></label> 
+							<select v-model=form.inventory_item_id class="select select-bordered select-primary select-sm text-sm w-full">
+								<option v-for="row in items" :key=row.id :value=row.id>{{ row.name }}</option>
+							</select>
+
+							<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-error">*</span></span></label> 
+							<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-sm input-bordered w-full" required />
+							<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+
+							<label class="label"><span class="label-text">Termin</span></label> 
+							<input v-model=form.date_due type="date" :min="currentDate()" class="input input-primary input-sm input-bordered w-full" />
+							<label v-if="form.errors.date_due" class="label label-text-alt text-error text-sm">{{ form.errors.date_due }}</label>
+
+							<div v-if="form.date_due" class="flex items-center space-x-2 mt-2">
+								<input v-model="form.notification" type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+								<span class="label-text">Przypomnienie</span> 
+							</div>
+							<template v-if="isAuthAdmin">
+								<label class="label"><span class="label-text">Przypisz</span></label> 
+								<select v-model=form.assigned_user class="select select-bordered select-sm select-primary text-sm w-full">
+									<option :value="null">Nie przypisuj</option>
+									<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+								</select>
+							</template>
+							<label class="label"><span class="label-text">Opis</span></label> 
+							<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." max=255 min=3></textarea>
+							<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+						</form>
+					</template>
+				</ul>
+			</template>
+			<template #footer>
+				<template v-if="!selectedService.is_finished && !editServiceMode">
+					<button v-if="!selectedService.assigned_user_id" @click="assignAuth(selectedService)" class="btn btn-xs btn-success" :disabled="form.processing" :class="{ 'loading': form.processing }">Przypisz mnie</button> 
+					<button v-if="isAuthAdmin || $page.props.user.id == assigned_user_id" @click="finishService(selectedService)" class="btn btn-xs btn-success" :disabled="form.processing" :class="{ 'loading': form.processing }">Zakończ</button>
 				</template>
-				
-			</ServicesDisplay>
-		</div>
+			</template>
+		</Modal>
+
+		<!-- Modal - create -->
+		<Modal :show=createModalOpened @close=close :id="'modal-1'" :maxWidth="'max-w-sm'">
+			<template #side>
+				<h1 class="text-lg font-semibold">Nowy serwis</h1>
+			</template>
+
+			<template #content>
+				<form>
+					<div class="form-control mt-4">
+						<label class="label"><span class="label-text">Przedmiot<span class="ml-1 text-error">*</span></span></label> 
+						<select v-model=form.inventory_item_id class="select select-bordered select-primary w-full">
+							<option v-for="row in items" :key=row.id :value=row.id>{{ row.name }}</option>
+						</select>
+
+						<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-error">*</span></span></label> 
+						<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required />
+						<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+
+						<label class="label"><span class="label-text">Termin</span></label> 
+						<input v-model=form.date_due type="date" :min="currentDate()" class="input input-primary input-bordered w-full" />
+						<label v-if="form.errors.date_due" class="label label-text-alt text-error text-sm">{{ form.errors.date_due }}</label>
+
+						<div v-if="form.date_due" class="flex mt-4 items-center space-x-2">
+							<input v-model="form.notification" type="checkbox" class="checkbox checkbox-primary">
+							<span class="label-text">Przypomnienie</span> 
+						</div>
+
+						<template v-if="isAuthAdmin">
+							<label class="label"><span class="label-text">Przypisz</span></label> 
+							<select v-model=form.assigned_user class="select select-bordered select-primary w-full">
+								<option :value="null">Nie przypisuj</option>
+								<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+							</select>
+						</template>
+
+						<div v-else class="flex mt-4 items-center space-x-2">
+							<input id="auth-assign" type="checkbox" class="checkbox checkbox-primary">
+							<span class="label-text">Przypisz sobie</span> 
+						</div>
+
+						<label class="label"><span class="label-text">Opis</span></label> 
+						<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." max=255 min=3></textarea>
+						<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+
+					</div>
+				</form>
+			</template>
+
+			<template #footer>
+				<button @click=store(false) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-primary w-full">Dodaj</button>
+			</template>
+		</Modal>
 
 	</admin-panel-layout>
-
-	<CrudModal :show=modalOpened @close=close :id="'modal'">
-		<template #title>Nowy serwis</template>
-
-		<template #content>
-			<jet-validation-errors class="my-6" />
-			<form @submit.prevent="store, update">
-
-				<div class="mt-6">
-					<label for=item>Przedmiot</label>
-					<select id=item class="w-full rounded-lg" v-model=form.inventory_item_id>
-						<template v-for="row in items" :key=row>
-							<option :value="row.id"> {{ row.name }} </option>
-						</template>
-					</select>
-				</div>
-
-				<div class="mt-6">
-					<label for=name>Nazwa</label>
-					<jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus placeholder="Nazwa" autocomplete="name" />
-				</div>
-				<div class="mt-6">
-					<label for=description>Opis</label>
-					<jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" placeholder="Opis" autocomplete="description" />
-				</div>
-				<div class="mt-6">
-					<label for=date_due>Termin</label>
-					<jet-input id="date_due" type="date" class="mt-1 block w-full" v-model="form.date_due" placeholder="Termin" autocomplete="date_due" :min=currentDate() />
-				</div>								
-
-				<div v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" class="mt-6">
-					<label for=assigned_user>Przydziel użytkownikowi</label>
-					<select id=assigned_user class="w-full rounded-lg" v-model=form.assigned_user>
-						<template v-for="row in users" :key=row>
-							<option :value="row.id"> {{ row.name }} </option>
-						</template>
-					</select>
-				</div>
-
-				<div class="mt-6" v-if="form.date_due">
-					<checkbox id=notification v-model="form.notification" :checked="form.notification">asd</checkbox>
-					<span class="ml-2">Przypomnienie</span>
-				</div>
-
-			</form>
-		</template>
-
-		<template #footer>
-			<jet-button type="submit" v-if=!modalEditMode @click=store class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Dodaj
-			</jet-button>
-
-			<jet-button type="submit" v-else @click=update class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-				Edytuj
-			</jet-button>
-		</template>
-	</CrudModal>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { Link, useForm } from '@inertiajs/inertia-vue3'
+import { defineComponent, ref, computed } from "vue";
+import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import JetButton from '@/Jetstream/Button.vue'
 import Checkbox from '@/Jetstream/Checkbox.vue'
@@ -137,7 +199,7 @@ import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import ServicesDisplay from '@/Components/ServicesDisplay.vue'
-import CrudModal from '@/Components/CrudModal.vue'
+import Modal from '@/Components/CrudModal.vue'
 import { Inertia } from '@inertiajs/inertia'
 import Label from '@/Jetstream/Label.vue'
 
@@ -151,104 +213,140 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const modalOpened = ref(false)
-		const modalEditMode = ref(false)
+		// Modals visibility
+		const createModalOpened = ref(false)
+		const detailsModalOpened = ref(false)
 
+		// Service for details modal
+		const selectedService = ref({ 'is_finished': false, 'created_at':'' })
+
+		// Serivice edit mode
+		const editServiceMode = ref(false)
+
+		// Checks if authenticated user has an administrator privileges
+		const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
+		
+		// Returns current date
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		const finish = (row) => {
-            if (!confirm('Czy potwierdzasz wykonanie serwisu?')) return;
-            Inertia.post('inventoryservicesfinish/', row)
-        }
-
-		const showDetails = (id) => {
-			let element = document.getElementById('details-'+id)
-			let arrow = document.getElementById('arrow-'+id)
-
-			element.classList.contains('hidden') ? element.classList.remove('hidden') : element.classList.add('hidden')
-			arrow.innerHTML.indexOf('down') != -1 ? arrow.innerHTML = '<i class="fas fa-arrow-up"></i>' : arrow.innerHTML = '<i class="fas fa-arrow-down"></i>'
-		}
-
-        const booleanIcon = (notification) => notification == true ? '<i class="fas fa-check text-green-500">' : '<i class="fas fa-times text-red-500">'
-
-		const checkDateDue = (date_due) => {
-			if(date_due < currentDate()) return 'text-red-500';
-			else if (date_due == currentDate()) return 'text-yellow-500';
-			else return 'text-green-500'
-		}
-
+		// Create and edit form
 		const form = useForm({
-            id: null,
 			name: null,
             description: null,
 			date_due: null,
 			inventory_item_id: props.items.length ? props.items[0].id : 0,
-			assigned_user: props.users.length ? props.users[0].id : 0,
-			notification: false
+			assigned_user: null,
+			notification: false,
 		})
 
-		const reset = _ => { 
+		// Shows details modal
+		const showDetails = (service) => {
+			selectedService.value = service
+			detailsModalOpened.value = true
+		}
+
+		// Close modals and reset form
+		const reset = _ => {
 			form.reset()
-			modalEditMode.value = false 
+			form.clearErrors()
 		}
 
 		const close = _ => { 
-			modalOpened.value = false
-			reset() 
+			detailsModalOpened.value = false
+			createModalOpened.value = false
+			editServiceMode.value = false
+			reset()
 		}
 
+		// Edit mode
 		const edit = (row) => { 
-			modalEditMode.value = true
+			editServiceMode.value = !editServiceMode.value
 
-			form.id = row.id
 			form.name = row.name
             form.description = row.description
 			form.date_due = row.date_due
             form.inventory_item_id = row.inventory_item_id
             form.assigned_user = row.assigned_user_id
             form.notification = row.notification
-
-			modalOpened.value = true 
 		}
 
-        const store = _ => { 
+		// Store service
+		const store = _ => { 
+			if (!isAuthAdmin.value) document.getElementById('auth-assign').checked ? form.assigned_user = usePage().props.value.user.id : form.assigned_user = null
 			form.post(route('admin.inventory_services.store'), {
+				onSuccess: () => reset()
+			}) 
+		}
+        
+		// Update service
+		const update = (row) => { 
+			form.put(route('admin.inventory_services.update', row), {
 				onSuccess: () => close()
 			}) 
 		}
 
-		const update = _ => { 
-			form.put('inventoryservices/' + form.id, {
-				onSuccess: () => close()
-			}) 
-		}
-
+		// Delete service
         const deleteRow = (row) => {
             if (!confirm('Na pewno?')) return;
-            Inertia.delete('inventoryservices/' + row.id)
+            Inertia.delete(route('admin.inventory_services.destroy', row), {
+				onSuccess: () => close()
+			}) 
         }
 
+		// Mark the service as finished
+		const finishService = (row) => {
+            if (!confirm('Czy potwierdzasz wykonanie serwisu?')) return;
+            form.patch(route('admin.inventory_services.finish', row), {
+				onSuccess: () => close()
+			}) 
+        }
+
+		// Assign authenticated user to the service
+		const assignAuth = (row) => {
+            if (!confirm('Na pewno?')) return;
+            form.patch(route('admin.inventory_services.assign', row), {
+				onSuccess: () => close()
+			})
+        }
+
+		// Sort options
 		const columns = [
-			{name:'name', label:'Nazwa', sortable: true},
-			{name:'description', label:'Opis'},
-			{name:'created_at', label:'Data utworzenia', sortable: true},
-			{name:'date_due', label:'Termin', sortable: true},
-			{name:'notification', label:'Przypomnienie', sortable: true},
-			{name:'is_finished', label:'Zakończony'},
-			{name:'inventory_item_name', label:'Przedmiot'},
-
-			{name:'inventory_item_id', label:'Przedmiot', sortable: true},
-			{name:'assigned_user', label:'Przypisany użytkownik', sortable: true}
-
+			{ name:'date_due', label:'Termin malejąco', direction: 'desc' },
+			{ name:'date_due', label:'Termin rosnąco', direction: 'asc' },
+			{ name:'name', label:'Nazwa rosnąco', direction: 'asc' },
+			{ name:'name', label:'Nazwa malejąco', direction: 'desc' },
+			{ name:'inventory_item_id', label:'Przedmiot rosnąco', direction: 'asc' },
+			{ name:'inventory_item_id', label:'Przedmiot malejąco', direction: 'desc' },
         ]
 
+		// Available filters
 		const frontFilters = [
-			{ label: 'Niewykonane', value: 0 },
-			{ label: 'Wykonane', value: 1 },
+			{ label: 'Nieprzypisane', value: 0 },
+			{ label: 'Przypisane', value: 1 },
 			{ label: 'Moje', value: 2 },
+			{ label: 'Wykonane', value: 3 },
 		]
-
-		return { form, columns, frontFilters, modalOpened, modalEditMode, close, store, edit, update, deleteRow, finish, showDetails, booleanIcon, currentDate, checkDateDue }
+		
+		// Returned data
+		return { 
+			assignAuth, 
+			form, 
+			isAuthAdmin, 
+			columns, 
+			frontFilters, 
+			createModalOpened, 
+			editServiceMode, 
+			selectedService, 
+			close, 
+			store, 
+			edit, 
+			update, 
+			deleteRow, 
+			finishService, 
+			showDetails, 
+			currentDate, 
+			detailsModalOpened 
+		}
 	},
 
 	components: {
@@ -258,7 +356,7 @@ export default defineComponent({
 		JetInput,
 		JetLabel,
 		JetValidationErrors,
-		CrudModal,
+		Modal,
 		ServicesDisplay,
 		Checkbox,
 		Label

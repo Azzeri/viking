@@ -15,8 +15,8 @@ class CreateInventoryServicesTable extends Migration
     {
         Schema::create('inventory_services', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 64);
-            $table->text('description')->nullable();
+            $table->string('name', 64)->unique();
+            $table->text('description', 255)->nullable();
             $table->date('date_due')->nullable();
             $table->date('date_performed')->nullable();
             $table->boolean('notification')->default(false);
@@ -24,6 +24,7 @@ class CreateInventoryServicesTable extends Migration
             $table->foreignId('inventory_item_id')->constrained();
             $table->foreignId('assigned_user')->nullable()->constrained('users');
             $table->foreignId('performed_by')->nullable()->constrained('users');
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

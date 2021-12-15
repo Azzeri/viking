@@ -11,7 +11,7 @@ class InventoryServicePolicy
 {
     use HandlesAuthorization;
 
-        /**
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
@@ -41,7 +41,23 @@ class InventoryServicePolicy
      */
     public function update(User $user, InventoryService $inventoryService)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $inventoryService->is_finished == false
+            && ($user->privilege_id == Privilege::IS_ADMIN
+                || ($user->privilege_id == Privilege::IS_COORDINATOR && $inventoryService->created_by == $user->id && ($inventoryService->assigned_user == null || $inventoryService->assigned_user == $user->id)));
+    }
+
+    public function finish(User $user, InventoryService $inventoryService)
+    {
+        return $inventoryService->is_finished == false
+            && ($user->privilege_id == Privilege::IS_ADMIN
+                || ($user->privilege_id == Privilege::IS_COORDINATOR && $inventoryService->assigned_user == $user->id));
+    }
+
+    public function assign(User $user, InventoryService $inventoryService)
+    {
+        return $inventoryService->is_finished == false
+            && ($user->privilege_id == Privilege::IS_ADMIN
+                || ($user->privilege_id == Privilege::IS_COORDINATOR && $inventoryService->assigned_user == null));
     }
 
     /**
@@ -53,6 +69,7 @@ class InventoryServicePolicy
      */
     public function delete(User $user, InventoryService $inventoryService)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN]);
+        return $user->privilege_id == Privilege::IS_ADMIN
+            || ($user->privilege_id == Privilege::IS_COORDINATOR && $inventoryService->created_by == $user->id && ($inventoryService->assigned_user == null || $inventoryService->assigned_user == $user->id));
     }
 }

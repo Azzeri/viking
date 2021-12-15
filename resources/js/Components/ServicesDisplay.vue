@@ -1,56 +1,69 @@
 <template>
+    <section class="w-full md:max-w-4xl">
 
-    <!-- heading -->
-    <div class="w-full space-y-4 lg:space-y-0 lg:mt-4">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:justify-between">
 
-        <div class="flex justify-between lg:justify-start items-center lg:space-x-3 lg:space-y-0 lg:mb-4">
-            <slot name="buttons"></slot>
-        </div>       
-
-        <div class="lg:flex space-y-4 lg:space-y-0">
-            <div class="flex lg:justify-start lg:w-1/2">
-                <div class="lg:flex items-center w-1/2 lg:w-auto">
-                    <span class="text-white">Filtruj</span>
-                    <select class="lg:ml-2 rounded-lg w-full lg:w-auto" v-model=filter @change=filterServices(filter)>
-                        <option v-for="filter in frontFilters" :key=filter :value=filter.value>{{ filter.label }}</option>
-                    </select>
+            <div class="flex flex-col space-y-2 md:space-y-4">
+                <!-- Buttons -->
+                <div class="flex space-x-2 md:items-center">
+                    <slot name="buttons"></slot>
                 </div>
-                <div class="lg:flex items-center w-1/2 lg:w-auto">
-                    <div class="flex space-x-2">
-                        <span class="lg:ml-2 text-white">Sortuj</span>
-                        <div @click=changeSortOrder class="flex justify-between items-center">
-                            <i v-if="params.direction === 'asc'" class="fas fa-sort-up"></i>
-                            <i v-else-if="params.direction === 'desc'" class="fas fa-sort-down"></i>
-                        </div>
+
+                <!-- Filters and sort -->
+                <div class="flex flex-col md:flex-row justify-between md:justify-start space-y-1 md:space-y-0 md:space-x-2">
+                    <div class="dropdown">
+                        <div tabindex="0" class="btn btn-sm w-full">
+                            <i class="mr-1 fas fa-filter"></i>
+                            <span>{{ `Filtruj: ${currentFilter}` }}</span>
+                        </div> 
+                        <ul id="filter-list" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                            <li v-for="row in frontFilters" :key="row.value" @click="filterServices(row)">
+                                <a>{{ row.label }}</a>
+                            </li> 
+                        </ul>
                     </div>
-                    
-                    <select class="lg:ml-2 rounded-lg w-full lg:w-auto" v-model="sortField" @change=sort(sortField.name,sortField.sortable)>
-                        <template v-for="row in columns" :key=row> 
-                            <option v-if=row.sortable :value="row">
-                                {{ row.label }}
-                            </option>    
-                        </template>
-                    </select>
+                    <div class="dropdown">
+                        <div tabindex="1" class="btn btn-sm w-full">
+                            <span id="sort-icon"><i class="mr-1 fas fa-sort-amount-up"></i></span>
+                            {{ `Sortuj: ${currentSortField}` }}
+                        </div> 
+                        <ul id="sort-list" tabindex="1" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                            <li v-for="row in columns" :key="row.value" @click="sort(row)">
+                                <a>{{ row.label }}</a>
+                            </li>  
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-end w-full items-center lg:w-1/2">
-                <div class="flex justify-center items-center px-2 rounded-l-full h-10 bg-white"><i class="fas fa-lg fa-search"></i></div>
-                <input v-model="params.search" @click="params.searchField='name'" type="search" class="border-none w-full lg:w-auto h-10 px-2 py-1 rounded-r-full">
+            <!-- Search bar -->
+            <div class="relative">
+                <input v-model="params.search" @click="params.searchField='name'" placeholder="Szukaj" class="w-full pr-16 input input-primary input-sm input-bordered" type="text"> 
+                <button class="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary hover:bg-primary cursor-default no-animation"><i class="fas fa-lg fa-search"></i></button>
             </div>
         </div>
 
-    </div> 
+        <!-- Content -->
+        <div>
+            <slot name="content"></slot>
+        </div>
+
+        <!-- Footer -->
+        <div>
+            <pagination :links=links></pagination>
+        </div>
+    </section>
 
     <!-- content -->
-    <div class="space-y-2">
+    <!-- <div class="space-y-2">
         <slot name="content"></slot>
-    </div>
+    </div> -->
 
     <!-- footer -->
-    <div class="sm:flex justify-center py-3 rounded-lg bg-white text-center mt-2 px-3 items-center">
+    <!-- <div class="sm:flex justify-center py-3 rounded-lg bg-white text-center mt-2 px-3 items-center">
         <pagination :links=links></pagination>
-    </div>
+    </div> -->
 
 </template>
 
@@ -71,10 +84,11 @@ export default {
     },
 
     setup(props) {
-		const servicesState = ref(false)
-        const filter = props.filters.filter ? ref(props.filters.filter) : ref(0)
-        const sortField = ref(props.columns[0])
+        // Filter label
+        const currentFilter = ref(props.frontFilters[0].label)
+        const currentSortField = ref(props.columns[0].label)
 
+        // Filter and sort parameters
         const params = reactive({
             search: props.filters.search,
             field: props.filters.field,
@@ -82,24 +96,20 @@ export default {
             filter: props.filters.filter
         })
 
-        function sort(field, sortable) {
-            if (sortable){
-                params.field = field
-                changeSortOrder()
-            }
+        // Sort and filter functions
+        const sort = (field) => {
+            params.field = field.name
+            params.direction = field.direction
+            currentSortField.value = field.label
         }
-
-        const changeSortOrder = _ => {
-            params.direction = params.direction === 'asc' ? 'desc' : 'asc'
-        }
-
-        sort(props.columns[0].name, props.columns[0].sortable)
 
         const filterServices = (option) => {
-            params.filter = option
+            params.filter = option.value
+            currentFilter.value = option.label
         }
 
-        return { params, sort, servicesState, filter, filterServices, sortField, changeSortOrder }
+        // Returned data
+        return { params, sort, filterServices, currentSortField, currentFilter, }
     },
 
     watch: {

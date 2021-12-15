@@ -27,7 +27,7 @@ class InventoryServiceFactory extends Factory
             'notification' => $this->faker->boolean(),
             'description' => $this->faker->optional()->realText($maxNbChars = 255, $indexSize = 2),
             'assigned_user' => $this->faker->numberBetween(1, 5),
-            'inventory_item_id' => $this->faker->numberBetween(1, 30)
+            'inventory_item_id' => $this->faker->numberBetween(1,1)
         ];
     }
 }
