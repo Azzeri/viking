@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\PhotoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,11 +17,33 @@ class PhotoController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Photo::class);
-// FILTRY
-        $categories = Photo::paginate()->withQueryString()
+//walidacja filtra
+        $categories = PhotoCategory::orderBy('name')->get()->map(fn ($category) => [
+            'id' => $category->id,
+            'name' => $category->name,
+            'photos' => $category->photos ? $category->photos : null,
+            'category' => $category->parentCategory ?? null,
+            'subcategories' => $category->subcategories->map(fn ($subcategory) => [
+                'id' => $subcategory->id,
+                'name' => $subcategory->name
+            ]) ?? []
+        ]);
+
+        $subcategories = PhotoCategory::where('photo_category_id', '!=', null)->orderBy('name')->get()->map(fn ($category) => [
+            'id' => $category->id,
+            'name' => $category->name,
+        ]);
+
+        $query = Photo::query();
+
+        if (request('filter'))
+            $query->where('photo_category_id', request('filter'));
+        
+
+        $photos = $query->paginate(12)->withQueryString()
             ->through(fn ($category) => [
                 'id' => $category->id,
-                'path' => $category->photo_path,
+                'path' => $category->path,
                 'photo_category_id' => $category->photo_category_id,
                 'category' => $category->parentCategory
                     ? array(
@@ -28,10 +51,12 @@ class PhotoController extends Controller
                         'name' => $category->parentCategory->name,
                     ) : [],
             ]);
-            
+
         return inertia('Admin/Photos', [
+            'photos' => $photos,
             'categories' => $categories,
-            'filters' => request()->all(['search', 'field', 'direction']),
+            'subcategories' => $subcategories,
+            'filters' => request()->all(['filter']),
         ]);
     }
 
@@ -47,15 +72,19 @@ class PhotoController extends Controller
 
         $request->validate([
             'photo_category_id' => ['required', 'integer', 'exists:photo_categories,id'],
-            'path' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'images' => ['required'],
+            'images.*' => ['image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        foreach ($request->file('images') as $img) {
+            $image_path = '/storage/' . $img->store('image', 'public');
 
-        Photo::create([
-           'photo_category_id' => $request->photo_category_id,
-           'path' => $image_path ? $image_path : '/images/default.png'
-        ]);
+            Photo::create([
+                'photo_category_id' => $request->photo_category_id,
+                'path' => $image_path
+            ]);
+        }
 
         return redirect()->back()->with('message', 'Pomyślnie dodano zdjęcie');
     }
@@ -70,8 +99,10 @@ class PhotoController extends Controller
     {
         $this->authorize('delete', $photo, Photo::class);
 
-        $photo->delete();
-        Storage::delete('public/'.ltrim($photo->photo_path, '/storage'));
+        if (Storage::exists('public/' . ltrim($photo->path, '/storage'))) {
+            $photo->delete();
+            Storage::delete('public/' . ltrim($photo->path, '/storage'));
+        }
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
     }

@@ -76,7 +76,7 @@
                     <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store_items.index')">Sklep</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index')">Sprzęt</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index')">Posty</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photo_categories.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photos.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>
                 </div>
 
                 <!-- User options -->

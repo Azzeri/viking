@@ -14,6 +14,14 @@ class PhotoCategorySeeder extends Seeder
      */
     public function run()
     {
-        PhotoCategory::factory()->count(15)->create();
+        PhotoCategory::create([
+            'name' => 'Kategoria 1'
+        ]);
+
+        PhotoCategory::create([
+            'name' => 'Subkategoria 1',
+            'photo_category_id' => 1
+        ]);
+        // PhotoCategory::factory()->count(15)->create();
     }
 }

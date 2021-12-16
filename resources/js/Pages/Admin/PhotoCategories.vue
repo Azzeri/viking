@@ -4,7 +4,7 @@
 	<!-- Data not present -->
 	<template v-if="!categories.data.length && filters.search == null">
 		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnej kategorii</h1>
-		<Link :href="route('admin.inventory_items.index')" class="btn btn-wide btn-secondary mt-4">
+		<Link :href="route('admin.photos.index')" class="btn btn-wide btn-secondary mt-4">
 			Powrót
 		</Link>
 		<button @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
@@ -18,7 +18,7 @@
 		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.photo_categories.index">
 			<template #buttons>
 				<div class="flex space-x-2">
-					<Link :href="route('admin.inventory_items.index')" class="btn btn-secondary sm:btn-sm">
+					<Link :href="route('admin.photos.index')" class="btn btn-secondary sm:btn-sm">
 						<i class="fas fa-arrow-left mr-2"></i>
 						Powrót
 					</Link>
