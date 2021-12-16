@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventSubTaskController;
 use App\Http\Controllers\EventTaskController;
@@ -77,7 +78,7 @@ Route::middleware('guest')->post('/storeMember', [UserController::class, 'storeM
 // Administrator and Coordinators routes
 Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('dashboard', fn () => inertia('Admin/Dashboard'))->name('dashboard');
+    Route::get('dashboard', [AdminDashboardController::class, '__invoke'])->name('dashboard');
 
     // Event
     Route::put('events/finish/{event}', [EventController::class, 'finish'])->name('events.finish');
@@ -106,7 +107,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
 
     //Photo
     Route::resource('/photos', PhotoController::class)->except(['create', 'edit', 'show', 'update']);
-    
+
     // PhotoCategory
     Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show']);
 

@@ -290,7 +290,7 @@ export default defineComponent({
 		// Mark the service as finished
 		const finishService = (row) => {
             if (!confirm('Czy potwierdzasz wykonanie serwisu?')) return;
-            form.patch(route('admin.inventory_services.finish', row), {
+            form.put(route('admin.inventory_services.finish', row), {
 				onSuccess: () => close()
 			}) 
         }
@@ -298,7 +298,7 @@ export default defineComponent({
 		// Assign authenticated user to the service
 		const assignAuth = (row) => {
             if (!confirm('Na pewno?')) return;
-            form.patch(route('admin.inventory_services.assign', row), {
+            form.put(route('admin.inventory_services.assign', row), {
 				onSuccess: () => close()
 			})
         }
