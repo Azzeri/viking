@@ -66,7 +66,7 @@
         </div> 
         
         <!-- Side drawer content -->
-        <div class="drawer-side fixed h-full">
+        <div class="drawer-side w-64 lg:w-auto lg:fixed h-full">
             <label for="my-drawer-3" class="drawer-overlay lg:hidden fixed w-full h-full"></label> 
             <ul class="px-4 pb-24 bg-accent text-accent-content pt-8 menu lg:w-20 lg:hover:w-64 group h-full justify-between">
                 <div class="flex space-y-4 flex-col">
@@ -79,7 +79,6 @@
                     <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photos.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>
                 </div>
 
-                <!-- User options -->
                 <div class="lg:hidden flex space-y-4 flex-col">
                     <div class="flex">
                         <Link :href="route('profile.show')" class="avatar">
