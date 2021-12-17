@@ -4,7 +4,7 @@
         <!-- Left side -->
         <div class="px-2 mx-2 space-x-2 navbar-start">
             <!-- Logo -->
-            <Link :href="route('about')" as=button class="btn btn-square btn-ghost">
+            <Link :href="route('home')" as=button class="btn btn-square btn-ghost">
                 <jet-application-mark class="block h-9 w-auto" />
             </Link>
             <span class="text-lg font-bold">

@@ -2,7 +2,7 @@
     <footer class="p-10 footer bg-neutral text-neutral-content">
         <div class="flex space-x-1 items-center">
             <!-- Logo -->
-            <Link :href="route('about')" as=button class="btn btn-square btn-ghost">
+            <Link :href="route('home')" as=button class="btn btn-square btn-ghost">
                 <jet-application-mark class="block h-9 w-auto fa-3x" />
             </Link> 
             <span class="text-lg font-bold">

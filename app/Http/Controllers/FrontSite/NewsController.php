@@ -1,21 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FrontSite;
 
+use App\Models\StoreCategory;
+use App\Models\StoreItem;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
-class SitePostController extends Controller
+class NewsController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(Request $request)
-    {
+    public function index() {
         // request()->validate([
         //     'direction' => ['in:asc,desc'],
         //     'field' => ['in:id,title,user_id,created_at']
@@ -54,5 +50,9 @@ class SitePostController extends Controller
             'posts' => $posts,
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
+    }
+
+    public function show(Post $post) {
+        
     }
 }

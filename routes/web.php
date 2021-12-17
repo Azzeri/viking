@@ -7,25 +7,20 @@ use App\Http\Controllers\EventTaskController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryServiceController;
+use App\Http\Controllers\FrontSite\AboutController;
+use App\Http\Controllers\FrontSite\EventsController;
+use App\Http\Controllers\FrontSite\GalleryController;
+use App\Http\Controllers\FrontSite\NewsController;
+use App\Http\Controllers\FrontSite\StoreController;
 use App\Http\Controllers\PhotoCategoryController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\StoreCategoryController;
-use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\SitePostController;
-use App\Models\EventTask;
-use App\Models\Post;
-use App\Models\StoreCategory;
-use App\Models\StoreItem;
-use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,34 +33,32 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
+// Home redirect
 Route::get('/', function () {
-    return redirect(route('about'));
-});
+    return redirect(route('about.index'));
+})->name('home');
 
-/* GENERAL ROUTES */
-Route::get('/about', function () {
-    return inertia('About', [
-        'users' => User::where('role', '!=', 'null')->orderBy('name')->limit(6)->get()->map(fn ($user) => [
-            'name' => $user->name,
-            'surname' => $user->surname,
-            'nickname' => $user->nickname,
-            'role' => $user->role,
-            'photo_path' => $user->profile_photo_path
-        ])
-    ]);
-})->name('about');
-
-Route::get('/posts', [SitePostController::class, '__invoke'])->name('posts');
-
-Route::get('/store', [StoreController::class, 'index'])->name('store');
-Route::get('/storeItem/{id}', [StoreController::class, 'itemDetails'])->name('item.details');
-Route::post('/storeRequestCreate', [StoreRequestController::class, 'store']);
-
-
-//TODELETE
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return inertia('Dashboard');
+Route::get('/dashboard', function () {
+    return redirect(route('about.index'));
 })->name('dashboard');
+
+// About
+Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+
+// Events
+Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+
+// Gallery
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+
+// Store
+Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+Route::get('/store/{store_item}', [StoreController::class, 'show'])->name('store.show');
+Route::post('/store', [StoreRequestController::class, 'store'])->name('store.store');
+
+// News
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{post}', [NewsController::class, 'show'])->name('news.show');
 
 
 // Group Coordinator registration

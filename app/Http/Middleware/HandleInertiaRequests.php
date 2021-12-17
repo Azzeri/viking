@@ -47,11 +47,11 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'navigation' => [
-                ['label' => 'Aktualności', 'link' => 'posts', 'icon' => 'fas fa-newspaper'],
-                ['label' => 'Galeria', 'link' => 'dashboard', 'icon' => 'far fa-images'],
-                ['label' => 'Sklep', 'link' => 'store', 'icon' => 'fas fa-shopping-basket'],
-                ['label' => 'Wydarzenia', 'link' => 'dashboard', 'icon' => 'far fa-calendar-alt'],
-                ['label' => 'O nas', 'link' => 'about', 'icon' => 'far fa-address-card']
+                ['label' => 'Aktualności', 'link' => 'news.index', 'icon' => 'fas fa-newspaper'],
+                ['label' => 'Galeria', 'link' => 'gallery.index', 'icon' => 'far fa-images'],
+                ['label' => 'Sklep', 'link' => 'store.index', 'icon' => 'fas fa-shopping-basket'],
+                ['label' => 'Wydarzenia', 'link' => 'events.index', 'icon' => 'far fa-calendar-alt'],
+                ['label' => 'O nas', 'link' => 'about.index', 'icon' => 'far fa-address-card']
             ],
 
             'groupInfo' => [

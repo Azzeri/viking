@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FrontSite;
 
 use App\Models\StoreCategory;
 use App\Models\StoreItem;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class StoreController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         request()->validate([
             'direction' => ['in:asc,desc'],
             'field' => ['in:name,price']
@@ -60,8 +60,7 @@ class StoreController extends Controller
         ]);
     }
 
-    public function itemDetails($id)
-    {
+    public function show(StoreItem $store_item) {
         $item = StoreItem::with('category')->where('id', $id)->first();
 
         if($item == null)
