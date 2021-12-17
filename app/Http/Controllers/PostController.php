@@ -70,7 +70,7 @@ class PostController extends Controller
 
         $request->validate([
             'title' => ['required', 'min:3', 'max:128', 'string'],
-            'body' => ['required', 'min:3', 'max:255'],
+            'body' => ['required', 'min:3'],
             'resource_link' => ['nullable', 'string']
         ]);
 
@@ -129,7 +129,7 @@ class PostController extends Controller
         $post->update(
             $request->validate([
                 'title' => ['required', 'min:3', 'max:128', 'string'],
-                'body' => ['required', 'min:3', 'max:255'],
+                'body' => ['required', 'min:3'],
                 'resource_link' => ['nullable', 'string']
             ])
         );

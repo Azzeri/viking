@@ -1,53 +1,54 @@
 <template>
     <app-layout title="Aktualności">
+        <div class="flex-col hero-content place-self-start">
 
-        <!-- <div class="hero bg-base-100 place-items-start"> -->
-            <!-- <div class="flex-col bg-base-100 hero-content"> -->
+            <template v-if="posts == null">
+                <h1 class="text-lg font-semibold">Nie dodano jeszcze żadnych postów</h1>
+            </template>
 
-               <template v-if="posts == null">
-                   <h1 class="text-lg font-semibold">Nie dodano jeszcze żadnych postów</h1>
-               </template>
-
-               <template v-else>
-                   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                       <article v-for="row in posts.data" :key="row.id" class="card shadow-2xl bordered">
-                           <figure>
-                                <img :src=row.photo_path class="">
-                            </figure> 
-                            <div class="card-body">
-                                <div class="card-title">{{ row.title }}</div>
-                                <p>{{ row.body.substring(0.25) }}</p>
+            <template v-else>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16">
+                    <article v-for="row in posts.data" :key="row.id" class="card shadow-lg bordered rounded-lg">
+                        <figure>
+                            <img :src=row.photo_path class="">
+                        </figure> 
+                        <div class="card-body justify-between">
+                            <div class="card-title">
+                                <span>{{ row.title }}</span>
+                                <h2 class="text-gray-500 text-base">
+                                    <div>{{ `${row.user.name} ${row.user.nickname ? `"${row.user.nickname}"` : ''} ${row.user.surname}` }}</div> 
+                                    <div class="text-sm">{{ `${row.date_created} ${row.time_created}` }}</div>
+                                </h2>
                             </div>
-                       </article>
-                   </div>
-               </template>
+                            <p>{{ row.body }}</p>
+                            <div class="card-actions">
+                                <Link as="button" :href="route('news.show', row.id)" class="btn btn-primary w-full md:w-auto">Więcej</Link>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <Pagination :links=posts.links :lg="true" class="md:self-start"></Pagination>
+            </template>
 
-            <!-- </div> -->
-        <!-- </div> -->
+        </div>
     </app-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
+import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'  
-import GroupMember from '@/Components/GroupMember.vue'  
-import ActionCard from '@/Components/ActionCard.vue'  
+import Pagination from "@/Components/Pagination.vue";
 
 export default defineComponent({
     props: {
         posts: Object
     },
 
-    setup() {
-
-
-        return {  }
-    },
-
     components: {
         AppLayout,
-        GroupMember,
-        ActionCard
+        Link,
+        Pagination
     },
 })
 </script>

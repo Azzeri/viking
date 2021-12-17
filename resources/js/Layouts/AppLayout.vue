@@ -17,10 +17,8 @@
 
             <!-- Site content -->
             <main class="text-base-content">
-                <div class="hero min-h-screen -mt-16 pt-16 place-items-start">
-                    <div class="hero-content flex-col mx-auto">
-                        <slot></slot>
-                    </div>
+                <div class="hero min-h-screen -mt-16 pt-16">
+                    <slot></slot>
                 </div>
             </main>
 
