@@ -39,13 +39,13 @@
 /* Track */
 ::-webkit-scrollbar-track {
     /* border-radius: 100vh; */
-    @apply bg-base-300 rounded-md;
+    @apply bg-base-300;
     /* background: #edf2f7; */
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    @apply bg-neutral rounded-md;
+    @apply bg-neutral;
     /* background: #cbd5e0;
     border-radius: 100vh;
     border: 3px solid #edf2f7; */

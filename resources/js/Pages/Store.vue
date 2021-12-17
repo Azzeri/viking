@@ -13,9 +13,9 @@
                         <div @click="filterServices(row.id)">{{ row.name }}</div>
                         <div v-if="row.subcategories.length" class="text-red-600">
                             {{row.subcategories}}
-                            <!-- <div v-for="subrow in row.subcategories" :key=subrow>
+                            <div v-for="subrow in row.subcategories" :key=subrow>
                                 <div @click="filterServices(subrow.id)">{{ subrow.name }}</div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </template>

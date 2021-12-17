@@ -1,8 +1,8 @@
 <template>
     <app-layout title="Aktualności">
 
-        <div class="hero bg-base-100 place-items-start">
-            <div class="flex-col bg-base-100 hero-content">
+        <!-- <div class="hero bg-base-100 place-items-start"> -->
+            <!-- <div class="flex-col bg-base-100 hero-content"> -->
 
                <template v-if="posts == null">
                    <h1 class="text-lg font-semibold">Nie dodano jeszcze żadnych postów</h1>
@@ -22,8 +22,8 @@
                    </div>
                </template>
 
-            </div>
-        </div>
+            <!-- </div> -->
+        <!-- </div> -->
     </app-layout>
 </template>
 

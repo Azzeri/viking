@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50">
+    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50 h-16">
 
         <!-- Left side -->
         <div class="px-2 mx-2 space-x-2 navbar-start">
@@ -52,55 +52,20 @@
 
             <!-- Hamburger -->
             <div class="flex-none lg:hidden">
-                <label @click="showingNavigationDropdown = ! showingNavigationDropdown" class="btn btn-square btn-ghost">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': showingNavigationDropdown, 'inline-flex': ! showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! showingNavigationDropdown, 'inline-flex': showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <label for="drawer-main" class="btn btn-square btn-ghost">
+                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
                 </label>
             </div> 
         </div>
 
     </div>
-
-    <!-- Responsive navigation menu -->
-    <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden fixed w-full mt-16 z-50">
-        <ul class="menu py-4 bg-base-100">
-            <ResponsiveNavLink v-for="row in $page.props.navigation" :key="row" :href="route(row.link)" :active="route().current(row.link)">
-                <i :class=row.icon></i>
-                <div class="ml-2">{{ row.label }}</div>
-            </ResponsiveNavLink>
-        </ul>
-
-        <!-- Authenticated user options -->
-        <ul v-if="$page.props.user != null" class="menu py-4 bg-base-100 border-t-2">
-            <div class="flex items-center space-x-3">
-                <Link :href="route('profile.show') " class="avatar ml-4">
-                    <div class="rounded-full w-14 h-14 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
-                        <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
-                    </div>
-                </Link>
-                <div>
-                    <div>{{ $page.props.user.name + ' ' + $page.props.user.surname }}</div>
-                    <div>{{ $page.props.user.email }}</div>
-                </div>
-            </div>
-            
-            <ResponsiveNavLink  :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
-                <i class="fas fa-user-shield"></i>
-                <div class="ml-2">Panel administracyjny</div>
-            </ResponsiveNavLink>
-            <ResponsiveNavLink  @click=logout>
-                <i class="fas fa-sign-out-alt"></i>
-                <div class="ml-2">Wyloguj</div>
-            </ResponsiveNavLink>
-        </ul>
-    </div>
 </template>
 
 <script>
 import { Link } from '@inertiajs/inertia-vue3';
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import NavLink from '@/Components/NavLink.vue'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
@@ -108,10 +73,9 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
     setup() {
-        const showingNavigationDropdown = ref(false)
         const logout = _ => Inertia.post(route('logout'));
         
-        return { showingNavigationDropdown, logout }
+        return { logout }
     },
 
     components: { JetApplicationMark, Link, NavLink, ResponsiveNavLink },

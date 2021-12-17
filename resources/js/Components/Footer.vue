@@ -19,8 +19,8 @@
         <div>
             <span class="footer-title">Kontakt</span> 
             <span>{{ $page.props.groupInfo.full_name }}</span>
-            <span>{{ $page.props.groupInfo.street + ' ' + $page.props.groupInfo.building + '/' + $page.props.groupInfo.appartment}}</span>
-            <span>{{ $page.props.groupInfo.postal + ' ' + $page.props.groupInfo.city}}</span>
+            <span>{{ `${$page.props.groupInfo.street} ${$page.props.groupInfo.building} ${$page.props.groupInfo.appartment}` }}</span>
+            <span>{{ `${$page.props.groupInfo.postal} ${$page.props.groupInfo.city}` }}</span>
             <span></span>
             <div class="flex space-x-2 items-center">
                 <i class="fas fa-envelope"></i>
@@ -48,10 +48,11 @@
         </div>
     </footer>
 
+    <!-- Copyright info -->
     <footer class="p-3 footer bg-neutral text-neutral-content footer-center border-t">
-    <div>
-    <p>© 2021 Mariusz Waloszczyk | Wszelkie prawa zastrzeżone</p>
-    </div>
+        <div>
+            <p>© 2021 Mariusz Waloszczyk | Wszelkie prawa zastrzeżone</p>
+        </div>
     </footer>
 </template>
 

@@ -1,11 +1,7 @@
 <template>
     <app-layout title="O nas">
 
-        <div class="hero bg-base-200 lg:py-32 bg-opacity-0">
-            <div class="flex-col space-y-10 hero-content w-full">
-
                 <!-- Group description -->
-                <div class="hero-content flex-col lg:flex-row-reverse">
                     <img class="w-11/12 sm:w-auto max-w-sm rounded-lg shadow-2xl" src="https://cdn.pixabay.com/photo/2020/08/17/08/45/axe-5494732_960_720.jpg"> 
                     <div>
                         <h1 class="text-5xl font-bold">
@@ -18,11 +14,21 @@
                             {{ $page.props.groupInfo.description }}                
                         </p> 
                     </div>
-                </div>
-
+<img class="w-11/12 sm:w-auto max-w-sm rounded-lg shadow-2xl" src="https://cdn.pixabay.com/photo/2020/08/17/08/45/axe-5494732_960_720.jpg"> 
+                    <div>
+                        <h1 class="text-5xl font-bold">
+                            {{ $page.props.groupInfo.name }}
+                        </h1> 
+                        <h2 class="mt-2 text-2xl font-bold text-gray-500">
+                            {{ $page.props.groupInfo.motto }}
+                        </h2> 
+                        <p class="mt-5 text-justify">
+                            {{ $page.props.groupInfo.description }}                
+                        </p> 
+                    </div>
 
                 <!-- Group Members -->
-                <div class="hero-content w-full justify-start">
+                <!-- <div class="hero-content w-full justify-start">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-500">
                             Nasi członkowie
@@ -37,9 +43,7 @@
                     </div>
                     
                 </div>
-                
-            </div>
-        </div>
+                 -->
     </app-layout>
 </template>
 

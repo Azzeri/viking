@@ -16,7 +16,7 @@
 
         computed: {
             classes() {
-                return this.active ? ' text-accent' : ''
+                return this.active ? ' text-accent' : 'text-neutral-content'
             }
         }
     })
