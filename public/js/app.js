@@ -26093,7 +26093,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50"
+  "class": "navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50 h-16"
 };
 var _hoisted_2 = {
   "class": "px-2 mx-2 space-x-2 navbar-start"
@@ -26174,7 +26174,7 @@ var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_14 = {
-  "class": "flex flex-col drawer-content"
+  "class": "flex flex-col drawer-content -mt-16 pt-16"
 };
 var _hoisted_15 = {
   "class": "lg:ml-20 text-base-content"
@@ -26197,7 +26197,7 @@ var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_20 = {
-  "class": "px-4 pb-24 bg-accent text-accent-content pt-8 menu lg:w-20 lg:hover:w-64 group h-full justify-between"
+  "class": "px-4 pb-24 bg-accent text-accent-content menu lg:w-20 lg:hover:w-64 group h-full justify-between pt-8"
 };
 var _hoisted_21 = {
   "class": "flex space-y-4 flex-col"

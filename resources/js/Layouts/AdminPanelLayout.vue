@@ -4,7 +4,7 @@
     <FlashMessage></FlashMessage>
 
     <!-- Navbar -->
-    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50">
+    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50 h-16">
 
         <!-- Left side -->
         <div class="px-2 mx-2 space-x-2 navbar-start">
@@ -54,7 +54,7 @@
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle"> 
         
         <!-- Drawer content -->
-        <div class="flex flex-col drawer-content">
+        <div class="flex flex-col drawer-content -mt-16 pt-16">
             <!-- Main content -->
             <main class="lg:ml-20 text-base-content">
                 <div class="hero min-h-screen -mt-16 pt-16 place-items-start">
@@ -68,7 +68,7 @@
         <!-- Side drawer content -->
         <div class="drawer-side w-64 lg:w-auto lg:fixed h-full">
             <label for="my-drawer-3" class="drawer-overlay lg:hidden fixed w-full h-full"></label> 
-            <ul class="px-4 pb-24 bg-accent text-accent-content pt-8 menu lg:w-20 lg:hover:w-64 group h-full justify-between">
+            <ul class="px-4 pb-24 bg-accent text-accent-content menu lg:w-20 lg:hover:w-64 group h-full justify-between pt-8">
                 <div class="flex space-y-4 flex-col">
                     <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">Panel</AdminNavButton>
                     <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')" :active="route().current('admin.users.index')">Użytkownicy</AdminNavButton>
