@@ -3,7 +3,13 @@
 
         <!-- Name and actions -->
         <div class="flex flex-col space-y-3 w-full items-center sm:mt-8">
-            <h1 class="text-2xl font-bold self-start">{{ event.name }}</h1>
+            <div class="flex space-x-2 self-start">
+                <Link :href="route('admin.events.index', event)" as="button" class="btn btn-sm btn-primary">
+                    <i class="fas fa-arrow-left mr-1"></i>
+                    Powrót
+                </Link>
+                <h1 class="text-2xl font-bold">{{ event.name }}</h1>
+            </div>
             <div class="flex flex-wrap gap-2 self-start shadow-lg p-3 rounded-2xl border w-full justify-center">
                 <Link :href="route('admin.events.task_manager', event)" as="button" class="btn btn-sm btn-primary">Zadania</Link>
                 <template v-if="!event.is_finished">
