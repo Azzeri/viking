@@ -6,6 +6,7 @@ use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -26,8 +27,8 @@ class PostController extends Controller
         $query = Post::query();
 
         if (request('search')) {
-            $query->where('name', 'ILIKE', '%' . request('search') . '%')
-                ->orWhere('description', 'ILIKE', '%' . request('search') . '%')
+            $query->where('title', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('body', 'ILIKE', '%' . request('search') . '%')
                 ->orWhere('resource_link', 'ILIKE', '%' . request('search') . '%');
         }
 
@@ -39,7 +40,7 @@ class PostController extends Controller
         $posts = $query->paginate()->withQueryString()
             ->through(fn ($post) => [
                 'id' => $post->id,
-                'title' => $post->title,
+                'title' => strlen($post->title) > 48 ? substr($post->title, 0, 48) . '...' : $post->title,
                 'photo_path' => $post->photo_path,
                 'body' => $post->body,
                 'resource_link' => $post->resource_link,
@@ -71,14 +72,18 @@ class PostController extends Controller
         $request->validate([
             'title' => ['required', 'min:3', 'max:128', 'string'],
             'body' => ['required', 'min:3'],
-            'resource_link' => ['nullable', 'string']
+            'resource_link' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
+
+        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
 
         Post::create([
             'title' => request()->title,
             'body' => request()->body,
             'resource_link' => request()->resource_link,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano post');
@@ -147,7 +152,10 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post, Post::class);
 
-        $post->delete();
+        if (Storage::exists('public/' . ltrim($post->path, '/storage'))) {
+            $post->delete();
+            Storage::delete('public/' . ltrim($post->path, '/storage'));
+        }
 
         return redirect()->route('admin.posts.index')->with('message', 'Pomyślnie usunięto post');
     }

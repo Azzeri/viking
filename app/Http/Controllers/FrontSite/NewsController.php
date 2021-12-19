@@ -10,12 +10,12 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy('created_at')->paginate()
+        $posts = Post::orderBy('created_at', 'desc')->paginate()
             ->through(fn ($post) => [
                 'id' => $post->id,
                 'title' => $post->title,
                 'photo_path' => $post->photo_path,
-                'body' => substr($post->body, 0, 255) . '...',
+                'body' => strlen($post->body) > 255 ? substr($post->body, 0, 255) . '...' : $post->body,
                 'resource_link' => $post->resource_link,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
                 'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
