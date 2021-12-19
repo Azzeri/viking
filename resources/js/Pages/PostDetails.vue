@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="Aktualności">
+    <app-layout title="Szczegóły postu">
         <div class="flex-col hero-content place-self-start mx-auto">
             <Link :href="route('news.index')" class="btn btn-primary btn-sm self-start">
                 <i class="fas fa-arrow-left mr-2"></i>
