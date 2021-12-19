@@ -2,7 +2,7 @@
   <admin-panel-layout title="Wydarzenia">
 
 	<!-- Data not present -->
-    <template v-if="!events.data.length && filters.search == null && filters.filter == null">
+    <template v-if="!events.data.length && filters.search == null && filters.filter != null && filters.filter != 1">
 		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego wydarzenia</h1>
 		<button @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
 			<i class="fas fa-plus fa-lg mr-3"></i>
