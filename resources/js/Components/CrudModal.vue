@@ -1,6 +1,6 @@
 <template>
     <div :id="id" class="modal">
-        <div class="modal-box" :class="maxWidth">
+        <div class="modal-box overflow-y-auto mt-10" :class="maxWidth" style="max-height:90vh;">
             <div class="flex items-center justify-between">
                 <div>
                     <slot name="side"></slot>

@@ -10,7 +10,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 class Event extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
-    // protected $cascadeDeletes = ['requests']; ZADANIA
+    protected $cascadeDeletes = ['tasks'];
 
     protected $fillable = [
         'name',

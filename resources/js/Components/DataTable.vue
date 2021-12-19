@@ -9,8 +9,9 @@
             </div>
 
             <!-- Filters -->
-            <div class="space-x-2 text-center">
-                <button v-for="filter in frontFilters" :key=filter @click=filterServices(filter.value) :class="[filter.color, {'btn-active':params.filter == filter.value}]"  class="btn sm:btn-xs">{{ filter.label }}</button> 
+            <div class="flex flex-wrap gap-x-2 gap-y-1 justify-center items-center">
+                <button v-for="filter in frontFilters" :key=filter @click=filterServices(filter.value) :class="[filter.color, {'btn-active':params.filter == filter.value}]"  
+                        class="btn sm:btn-xs">{{ filter.label }}</button> 
             </div>
 
              <!-- Search -->
@@ -93,7 +94,7 @@ export default {
             search: props.filters.search,
             field: props.filters.field,
             direction: props.filters.direction,
-            filter: props.filters.filter || ref(0)
+            filter: props.filters.filter
         })
 
         const sort = (field) => {

@@ -7,6 +7,7 @@ use App\Models\EventTask;
 use App\Models\EventTaskState;
 use App\Models\InventoryItem;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -50,8 +51,8 @@ class EventController extends Controller
                 'id' => $event->id,
                 'name' => $event->name,
                 'addrTown' => $event->addrTown,
-                'date_start' => $event->date_start,
-                'date_end' => $event->date_end,
+                'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
+                'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
                 'is_finished' => $event->is_finished,
             ]);
 
@@ -228,7 +229,7 @@ class EventController extends Controller
 
         $event->update(
             $request->validate([
-                'description_summary' => ['required', 'min:3', 'max:255'],
+                'description_summary' => ['nullable', 'min:3', 'max:255'],
                 'is_finished' => ['required', 'boolean', 'accepted']
             ])
         );
