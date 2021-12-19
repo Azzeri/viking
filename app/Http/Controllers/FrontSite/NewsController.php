@@ -15,7 +15,7 @@ class NewsController extends Controller
                 'id' => $post->id,
                 'title' => $post->title,
                 'photo_path' => $post->photo_path,
-                'body' => substr($post->body, 0, 255).'...',
+                'body' => substr($post->body, 0, 255) . '...',
                 'resource_link' => $post->resource_link,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
                 'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
@@ -33,6 +33,21 @@ class NewsController extends Controller
 
     public function show(Post $post)
     {
-        echo $post;
+        return inertia('PostDetails', [
+            'post' => array(
+                'id' => $post->id,
+                'title' => $post->title,
+                'photo_path' => $post->photo_path,
+                'body' => $post->body,
+                'resource_link' => $post->resource_link,
+                'time_created' => Carbon::parse($post->created_at)->format('H:i'),
+                'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+                'user' => array(
+                    'name' => $post->user->name,
+                    'surname' => $post->user->surname,
+                    'nickname' => $post->user->nickname,
+                )
+            )
+        ]);
     }
 }

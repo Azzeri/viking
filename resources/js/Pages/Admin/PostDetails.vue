@@ -1,4 +1,3 @@
-
 <template>
   <admin-panel-layout title="Szczegóły postu">
 
