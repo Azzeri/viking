@@ -111,19 +111,21 @@ class EventController extends Controller
             'addrTown' => $event->addrTown,
             'date_start' => $event->date_start,
             'date_end' => $event->date_end,
-            'time_start' => $event->time_start,
-            'time_end' => $event->time_end,
+            'date_start_parsed' => Carbon::parse($event->date_start)->toFormattedDateString(),
+            'date_end_parsed' => Carbon::parse($event->date_end)->toFormattedDateString(),
+            'time_start' => substr($event->time_start, 0, 5),
+            'time_end' => substr($event->time_end, 0, 5),
             'is_finished' => $event->is_finished,
-            'participants' => $event->participants ? User::whereIn('id', json_decode($event->participants))->orderBy('name')->get()->map(fn ($user) => [
+            'participants' => $event->participants ? User::whereIn('id', json_decode($event->participants))->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
             ]) : null,
-            'items' => $event->items ? InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
-                'id' => $item->id,
-                'name' => $item->name,
-            ]) : null
+            // 'items' => $event->items ? InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
+            //     'id' => $item->id,
+            //     'name' => $item->name,
+            // ]) : null
         );
 
         return inertia('Admin/EventDetails', [

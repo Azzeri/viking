@@ -4315,6 +4315,24 @@ html {
 .max-h-screen {
 	max-height: 100vh;
 }
+.max-h-1 {
+	max-height: 0.25rem;
+}
+.max-h-10 {
+	max-height: 2.5rem;
+}
+.max-h-2 {
+	max-height: 0.5rem;
+}
+.max-h-20 {
+	max-height: 5rem;
+}
+.max-h-40 {
+	max-height: 10rem;
+}
+.max-h-96 {
+	max-height: 24rem;
+}
 .min-h-screen {
 	min-height: 100vh;
 }
@@ -4422,6 +4440,9 @@ html {
 }
 .max-w-2xl {
 	max-width: 42rem;
+}
+.max-w-4xl {
+	max-width: 56rem;
 }
 .flex-1 {
 	flex: 1 1 0%;
@@ -4612,6 +4633,11 @@ html {
 	margin-right: calc(1rem * var(--tw-space-x-reverse));
 	margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
+.space-x-6 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(1.5rem * var(--tw-space-x-reverse));
+	margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .divide-y > :not([hidden]) ~ :not([hidden]) {
 	--tw-divide-y-reverse: 0;
 	border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -4657,6 +4683,12 @@ html {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+.whitespace-normal {
+	white-space: normal;
+}
+.break-words {
+	overflow-wrap: break-word;
+}
 .break-all {
 	word-break: break-all;
 }
@@ -4677,6 +4709,9 @@ html {
 }
 .rounded-sm {
 	border-radius: 0.125rem;
+}
+.rounded-2xl {
+	border-radius: 1rem;
 }
 .rounded-l-md {
 	border-top-left-radius: 0.375rem;
@@ -4758,6 +4793,10 @@ html {
 	--tw-border-opacity: 1;
 	border-color: rgba(107, 114, 128, var(--tw-border-opacity));
 }
+.border-black {
+	--tw-border-opacity: 1;
+	border-color: rgba(0, 0, 0, var(--tw-border-opacity));
+}
 .border-opacity-5 {
 	--tw-border-opacity: 0.05;
 }
@@ -4836,6 +4875,10 @@ html {
 .bg-black {
 	--tw-bg-opacity: 1;
 	background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+}
+.bg-red-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
@@ -5010,6 +5053,15 @@ html {
 }
 .pb-0 {
 	padding-bottom: 0px;
+}
+.pl-8 {
+	padding-left: 2rem;
+}
+.pl-7 {
+	padding-left: 1.75rem;
+}
+.pl-9 {
+	padding-left: 2.25rem;
 }
 .text-left {
 	text-align: left;
@@ -5726,6 +5778,11 @@ html {
 		margin-bottom: 2rem;
 	}
 
+	.sm\:my-5 {
+		margin-top: 1.25rem;
+		margin-bottom: 1.25rem;
+	}
+
 	.sm\:ml-3 {
 		margin-left: 0.75rem;
 	}
@@ -5768,6 +5825,10 @@ html {
 
 	.sm\:mt-5 {
 		margin-top: 1.25rem;
+	}
+
+	.sm\:mt-8 {
+		margin-top: 2rem;
 	}
 
 	.sm\:block {

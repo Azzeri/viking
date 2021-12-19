@@ -48,7 +48,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN]) && $event->is_finished == false;
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]) && $event->is_finished == false;
     }
 
     /**
