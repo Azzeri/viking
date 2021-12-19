@@ -83,13 +83,11 @@ class EventTaskController extends Controller
      * @param  \App\Models\EventTask  $eventTask
      * @return \Illuminate\Http\Response
      */
-    public function change_state($eventTask, EventTaskState $eventTaskState)
+    public function change_state(EventTask $eventTask, EventTaskState $eventTaskState)
     {
-        $task = EventTask::find($eventTask);
+        $this->authorize('update', $eventTask, EventTask::class);
 
-        $this->authorize('update', $task, EventTask::class);
-
-        $task->update([
+        $eventTask->update([
             'event_task_state_id' => $eventTaskState->id
         ]);
 

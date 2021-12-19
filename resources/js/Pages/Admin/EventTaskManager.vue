@@ -1,13 +1,22 @@
 <template>
   <admin-panel-layout title="Menedżer zadań">
-    <template #page-title>Menedżer zadań</template>
 
-	<div class="w-full flex space-x-2">
+	<!-- Name and return -->
+	<div class="flex space-x-2 self-start items-center">
+		<Link :href="route('admin.events.show', event)" as="button" class="btn btn-sm btn-primary">
+			<i class="fas fa-arrow-left mr-1"></i>
+			Powrót
+		</Link>
+		<h1 class="text-2xl font-bold">{{ event.name }}</h1>
+	</div>
 
-		<div v-for="state in task_states" :key=state.id @drop="onDrop($event, state)" @dragenter.prevent @dragover.prevent class="flex-shrink-0 border w-64 p-2 bg-neutral rounded-lg">
+	<!-- Task states -->
+	<div class="flex space-x-2">
+		<div v-for="state in task_states" :key=state.id @drop="onDrop($event, state)" @dragenter.prevent @dragover.prevent 
+		     class="w-60 p-2 bg-neutral rounded-lg overflow-y-auto" style="max-height: 80vh;">
 			<div class="flex justify-between items-center text-base-200">
 				<h1 class="font-bold capitalize">{{ state.name }}</h1>
-				<button @click="createTask(state.id)" for="create-task-modal" class="btn btn-ghost btn-sm modal-button"><i class="fas fa-plus"></i></button>
+				<button @click="createTask(state.id)" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i></button>
 			</div>
 			<div class="mt-4 space-y-3">
 				<template v-for="task in tasks" :key="task.id">
@@ -18,37 +27,31 @@
 				</template>
 			</div>
 		</div>
-
 	</div>
   </admin-panel-layout>
 
 	<!-- Modal - details -->
-	<input type="checkbox" id="task-details" class="modal-toggle"> 
-	<div class="modal overflow-y-auto">
-		<div class="modal-box">
-
+	<Modal :show="detailsModalOpened" @close=close id="modal-details">
+		<template #side>
 			<!-- Buttons -->
-			<div class="flex items-center justify-between mb-4">
-				<div class="flex space-x-2">
-					<button @click="deleteTask(currentTask)" class="btn btn-error btn-xs">
-						<i class="fas fa-times"></i>
-						<span class="ml-2">Usuń</span>
-					</button>
-					<button @click="editTask(currentTask)" class="btn btn-info btn-xs">
-						<i :class="{'fas fa-edit':!taskEditMode, 'fas fa-times':taskEditMode}"></i>
-						<span v-if=!taskEditMode class="ml-2">Edytuj</span>
-					</button>
-				</div>
-				<label @click="reset" for="task-details" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
-			</div>
+			<button @click="deleteTask(selectedTask)" class="btn btn-error btn-xs">
+				<i class="fas fa-times"></i>
+				<span class="ml-2">Usuń</span>
+			</button>
+			<button @click="editTask(selectedTask)" :class="{'btn-info':!taskEditMode, 'btn-error':taskEditMode}" class="btn btn-xs ml-2">
+				<i :class="{'fas fa-edit':!taskEditMode, 'fas fa-times':taskEditMode}"></i>
+				<span v-html="taskEditMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
+			</button>
+		</template>
 
-			<form @submit.prevent=updateTask(currentTask.id)>
+		<template #content>
+			<form @submit.prevent=updateTask(selectedTask.id)>
 				<!-- Task name -->
-				<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center mt-6">
 					<div class="flex items-center space-x-2">
 						<i class="fas fa-thumbtack"></i>
-						<h1 v-if="!taskEditMode" class="font-bold text-lg capitalize">{{ currentTask.name }}</h1>
-						<input v-else v-model="createTaskForm.name" type="text" class="input input-primary input-sm" />
+						<h1 v-if="!taskEditMode" class="font-bold text-lg capitalize">{{ selectedTask.name }}</h1>
+						<input v-else v-model="taskForm.name" type="text" class="input input-primary input-sm" />
 					</div>
 				</div>
 
@@ -57,16 +60,16 @@
 					<i class="fas fa-calendar-week"></i>
 					<h1 class="font-bold">Termin</h1>
 				</div>
-				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ currentTask.date_due ?? 'Nie określono' }}</h2>
-				<input v-else v-model="createTaskForm.date_due" type="date" class="input input-primary input-sm ml-6" />
+				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.date_due ?? 'Nie określono' }}</h2>
+				<input v-else v-model="taskForm.date_due" type="date" class="input input-primary input-sm ml-6" />
 
 				<!-- Description -->
 				<div class="flex items-center space-x-2 mt-6">
 					<i class="fas fa-align-justify"></i>
 					<h1 class="font-bold">Opis</h1>
 				</div>
-				<p v-if="!taskEditMode" class="ml-6 mt-2">{{ currentTask.description }}</p>
-				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary" v-model="createTaskForm.description"></textarea>
+				<p v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.description }}</p>
+				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary" v-model="taskForm.description"></textarea>
 				<button v-if=taskEditMode class="ml-6 btn btn-primary btn-sm">Zapisz</button>
 			</form>
 
@@ -74,20 +77,20 @@
 			<div class="flex items-center space-x-2 mt-6">
 				<i class="fas fa-tasks"></i>
 				<h1 class="font-bold">Zadania</h1>
-				<button @click="createSubTask(currentTask.id)" class="btn btn-ghost btn-xs">
+				<button @click="createSubTask(selectedTask.id)" class="btn btn-ghost btn-xs">
 					<i class="fas fa-plus fa-sm cursor-pointer"></i>
 				</button>			
 			</div>
 			<div class="flex mt-2 ml-5">
 				<form id="create-subtask-form" class="hidden space-x-3" @submit.prevent=storeSubTask>
-					<input v-model="createSubTaskForm.name" type="text" class=" input input-primary input-xs" />
-					<input v-model="createSubTaskForm.date_due" type="date" :min=currentDate() class=" input input-primary input-xs" />
+					<input v-model="subTaskForm.name" type="text" class=" input input-primary input-xs" />
+					<input v-model="subTaskForm.date_due" type="date" :min=currentDate() class=" input input-primary input-xs" />
 					<input type="submit" class=" btn btn-primary btn-xs" value="Dodaj">
 				</form>
 			</div>
 			<div class="mt-2">
 				<ul class="menu">
-					<li v-for="task in currentTask.subtasks" :key=task.id >
+					<li v-for="task in selectedTask.subtasks" :key=task.id >
 						<a>
 							<div :id="'subtask-name-'+task.id" class="flex w-full justify-between">
 								<div class="flex items-center space-x-2">
@@ -100,8 +103,8 @@
 							<div :id="'subtask-form-'+task.id" class="hidden w-full flex flex-col space-y-2">
 								<div>
 									<form @submit.prevent="updateSubTask(task.id)" class="flex justify-between w-full space-x-2">
-										<input v-model="createSubTaskForm.name" :id="'subtask-input-'+task.id" type="text" class="input input-primary input-xs w-3/4">
-										<input v-model="createSubTaskForm.date_due" type="date" class="input input-primary input-xs">
+										<input v-model="subTaskForm.name" :id="'subtask-input-'+task.id" type="text" class="input input-primary input-xs w-3/4">
+										<input v-model="subTaskForm.date_due" type="date" class="input input-primary input-xs">
 									</form>
 								</div>
 								<div class="flex space-x-3">
@@ -116,52 +119,48 @@
 					</li>
 				</ul>
 			</div>
-
-		</div>
-	</div>
+		</template>
+	</Modal>
 
 	<!-- Modal - create -->
-	<input type="checkbox" id="create-task-modal" class="modal-toggle"> 
-	<div class="modal">
-		<div class="modal-box">
-			<div class="flex justify-between items-center">
-				<div class="flex items-center space-x-2">
-					<i class="fas fa-thumbtack"></i>
-					<h1 class="font-bold text-lg capitalize">Nowe zadanie</h1>
-				</div>
-				<label @click="reset" for="create-task-modal" class="btn btn-ghost btn-sm"><i class="fas fa-times"></i></label>
+	<Modal :show="createModalOpened" @close=close id="modal-create">
+		<template #side>
+			<div class="flex items-center space-x-2">
+				<i class="fas fa-thumbtack"></i>
+				<h1 class="font-bold text-lg capitalize">Nowe zadanie</h1>
 			</div>
-			<jet-validation-errors v-if="createTaskForm.hasErrors" class="my-6" />
-			<form @submit.prevent=storeTask>
+		</template>
+
+		<template #content>
+			<form>
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=createTaskForm.name type="text" placeholder="Nazwa zadania" class="input input-primary input-bordered">
+					<input v-model=taskForm.name type="text" placeholder="Nazwa zadania" class="input input-primary input-bordered">
 					
 					<label class="label"><span class="label-text">Termin</span></label> 
-					<input v-model=createTaskForm.date_due type="date" :min=currentDate() class="input input-primary input-bordered">
+					<input v-model=taskForm.date_due type="date" :min=currentDate() class="input input-primary input-bordered">
 
 					<label class="label">
 						<span class="label-text">Opis</span>
 					</label> 
-					<textarea v-model=createTaskForm.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
-					
+					<textarea v-model=taskForm.description class="textarea h-24 textarea-bordered textarea-primary" placeholder="Opis..."></textarea>
 				</div> 
 			</form>
+		</template>
 
-			<div class="modal-action">
-				<button @click="storeTask()" class="btn">Dodaj</button>
-			</div>
-		</div>
-	</div>
+		<template #footer>
+			<button @click="storeTask()" class="btn w-full">Dodaj</button>
+		</template>
+	</Modal>
 
 </template>
 
 <script>
 import { defineComponent, ref } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
-import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import { Inertia } from "@inertiajs/inertia";
+import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
+import Modal from '@/Components/CrudModal.vue'
 
 export default defineComponent({
 
@@ -172,10 +171,13 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const currentTask = ref(props.tasks[0]) || ref({})
+		const detailsModalOpened = ref(false)
+		const createModalOpened = ref(false)
+
+		const selectedTask = ref({'name':''})
 		const taskEditMode = ref(false)
 
-		const createTaskForm = useForm({
+		const taskForm = useForm({
 			name:null,
 			description:null,
 			date_due:null,
@@ -183,36 +185,56 @@ export default defineComponent({
 			event_task_state_id:null,
 		})
 
-		const createSubTaskForm = useForm({
+		const subTaskForm = useForm({
 			name:null,
 			date_due:null,
 			event_task_id:null,
 		})
 
+		const close = _ => {
+			detailsModalOpened.value = false
+			createModalOpened.value = false
+
+			reset()
+		}
+
 		const reset = _ => {
-			createTaskForm.reset()
-			createTaskForm.clearErrors()
-			createSubTaskForm.reset()
-			createSubTaskForm.clearErrors()
-			document.getElementById('create-subtask-form').classList.add('hidden')
+			taskForm.reset()
+			taskForm.clearErrors()
+			subTaskForm.reset()
+			subTaskForm.clearErrors()
+
 			taskEditMode.value = false
 		}
 
 		const showDetails = (row) => {
-			currentTask.value = row
-			document.getElementById('task-details').checked = true
+			selectedTask.value = row
+			detailsModalOpened.value = true
 		}
 
 		const createTask = (id) => {
-			createTaskForm.event_task_state_id = id
-			document.getElementById('create-task-modal').checked = true
+			taskForm.event_task_state_id = id
+			createModalOpened.value = true
 		}
 
+
+		const editTask = (row) => {
+			if (taskEditMode.value == false) {
+				taskForm.name = row.name
+				taskForm.description = row.description
+				taskForm.date_due = row.date_due
+
+				taskEditMode.value = true
+			}
+			else reset()
+		}
+
+
+
 		const storeTask = _ => {
-			createTaskForm.post(route('admin.event_tasks.store'), {
+			taskForm.post(route('admin.event_tasks.store'), {
 				onSuccess: () => {
-					reset()
-					document.getElementById('create-task-modal').checked = false
+					close()
 				} 
 
 			})
@@ -222,36 +244,30 @@ export default defineComponent({
             if (!confirm('Na pewno?')) return;
             Inertia.delete(route('admin.event_tasks.destroy', row.id), {
 				onSuccess: () => {
-					reset()
-					document.getElementById('task-details').checked = false
+					close()
 				} 
 			})
         }
 
-		const editTask = (row) => {
-			if(taskEditMode.value == false) {
-				createTaskForm.name = row.name
-				createTaskForm.description = row.description
-				createTaskForm.date_due = row.date_due
-
-				taskEditMode.value = true
-			}
-			else
-				reset()
-		}
-
 		const updateTask = (id) => {
-			createTaskForm.put(route('admin.event_tasks.update', id), {
-				onSuccess: () => taskEditMode = false
+			taskForm.put(route('admin.event_tasks.update', id), {
+				onSuccess: () =>{
+					reset()
+					selectedTask.value = props.tasks.find(element => element.id == selectedTask.value.id)
+				} 
 			}) 
 		}
 
+
+
+
+
 		const createSubTask = (id) => {
 			toggleSubTaskEditMode({}, true)
-			createSubTaskForm.name = null,
-			createSubTaskForm.date_due = null,
-			createSubTaskForm.vent_task_id = null,
-			createSubTaskForm.event_task_id = id
+			subTaskForm.name = null,
+			subTaskForm.date_due = null,
+			subTaskForm.vent_task_id = null,
+			subTaskForm.event_task_id = id
 			document.getElementById('create-subtask-form').classList.contains('hidden') ? document.getElementById('create-subtask-form').classList.remove('hidden')
 			: document.getElementById('create-subtask-form').classList.add('hidden')
 
@@ -259,20 +275,20 @@ export default defineComponent({
 		}
 
 		const storeSubTask = _ => {
-			createSubTaskForm.post(route('admin.event_sub_tasks.store'), {
+			subTaskForm.post(route('admin.event_sub_tasks.store'), {
 				onSuccess: () => {
-					// const id = createSubTaskForm.event_task_id
+					// const id = subTaskForm.event_task_id
 					reset()
 					document.getElementById('task-details').checked = false
 
-					// showDetails(currentTask.value)
+					// showDetails(selectedTask.value)
 					// document.getElementById('create-subtask-form').classList.add('hidden')
 				}
 			})
 		}
 
 		const updateSubTask = (id) => { 
-			createSubTaskForm.put(route('admin.event_sub_tasks.update', id), {
+			subTaskForm.put(route('admin.event_sub_tasks.update', id), {
 				onSuccess: () => {toggleSubTaskEditMode({},true)}
 			}) 
 		}
@@ -304,9 +320,9 @@ export default defineComponent({
 				document.getElementById('subtask-form-'+task.id).classList.remove('hidden') : 
 				document.getElementById('subtask-form-'+task.id).classList.add('hidden')
 
-				createSubTaskForm.name = task.name
-				createSubTaskForm.date_due = task.date_due
-				createSubTaskForm.event_task_id = task.event_task_id
+				subTaskForm.name = task.name
+				subTaskForm.date_due = task.date_due
+				subTaskForm.event_task_id = task.event_task_id
 
 				document.getElementById('subtask-input-'+task.id).focus()
 			}
@@ -329,15 +345,15 @@ export default defineComponent({
 
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
-		return { currentTask, showDetails, createTask, storeTask, deleteTask, createTaskForm, taskEditMode, editTask, updateTask,
-				 finishSubtask, createSubTask, createSubTaskForm, storeSubTask, deleteSubTask, toggleSubTaskEditMode, updateSubTask,
-				 startDrag, onDrop, reset, currentDate,}
+		return { selectedTask, showDetails, createTask, storeTask, deleteTask, taskForm, taskEditMode, editTask, updateTask,
+				 finishSubtask, createSubTask, subTaskForm, storeSubTask, deleteSubTask, toggleSubTaskEditMode, updateSubTask,
+				 startDrag, onDrop, reset, currentDate, detailsModalOpened, createModalOpened, close}
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-		JetValidationErrors,
+		Modal
 	},
 
 });

@@ -4,7 +4,7 @@
         <!-- Name and actions -->
         <div class="flex flex-col space-y-3 w-full items-center sm:mt-8">
             <div class="flex space-x-2 self-start">
-                <Link :href="route('admin.events.index', event)" as="button" class="btn btn-sm btn-primary">
+                <Link :href="route('admin.events.index')" as="button" class="btn btn-sm btn-primary">
                     <i class="fas fa-arrow-left mr-1"></i>
                     Powrót
                 </Link>

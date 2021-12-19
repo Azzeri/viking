@@ -4237,6 +4237,12 @@ html {
 .mb-0 {
 	margin-bottom: 0px;
 }
+.-mt-4 {
+	margin-top: -1rem;
+}
+.-mt-8 {
+	margin-top: -2rem;
+}
 .block {
 	display: block;
 }
@@ -5564,6 +5570,10 @@ html {
 .focus\:bg-gray-50:focus {
 	--tw-bg-opacity: 1;
 	background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+}
+.focus\:bg-red-500:focus {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
 }
 .focus\:text-gray-700:focus {
 	--tw-text-opacity: 1;
