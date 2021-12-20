@@ -43,7 +43,6 @@ class EventSubTaskController extends Controller
             $request->validate([
                 'name' => ['required', 'min:1'],
                 'date_due' => ['nullable', 'date', 'after_or_equal:today'],
-                'event_task_id' => ['required', 'integer']
             ])
         );
 
@@ -75,10 +74,8 @@ class EventSubTaskController extends Controller
     {
         $this->authorize('update', $eventSubTask, EventSubTask::class);
 
-        $state = $eventSubTask->is_finished ? false : true;
-
         $eventSubTask->update([
-            'is_finished' => $state
+            'is_finished' => !$eventSubTask->is_finished
         ]);
 
         return redirect()->back();

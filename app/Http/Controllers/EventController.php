@@ -155,14 +155,14 @@ class EventController extends Controller
             'description' => $task->description,
             'date_due' => $task->date_due,
             'event_task_state_id' => $task->event_task_state_id,
-            'subtasks' => $task->subtasks ? $task->subtasks->sortBy('created_at')->map(fn ($subtask) => [
+            'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
                 'id' => $subtask->id,
                 'name' => $subtask->name,
                 'is_finished' => $subtask->is_finished,
                 'date_due' => $subtask->date_due,
                 'date_created' => $subtask->created_at,
                 'event_task_id' => $subtask->event_task_id
-            ]) : null
+            ])->sortBy('name') : null
         ]) : null;
 
         $task_states = EventTaskState::all();
