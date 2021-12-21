@@ -19,8 +19,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update($user, array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'name' => ['required', 'string', 'min:3', 'max:32'],
+            'surname' => ['required', 'string', 'min:3', 'max:32'],
+            'nickname' => ['nullable', 'string', 'min:3', 'max:32'],
+            'role' => ['required', 'string', 'min:3', 'max:64'],
+            'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
+            'description' => ['nullable', 'min:3', 'max:255'],
+            'email' => ['required', 'string', 'email:filter', 'max:64', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
@@ -28,12 +33,19 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateProfilePhoto($input['photo']);
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (
+            $input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
                 'name' => $input['name'],
+                'surname' => $input['surname'],
+                'nickname' => $input['nickname'],
+                'role' => $input['role'],
+                'date_birth' => $input['date_birth'],
+                'description' => $input['description'],
                 'email' => $input['email'],
             ])->save();
         }
@@ -50,6 +62,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $user->forceFill([
             'name' => $input['name'],
+            'surname' => $input['surname'],
+            'nickname' => $input['nickname'],
+            'role' => $input['role'],
+            'date_birth' => $input['date_birth'],
+            'description' => $input['description'],
             'email' => $input['email'],
             'email_verified_at' => null,
         ])->save();
