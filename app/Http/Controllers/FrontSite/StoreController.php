@@ -9,7 +9,8 @@ use App\Http\Controllers\Controller;
 
 class StoreController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         request()->validate([
             'direction' => ['in:asc,desc'],
             'field' => ['in:name,price']
@@ -21,37 +22,35 @@ class StoreController extends Controller
             $query->where('name', 'ILIKE', '%' . request('search') . '%');
         }
 
-        if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
-        } else
-            $query->orderBy('name');
+        (request()->has(['field', 'direction']))
+            ? $query->orderBy(request('field'), request('direction'))
+            : $query->orderBy('name');
 
-        if (request('filter')) 
+        if (request('filter'))
             $query->where('store_category_id', request('filter'));
 
 
-        $items = $query->paginate(12)->withQueryString()
+        $items = $query->paginate()->withQueryString()
             ->through(fn ($storeItem) => [
                 'id' => $storeItem->id,
                 'name' => $storeItem->name,
                 'photo_path' => $storeItem->photo_path,
-                'description' => $storeItem->description,
-                'quantity' => $storeItem->quantity,
+                'description' => strlen($storeItem->description) > 255 ? substr($storeItem->description, 0, 255) . '...' : $storeItem->description,
                 'price' => $storeItem->price,
-                // 'store_category_id' => $storeItem->store_category_id,
-                'category_name' => $storeItem->category->name,
-                // 'category_id' => $storeItem->category->id,
+                'category' => array(
+                    'id' => $storeItem->category->id,
+                    'name' => $storeItem->category->name
+                )
             ]);
 
         $categories = StoreCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
-            'subcategories' => $category->subcategories ? array_column($category->subcategories->toArray(), 'name') : null,
-            // 'subcategoriesIds' => $category->subcategories ? array_column($category->subcategories->toArray(), 'id') : null,
-            'parent_category_id' => $category->parentCategory ? $category->parentCategory->id : null
+            'subcategories' => $category->subcategories ? $category->subcategories->map(fn ($subcategory) => [
+                'id' => $subcategory->id,
+                'name' => $subcategory->name,
+            ]) : null
         ]);
-
-        // dd($categories);
 
         return inertia('Store', [
             'items' => $items,
@@ -60,14 +59,10 @@ class StoreController extends Controller
         ]);
     }
 
-    public function show(StoreItem $store_item) {
-        $item = StoreItem::with('category')->where('id', $id)->first();
-
-        if($item == null)
-            return abort(404);
-
+    public function show(StoreItem $store_item)
+    {
         return inertia('ItemDetails', [
-            'item' => $item
+            'item' => $store_item->with('category')->first()
         ]);
     }
 }

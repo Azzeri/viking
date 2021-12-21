@@ -1,13 +1,12 @@
 <template>
     <app-layout>
-        <FlashMessage></FlashMessage>
         <div class="hero min-h-screen bg-base-200 place-content-start justify-center">
             <div class="flex-col hero-content w-full">    
 
                 <div class="hero-content flex-col w-full">
                     <div class="lg:mt-10 ml-2 flex self-start space-x-2 items-center">
                         <i class="fas fa-long-arrow-alt-left"></i>
-                        <Link :href="route('store')" class="link-hover">Powrót</Link>
+                        <Link :href="route('store.index')" class="link-hover">Powrót</Link>
                     </div>
                     <div class="card lg:card-side">
                         <figure>

@@ -1,108 +1,97 @@
 <template>
-
-    <div v-if=showCategoriesOverlay>
-        <div @click="showCategoriesOverlay = false" class="w-screen fixed h-full p-4 bg-black bg-opacity-50"></div>
-        <div class="w-screen fixed h-screen p-4 bg-white mt-36 ">
-            <div class="flex justify-between items-center">
-                <h1 class="text-lg font-bold">Kategorie</h1>
-                <i @click="showCategoriesOverlay = false" class="far fa-times-circle fa-lg"></i>
-            </div>
-            <div>
-                <template v-for="row in categories" :key=row>
-                    <div v-if="!row.parent_category_id">
-                        <div @click="filterServices(row.id)">{{ row.name }}</div>
-                        <div v-if="row.subcategories.length" class="text-red-600">
-                            {{row.subcategories}}
-                            <div v-for="subrow in row.subcategories" :key=subrow>
-                                <div @click="filterServices(subrow.id)">{{ subrow.name }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
-    </div>
-
-    <app-layout title="Sklep">
+<app-layout title="Sklep">
+    <div class="flex-col hero-content place-self-start mx-auto w-full">
         
-        <div class="main mx-auto max-w-6xl py-6 px-2 lg:pt-16">
-            <div class="sm:flex justify-between flex-row-reverse">
-                <div class="form-control">
-                <div class="relative">
-                    <input v-model="params.search" @click="params.searchField='name'" placeholder="Szukaj" class="w-full pr-16 input input-primary input-bordered" type="text"> 
-                    <button class="absolute top-0 right-0 rounded-l-none btn btn-primary hover:bg-primary cursor-default"><i class="fas fa-lg fa-search"></i></button>
-                </div>
-                </div> 
-            
-                <div class="flex justify-between space-x-2 items-center mt-4 sm:mt-0">
-                    <div class="dropdown">
-                        <div @click="showDropdown" tabindex="0" class="btn">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
-                            <ul id="sort-ul" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                                <li @click="sort(['name', 'asc','nazwa'])">
-                                    <a>Nazwa rosnąco</a>
-                                </li> 
-                                <li @click="sort(['name', 'desc', 'nazwa'])">
-                                    <a>Nazwa malejąco</a>
-                                </li> 
-                                <li @click="sort(['price', 'asc', 'cena'])">
-                                    <a>Cena rosnąco</a>
-                                </li>
-                                <li @click="sort(['price', 'desc', 'cena'])">
-                                    <a>Cena malejąco</a>
+        <!-- Data not present -->
+        <template v-if="(!items.data || !categories) && filters.search == null">
+            <h1 class="text-lg font-semibold">Nie dodano jeszcze żadnych przedmiotów</h1>
+        </template>
+
+        <!-- Data present -->
+        <template v-else>
+            <!-- Categories dropdown -->
+            <div class="dropdown w-full">
+                <div tabindex="0" class="btn w-full md:w-auto">Kategorie</div> 
+                <div tabindex="0" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
+                        <template v-for="row in categories" :key="row.id">
+                            <ul v-if="row.subcategories.length" class="menu">
+                                <li class="menu-title"><span>{{ row.name }}</span></li>
+                                <li v-for="sub in row.subcategories" :key="sub.id" @click="filterItems(sub)">
+                                    <a>{{ sub.name }}</a>
                                 </li>
                             </ul>
-                        </div>
-
-                    <button @click="showCategoriesOverlay = true" class="btn btn-circle lg:hidden">
-                        <i class="fas fa-filter fa-lg"></i>
-                    </button>
-                    <button @click="showCategoriesOverlay = true" class="hidden lg:block btn">Kategorie</button>
+                    </template>
                 </div>
-            </div>        
-
-            <div class="flex flex-wrap -mx-1 lg:-mx-4 sm:mt-5 mt-3">
-                <div v-for="row in items.data" :key="row" class="my-1 px-1 w-full sm:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-                    <div class="card shadow-lg bordered">
-                        <figure>
-                            <img :alt=row.name  :src=row.photo_path>
-                        </figure> 
-                        <div class="card-body">
-                            <h1 class="card-title capitalize">
-                                <div>{{ row.name }}</div>
-                                <div class="text-gray-500 text-sm">{{ row.category_name }}</div>
-                            </h1> 
-                            
-                            <div class="card-actions justify-between items-center">
-                                <p class="text-lg">
-                                    {{ row.price }} zł
-                                </p>
-                                <button @click="itemDetails(row.id)" class="btn btn-primary">Zobacz</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- <img :alt=row.name class="block h-64 w-full object-fill" :src=row.photo_path>  -->
+            </div>
+            <div class="flex flex-col md:flex-row gap-2 w-full">
+                <!-- Sort -->
+                <div class="dropdown">
+                    <div @click="showDropdown" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
+                    <ul id="sort-ul" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                        <li @click="sort(['name', 'asc','nazwa'])">
+                            <a>Nazwa rosnąco</a>
+                        </li> 
+                        <li @click="sort(['name', 'desc', 'nazwa'])">
+                            <a>Nazwa malejąco</a>
+                        </li> 
+                        <li @click="sort(['price', 'asc', 'cena'])">
+                            <a>Cena rosnąco</a>
+                        </li>
+                        <li @click="sort(['price', 'desc', 'cena'])">
+                            <a>Cena malejąco</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative">
+                    <input v-model="params.search" @click="params.searchField='name'" placeholder="Szukaj" class="w-full md:w-auto pr-16 input input-primary input-bordered" type="text"> 
+                    <button class="absolute top-0 right-0 rounded-l-none btn btn-primary hover:bg-primary cursor-default"><i class="fas fa-lg fa-search"></i></button>
                 </div>
             </div>
             
-            <div class="flex-col flex sm:flex-row-reverse justify-between py-3 rounded-lg bg-white text-center space-y-4 shadow-lg sm:space-y-0 px-3 items-center">
-                <pagination :links=items.links class="mt-4 sm:mt-0"></pagination>
-                <span>Pozycje od {{items.from}} do {{items.to}} z {{items.total}} pozycji.</span>
-            </div>
-        </div>
-        
-    </app-layout>
 
+             <!-- Category hasn't items -->
+            <template v-if="!items.data.length && filters.search == null">
+                Brak produktów w tej kategorii
+            </template>
+
+            <!-- Category has items -->
+            <template v-else>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16">
+                    <article v-for="row in items.data" :key="row.id" class="card shadow-lg bordered rounded-lg">
+                        <figure>
+                            <img :src=row.photo_path class="">
+                        </figure> 
+                        <div class="card-body justify-between">
+                            <div class="card-title">
+                                <span>{{ row.name }}</span>
+                                <h2 class="text-gray-500 text-base">
+                                    <div>{{ `${row.category.name}` }}</div> 
+                                    <div class="text-2xl text-base-content mt-2">{{ `${row.price}zł` }}</div>
+                                </h2>
+                            </div>
+                            <p>{{ row.description }}</p>
+                            <div class="card-actions">
+                                <Link as="button" :href="route('store.show', row.id)" class="btn btn-primary w-full md:w-auto">Więcej</Link>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <Pagination :links=items.links :lg="true" class="md:self-start"></Pagination>
+            </template>
+
+        </template>
+
+    </div>
     
+</app-layout>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from 'vue'
+import { pickBy, throttle } from 'lodash';
+import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'  
 import Pagination from "@/Components/Pagination.vue";
-import { pickBy, throttle } from 'lodash';
-import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
     props: {
@@ -134,21 +123,18 @@ export default defineComponent({
         
         const showDropdown = _ => document.getElementById('sort-ul').style.visibility = 'visible'
 
-        const filterServices = (option) => {
-            params.filter = option
-            showCategoriesOverlay.value = false
+        const filterItems = (option) => {
+            params.filter = option.id
         }
 
-        const itemDetails = (id) => Inertia.get('/storeItem/'+id)
-
-        return { params, sort, filter, filterServices, sortLabel, showCategoriesOverlay, itemDetails, showDropdown }
+        return { params, sort, filter, filterItems, sortLabel, showCategoriesOverlay, showDropdown }
     },
 
     watch: {
         params: {
             handler: throttle(function () {
                 let params = pickBy(this.params);
-                this.$inertia.get(this.route('store'), params, { replace: true, preserveState: true });
+                this.$inertia.get(this.route('store.index'), params, { replace: true, preserveState: true });
             }, 150),
             deep: true
         },
@@ -156,13 +142,8 @@ export default defineComponent({
 
     components: {
         AppLayout,
-        Pagination
+        Pagination,
+        Link
     },
 })
 </script>
-
-<style>
-.main {
-    min-height: 75vh
-}
-</style>
