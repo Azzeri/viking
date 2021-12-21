@@ -26368,7 +26368,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["href", "active"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fa-calendar-week fa-lg",
     href: _ctx.route('admin.events.index'),
-    active: _ctx.route().current('admin.events.index')
+    active: _ctx.route().current('admin.events.index') || _ctx.route().current('admin.events.show') || _ctx.route().current('admin.events.task_manager')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_24];
@@ -26381,7 +26381,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fa-shopping-basket fa-lg",
     href: _ctx.route('admin.store_items.index'),
-    active: _ctx.route().current('admin.store_items.index')
+    active: _ctx.route().current('admin.store_items.index') || _ctx.route().current('admin.store_categories.index') || _ctx.route().current('admin.store_requests.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_25];
@@ -26394,7 +26394,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fas fa-ankh fa-lg",
     href: _ctx.route('admin.inventory_items.index'),
-    active: _ctx.route().current('admin.inventory_items.index')
+    active: _ctx.route().current('admin.inventory_items.index') || _ctx.route().current('admin.inventory_categories.index') || _ctx.route().current('admin.inventory_services.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_26];
@@ -26420,7 +26420,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AdminNavButton, {
     icon: "fas fas fa-images fa-lg",
     href: _ctx.route('admin.photos.index'),
-    active: _ctx.route().current('admin.photo_categories.index')
+    active: _ctx.route().current('admin.photo_categories.index') || _ctx.route().current('admin.photos.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_28];

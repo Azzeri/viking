@@ -72,11 +72,11 @@
                 <div class="flex space-y-4 flex-col">
                     <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">Panel</AdminNavButton>
                     <AdminNavButton v-if="$page.props.user != null && $page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" icon="fas fa-users fa-lg" :href="route('admin.users.index')" :active="route().current('admin.users.index')">Użytkownicy</AdminNavButton>
-                    <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')" :active="route().current('admin.events.index')">Wydarzenia</AdminNavButton>
-                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store_items.index')">Sklep</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index')">Sprzęt</AdminNavButton>
+                    <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')" :active="route().current('admin.events.index') || route().current('admin.events.show') || route().current('admin.events.task_manager')">Wydarzenia</AdminNavButton>
+                    <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store_items.index') || route().current('admin.store_categories.index') || route().current('admin.store_requests.index')">Sklep</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index') || route().current('admin.inventory_categories.index') || route().current('admin.inventory_services.index')">Sprzęt</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index')">Posty</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photos.index')" :active="route().current('admin.photo_categories.index')">Zdjęcia</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photos.index')" :active="route().current('admin.photo_categories.index') || route().current('admin.photos.index')">Zdjęcia</AdminNavButton>
                 </div>
 
                 <div class="lg:hidden flex space-y-4 flex-col">
