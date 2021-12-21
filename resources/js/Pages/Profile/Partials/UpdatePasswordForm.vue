@@ -1,41 +1,47 @@
 <template>
     <jet-form-section @submitted="updatePassword">
         <template #title>
-            Update Password
+            Zmień hasło
         </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            Upewnij się, że hasło jest odpowiednio długie i skomplikowane
         </template>
 
         <template #form>
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="current_password" value="Current Password" />
-                <jet-input id="current_password" type="password" class="mt-1 block w-full" v-model="form.current_password" ref="current_password" autocomplete="current-password" />
-                <jet-input-error :message="form.errors.current_password" class="mt-2" />
+            <div class="col-span-6 sm:col-span-4 form-control">
+                <label class="label">
+                    <span class="label-text">Obecne hasło</span>
+                </label> 
+                <input type="password" class="input input-primary input-bordered w-full" v-model="form.current_password" ref="current_password" autocomplete="current-password">
+				<label v-if="form.errors.current_password" class="label label-text-alt text-error text-sm">{{ form.errors.current_password }}</label>
             </div>
 
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="password" value="New Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" ref="password" autocomplete="new-password" />
-                <jet-input-error :message="form.errors.password" class="mt-2" />
+            <div class="col-span-6 sm:col-span-4 form-control">
+                <label class="label">
+                    <span class="label-text">Nowe hasło</span>
+                </label> 
+                <input type="password" class="input input-primary input-bordered w-full" v-model="form.password" ref="password" autocomplete="new-password">
+				<label v-if="form.errors.password" class="label label-text-alt text-error text-sm">{{ form.errors.password }}</label>
             </div>
 
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="password_confirmation" value="Confirm Password" />
-                <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" autocomplete="new-password" />
-                <jet-input-error :message="form.errors.password_confirmation" class="mt-2" />
+            <div class="col-span-6 sm:col-span-4 form-control">
+                <label class="label">
+                    <span class="label-text">Potwierdź hasło</span>
+                </label> 
+                <input type="password" class="input input-primary input-bordered w-full" v-model="form.password_confirmation" autocomplete="new-password">
+				<label v-if="form.errors.password_confirmation" class="label label-text-alt text-error text-sm">{{ form.errors.password_confirmation }}</label>
             </div>
         </template>
 
         <template #actions>
             <jet-action-message :on="form.recentlySuccessful" class="mr-3">
-                Saved.
+                Zapisano.
             </jet-action-message>
 
-            <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </jet-button>
+            <button class="btn btn-primary" :class="{ 'loading': form.processing }" :disabled="form.processing">
+                Zapisz
+            </button>
         </template>
     </jet-form-section>
 </template>

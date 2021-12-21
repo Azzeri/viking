@@ -37331,34 +37331,64 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Update Password ");
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Zmień hasło ");
 
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Ensure your account is using a long, random password to stay secure. ");
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Upewnij się, że hasło jest odpowiednio długie i skomplikowane ");
 
 var _hoisted_3 = {
-  "class": "col-span-6 sm:col-span-4"
+  "class": "col-span-6 sm:col-span-4 form-control"
 };
-var _hoisted_4 = {
-  "class": "col-span-6 sm:col-span-4"
-};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "label"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "label-text"
+}, "Obecne hasło")], -1
+/* HOISTED */
+);
+
 var _hoisted_5 = {
-  "class": "col-span-6 sm:col-span-4"
+  key: 0,
+  "class": "label label-text-alt text-error text-sm"
+};
+var _hoisted_6 = {
+  "class": "col-span-6 sm:col-span-4 form-control"
 };
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Saved. ");
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "label"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "label-text"
+}, "Nowe hasło")], -1
+/* HOISTED */
+);
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Save ");
+var _hoisted_8 = {
+  key: 0,
+  "class": "label label-text-alt text-error text-sm"
+};
+var _hoisted_9 = {
+  "class": "col-span-6 sm:col-span-4 form-control"
+};
 
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "label"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "label-text"
+}, "Potwierdź hasło")], -1
+/* HOISTED */
+);
+
+var _hoisted_11 = {
+  key: 0,
+  "class": "label label-text-alt text-error text-sm"
+};
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Zapisano. ");
+
+var _hoisted_13 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_jet_label = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-label");
-
-  var _component_jet_input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-input");
-
-  var _component_jet_input_error = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-input-error");
-
   var _component_jet_action_message = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-action-message");
-
-  var _component_jet_button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-button");
 
   var _component_jet_form_section = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-form-section");
 
@@ -37372,66 +37402,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [_hoisted_2];
     }),
     form: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
-        "for": "current_password",
-        value: "Current Password"
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
-        id: "current_password",
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "password",
-        "class": "mt-1 block w-full",
-        modelValue: _ctx.form.current_password,
+        "class": "input input-primary input-bordered w-full",
         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
           return _ctx.form.current_password = $event;
         }),
         ref: "current_password",
         autocomplete: "current-password"
-      }, null, 8
-      /* PROPS */
-      , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input_error, {
-        message: _ctx.form.errors.current_password,
-        "class": "mt-2"
-      }, null, 8
-      /* PROPS */
-      , ["message"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
-        "for": "password",
-        value: "New Password"
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
-        id: "password",
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.form.current_password]]), _ctx.form.errors.current_password ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.form.errors.current_password), 1
+      /* TEXT */
+      )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "password",
-        "class": "mt-1 block w-full",
-        modelValue: _ctx.form.password,
+        "class": "input input-primary input-bordered w-full",
         "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
           return _ctx.form.password = $event;
         }),
         ref: "password",
         autocomplete: "new-password"
-      }, null, 8
-      /* PROPS */
-      , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input_error, {
-        message: _ctx.form.errors.password,
-        "class": "mt-2"
-      }, null, 8
-      /* PROPS */
-      , ["message"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
-        "for": "password_confirmation",
-        value: "Confirm Password"
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
-        id: "password_confirmation",
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.form.password]]), _ctx.form.errors.password ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.form.errors.password), 1
+      /* TEXT */
+      )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "password",
-        "class": "mt-1 block w-full",
-        modelValue: _ctx.form.password_confirmation,
+        "class": "input input-primary input-bordered w-full",
         "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
           return _ctx.form.password_confirmation = $event;
         }),
         autocomplete: "new-password"
-      }, null, 8
-      /* PROPS */
-      , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input_error, {
-        message: _ctx.form.errors.password_confirmation,
-        "class": "mt-2"
-      }, null, 8
-      /* PROPS */
-      , ["message"])])];
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.form.password_confirmation]]), _ctx.form.errors.password_confirmation ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.form.errors.password_confirmation), 1
+      /* TEXT */
+      )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
     }),
     actions: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_action_message, {
@@ -37439,28 +37445,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "mr-3"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_6];
+          return [_hoisted_12];
         }),
         _: 1
         /* STABLE */
 
       }, 8
       /* PROPS */
-      , ["on"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_button, {
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
-          'opacity-25': _ctx.form.processing
-        }),
+      , ["on"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["btn btn-primary", {
+          'loading': _ctx.form.processing
+        }]),
         disabled: _ctx.form.processing
-      }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_7];
-        }),
-        _: 1
-        /* STABLE */
-
-      }, 8
-      /* PROPS */
-      , ["class", "disabled"])];
+      }, " Zapisz ", 10
+      /* CLASS, PROPS */
+      , _hoisted_13)];
     }),
     _: 1
     /* STABLE */
