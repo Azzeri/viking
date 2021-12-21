@@ -1,16 +1,16 @@
 <template>
     <jet-action-section>
         <template #title>
-            Browser Sessions
+            Sesje przeglądarki
         </template>
 
         <template #description>
-            Manage and log out your active sessions on other browsers and devices.
+            Zarządzaj sesjami i wyloguj się z innych urządzeń
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+                Jeśli zajdzie taka potrzeba, możesz wylogować się ze wszystkich innych urządzeń, na których jesteś zalogowany/a. Poniżej widoczne są niektóre z ostatnich sesji. Jeśli uważasz, że Twoje konto może być narażone, powinienieś zmienić hasło.
             </div>
 
             <!-- Other Browser Sessions -->
@@ -35,8 +35,8 @@
                             <div class="text-xs text-gray-500">
                                 {{ session.ip_address }},
 
-                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">This device</span>
-                                <span v-else>Last active {{ session.last_active }}</span>
+                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">To urządzenie</span>
+                                <span v-else>Ostatnia aktywna sesja {{ session.last_active }}</span>
                             </div>
                         </div>
                     </div>
@@ -44,42 +44,41 @@
             </div>
 
             <div class="flex items-center mt-5">
-                <jet-button @click="confirmLogout">
-                    Log Out Other Browser Sessions
-                </jet-button>
+                <button class="btn btn-success" @click="confirmLogout">
+                    Wyloguj z innych urządzeń
+                </button>
 
                 <jet-action-message :on="form.recentlySuccessful" class="ml-3">
-                    Done.
+                    Gotowe.
                 </jet-action-message>
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
             <jet-dialog-modal :show="confirmingLogout" @close="closeModal">
                 <template #title>
-                    Log Out Other Browser Sessions
+                    Wyloguj z innych urządzeń
                 </template>
 
                 <template #content>
-                    Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
+                    Proszę potwierdzić swoje hasło
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
-                                    ref="password"
-                                    v-model="form.password"
-                                    @keyup.enter="logoutOtherBrowserSessions" />
-
-                        <jet-input-error :message="form.errors.password" class="mt-2" />
+                        <label class="label">
+                            <span class="label-text">Nowe hasło</span>
+                        </label> 
+                        <input type="password" class="input input-primary input-bordered w-3/4" v-model="form.password" ref="password" placeholder="Hasło" @keyup.enter="logoutOtherBrowserSessions" >
+                        <label v-if="form.errors.password" class="label label-text-alt text-error text-sm">{{ form.errors.password }}</label>
                     </div>
                 </template>
 
                 <template #footer>
-                    <jet-secondary-button @click="closeModal">
-                        Cancel
-                    </jet-secondary-button>
+                    <button class="btn btn-error" @click="closeModal">
+                        Anuluj
+                    </button>
 
-                    <jet-button class="ml-2" @click="logoutOtherBrowserSessions" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Log Out Other Browser Sessions
-                    </jet-button>
+                    <button class="btn ml-2" @click="logoutOtherBrowserSessions" :class="{ 'loading': form.processing }" :disabled="form.processing">
+                        Wyloguj z innych urządzeń
+                    </button>
                 </template>
             </jet-dialog-modal>
         </template>
