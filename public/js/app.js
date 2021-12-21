@@ -19253,6 +19253,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
 
 
 
@@ -19274,31 +19276,38 @@ __webpack_require__.r(__webpack_exports__);
 
     var sort = function sort(field) {
       params.field = field.name;
-      params.direction = params.direction === 'asc' ? 'desc' : 'asc';
+      params.direction = params.direction === "asc" ? "desc" : "asc";
     };
 
     var filterServices = function filterServices(option) {
       return params.filter = option;
     };
 
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watchEffect)((0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
+      var paramsPicked = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(params);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get(route(props.sortRoute), paramsPicked, {
+        replace: true,
+        preserveState: true
+      });
+    }, 150));
     return {
       params: params,
       sort: sort,
       filterServices: filterServices
     };
   },
-  watch: {
-    params: {
-      handler: (0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
-        var params = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(this.params);
-        this.$inertia.get(this.route(this.sortRoute), params, {
-          replace: true,
-          preserveState: true
-        });
-      }, 150),
-      deep: true
-    }
-  },
+  //   watch: {
+  //     params: {
+  //       handler: throttle(function () {
+  //         let params = pickBy(this.params);
+  //         this.$inertia.get(this.route(this.sortRoute), params, {
+  //           replace: true,
+  //           preserveState: true,
+  //         });
+  //       }, 150),
+  //       deep: true,
+  //     },
+  //   },
   components: {
     Pagination: _Components_Pagination_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
@@ -19536,6 +19545,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
 
 
 
@@ -19570,8 +19581,15 @@ __webpack_require__.r(__webpack_exports__);
     var filterServices = function filterServices(option) {
       params.filter = option.value;
       currentFilter.value = option.label;
-    }; // Returned data
+    };
 
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watchEffect)((0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
+      var paramsPicked = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(params);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.get(route(props.sortRoute), paramsPicked, {
+        replace: true,
+        preserveState: true
+      });
+    }, 150)); // Returned data
 
     return {
       params: params,
@@ -19581,18 +19599,15 @@ __webpack_require__.r(__webpack_exports__);
       currentFilter: currentFilter
     };
   },
-  watch: {
-    params: {
-      handler: (0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
-        var params = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(this.params);
-        this.$inertia.get(this.route(this.sortRoute), params, {
-          replace: true,
-          preserveState: true
-        });
-      }, 150),
-      deep: true
-    }
-  },
+  // watch: {
+  //     params: {
+  //         handler: throttle(function () {
+  //             let params = pickBy(this.params);
+  //             this.$inertia.get(this.route(this.sortRoute), params, { replace: true, preserveState: true });
+  //         }, 150),
+  //         deep: true
+  //     },
+  // },
   components: {
     Pagination: _Components_Pagination_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.Link
