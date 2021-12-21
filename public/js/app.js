@@ -27068,7 +27068,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "flex-col hero-content mx-auto"
+  "class": "flex-col hero-content mx-auto mt-32"
 };
 var _hoisted_2 = {
   "class": "flex flex-col lg:flex-row-reverse gap-4 w-full"

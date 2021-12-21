@@ -1,6 +1,6 @@
 <template>
   <app-layout title="O nas">
-    <div class="flex-col hero-content mx-auto">
+    <div class="flex-col hero-content mx-auto mt-32">
       <!-- Group info -->
       <div class="flex flex-col lg:flex-row-reverse gap-4 w-full">
         <img
