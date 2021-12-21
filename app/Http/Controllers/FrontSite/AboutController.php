@@ -12,7 +12,7 @@ class AboutController extends Controller
 {
     public function index() {
         return inertia('About', [
-            'users' => User::where('role', '!=', 'null')->orderBy('name')->limit(6)->get()->map(fn ($user) => [
+            'users' => User::orderBy('name')->get()->map(fn ($user) => [
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
