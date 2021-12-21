@@ -11,8 +11,8 @@
         <template v-else>
             <!-- Categories dropdown -->
             <div class="dropdown w-full">
-                <div tabindex="0" class="btn w-full md:w-auto">Kategorie</div> 
-                <div tabindex="0" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
+                <div @click="showDropdown('filter-ul')" tabindex="1" class="btn w-full md:w-auto">Kategorie</div> 
+                <div id="filter-ul" tabindex="1" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
                         <template v-for="row in categories" :key="row.id">
                             <ul v-if="row.subcategories.length" class="menu">
                                 <li class="menu-title"><span>{{ row.name }}</span></li>
@@ -26,7 +26,7 @@
             <div class="flex flex-col md:flex-row gap-2 w-full">
                 <!-- Sort -->
                 <div class="dropdown">
-                    <div @click="showDropdown" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
+                    <div @click="showDropdown('sort-ul')" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
                     <ul id="sort-ul" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
                         <li @click="sort(['name', 'asc','nazwa'])">
                             <a>Nazwa rosnąco</a>
@@ -121,9 +121,10 @@ export default defineComponent({
 
         }
         
-        const showDropdown = _ => document.getElementById('sort-ul').style.visibility = 'visible'
+        const showDropdown = (id) => document.getElementById(id).style.visibility = 'visible'
 
         const filterItems = (option) => {
+            document.getElementById('filter-ul').style.visibility = 'hidden'
             params.filter = option.id
         }
 
