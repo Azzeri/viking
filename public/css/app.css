@@ -4129,6 +4129,9 @@ html {
 .top-1\/2 {
 	top: 50%;
 }
+.top-10 {
+	top: 2.5rem;
+}
 .z-0 {
 	z-index: 0;
 }
@@ -4742,6 +4745,9 @@ html {
 }
 .rounded-sm {
 	border-radius: 0.125rem;
+}
+.rounded-none {
+	border-radius: 0px;
 }
 .rounded-l-md {
 	border-top-left-radius: 0.375rem;
@@ -6076,6 +6082,22 @@ html {
 }
 @media (min-width: 768px) {
 
+	.md\:bottom-10 {
+		bottom: 2.5rem;
+	}
+
+	.md\:top-0 {
+		top: 0px;
+	}
+
+	.md\:top-10 {
+		top: 2.5rem;
+	}
+
+	.md\:top-auto {
+		top: auto;
+	}
+
 	.md\:col-span-2 {
 		grid-column: span 2 / span 2;
 	}
@@ -6164,6 +6186,20 @@ html {
 
 	.md\:self-start {
 		align-self: flex-start;
+	}
+
+	.md\:rounded {
+		border-radius: 0.25rem;
+	}
+
+	.md\:rounded-l-lg {
+		border-top-left-radius: 0.5rem;
+		border-bottom-left-radius: 0.5rem;
+	}
+
+	.md\:rounded-l-xl {
+		border-top-left-radius: 0.75rem;
+		border-bottom-left-radius: 0.75rem;
 	}
 
 	.md\:border-t-0 {

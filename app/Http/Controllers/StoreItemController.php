@@ -120,6 +120,7 @@ class StoreItemController extends Controller
         ]));
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
+
     }
 
     /**
