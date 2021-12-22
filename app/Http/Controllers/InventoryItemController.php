@@ -28,7 +28,7 @@ class InventoryItemController extends Controller
 
         if (request('search')) {
             $query->where('name', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('description', 'ILIKE', '%' . request('search') . '%');
+                ->orWhere('description', 'ILIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -74,13 +74,15 @@ class InventoryItemController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
-            'inventory_category_id' => ['required', 'integer', 'exists:inventory_categories,id'],
+            'inventory_category_id' => ['required', 'integer', Rule::exists('inventory_categories', 'id')->where(function ($query) {
+                return $query->where('inventory_category_id', '!=', null);
+            })],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
         InventoryItem::create([
             'name' => $request->name,
@@ -128,7 +130,7 @@ class InventoryItemController extends Controller
         $this->authorize('delete', $inventory_item, InventoryItem::class);
 
         $inventory_item->delete();
-        Storage::delete('public/'.ltrim($inventory_item->photo_path, '/storage'));
+        Storage::delete('public/' . ltrim($inventory_item->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
     }

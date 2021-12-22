@@ -6,6 +6,7 @@ use App\Models\Photo;
 use App\Models\PhotoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PhotoController extends Controller
 {
@@ -17,7 +18,7 @@ class PhotoController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Photo::class);
-//walidacja filtra
+        //walidacja filtra
         $categories = PhotoCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
@@ -38,7 +39,7 @@ class PhotoController extends Controller
 
         if (request('filter'))
             $query->where('photo_category_id', request('filter'));
-        
+
 
         $photos = $query->paginate(12)->withQueryString()
             ->through(fn ($category) => [
@@ -71,7 +72,9 @@ class PhotoController extends Controller
         $this->authorize('create', Photo::class);
 
         $request->validate([
-            'photo_category_id' => ['required', 'integer', 'exists:photo_categories,id'],
+            'photo_category_id' => ['required', 'integer', Rule::exists('photo_categories', 'id')->where(function ($query) {
+                return $query->where('photo_category_id', '!=', null);
+            })],
             'images' => ['required'],
             'images.*' => ['image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
 

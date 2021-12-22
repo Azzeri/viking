@@ -79,7 +79,9 @@ class StoreItemController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:store_items'],
-            'store_category_id' => ['required', 'integer', 'exists:store_categories,id'],
+            'store_category_id' => ['required', 'integer', Rule::exists('store_categories', 'id')->where(function ($query) {
+                return $query->where('store_category_id', '!=', null);
+            })],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999'],
             'description' => ['nullable', 'min:3', 'max:255'],
