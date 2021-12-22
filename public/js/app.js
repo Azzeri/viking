@@ -23537,7 +23537,7 @@ __webpack_require__.r(__webpack_exports__);
     });
 
     var store = function store(_) {
-      return form.post('/storeRequestCreate', {
+      return form.post(route('store.store'), {
         onSuccess: function onSuccess() {
           return form.reset();
         }

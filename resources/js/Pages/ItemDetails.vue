@@ -94,7 +94,7 @@ export default defineComponent({
 			client_email: null
 		})
 
-        const store = _ => form.post('/storeRequestCreate', { onSuccess: () => form.reset() }) 
+        const store = _ => form.post(route('store.store'), { onSuccess: () => form.reset() }) 
 
         return { form, store }
   },
