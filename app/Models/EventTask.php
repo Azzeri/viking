@@ -23,7 +23,7 @@ class EventTask extends Model
     }
 
     public function subtasks() {
-        return $this->hasMany(EventSubTask::class);
+        return $this->hasMany(EventSubTask::class)->orderBy('name');
     }
 }
 

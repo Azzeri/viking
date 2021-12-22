@@ -16,7 +16,7 @@ class InventoryCategory extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(InventoryCategory::class);
+        return $this->hasMany(InventoryCategory::class)->orderBy('name');
     }
 
     public function parentCategory()
@@ -26,6 +26,6 @@ class InventoryCategory extends Model
 
     public function items()
     {
-        return $this->hasMany(InventoryItem::class);
+        return $this->hasMany(InventoryItem::class)->orderBy('name');
     }
 }

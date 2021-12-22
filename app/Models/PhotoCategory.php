@@ -17,7 +17,7 @@ class PhotoCategory extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(PhotoCategory::class);
+        return $this->hasMany(PhotoCategory::class)->orderBy('name');
     }
 
     public function parentCategory()

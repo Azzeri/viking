@@ -16,7 +16,7 @@ class StoreCategory extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(StoreCategory::class);
+        return $this->hasMany(StoreCategory::class)->orderBy('name');
     }
 
     public function parentCategory()
@@ -26,6 +26,6 @@ class StoreCategory extends Model
 
     public function items()
     {
-        return $this->hasMany(StoreItem::class);
+        return $this->hasMany(StoreItem::class)->orderBy('name');
     }
 }

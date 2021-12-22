@@ -45,7 +45,7 @@ class StoreCategoryController extends Controller
                         'id' => $store_category->parentCategory->id,
                         'name' => $store_category->parentCategory->name,
                     ) : [],
-                'subcategories' => $store_category->subcategories ? $store_category->subcategories->sortBy('name')->map(fn ($subcategory) => [
+                'subcategories' => $store_category->subcategories ? $store_category->subcategories->map(fn ($subcategory) => [
                     'id' => $subcategory->id,
                     'name' => $subcategory->name,
                 ]) : null

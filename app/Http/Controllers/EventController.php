@@ -162,7 +162,7 @@ class EventController extends Controller
                 'date_due' => $subtask->date_due,
                 'date_created' => $subtask->created_at,
                 'event_task_id' => $subtask->event_task_id
-            ])->sortBy('name') : null
+            ]) : null
         ]) : null;
 
         $task_states = EventTaskState::all();
