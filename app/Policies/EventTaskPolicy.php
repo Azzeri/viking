@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Event;
 use App\Models\EventTask;
 use App\Models\Privilege;
 use App\Models\User;
@@ -31,7 +32,7 @@ class EventTaskPolicy
      */
     public function update(User $user, EventTask $eventTask)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]) && $eventTask->event->is_finished == false;
     }
 
     /**
@@ -43,7 +44,7 @@ class EventTaskPolicy
      */
     public function delete(User $user, EventTask $eventTask)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]) && $eventTask->event->is_finished == false;
     }
     
 }

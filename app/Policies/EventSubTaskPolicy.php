@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\EventSubTask;
+use App\Models\Event;
 use App\Models\Privilege;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -31,7 +32,7 @@ class EventSubTaskPolicy
      */
     public function update(User $user, EventSubTask $eventSubTask)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]) && $eventSubTask->task->event->is_finished == false;
     }
 
     /**
@@ -43,6 +44,6 @@ class EventSubTaskPolicy
      */
     public function delete(User $user, EventSubTask $eventSubTask)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]) && $eventSubTask->task->event->is_finished == false;
     }
 }

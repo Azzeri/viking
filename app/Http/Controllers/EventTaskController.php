@@ -6,6 +6,7 @@ use App\Models\EventTask;
 use App\Models\EventTaskState;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class EventTaskController extends Controller
 {
@@ -20,10 +21,12 @@ class EventTaskController extends Controller
         $this->authorize('create', EventTask::class);
 
         $request->validate([
+            'event_id' => ['required', 'integer', Rule::exists('events','id')->where(function ($query) {
+                return $query->where('is_finished', false);
+            })],
             'name' => ['required', 'string', 'min:3', 'max:128'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'date_due' => ['nullable', 'date', 'after_or_equal:today'],
-            'event_id' => ['required', 'integer'],
             'event_task_state_id' => ['required', 'integer'],
         ]);
 

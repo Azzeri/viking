@@ -11,4 +11,8 @@ class EventSubTask extends Model
 
     protected $fillable = ['name', 'date_due', 'is_finished', 'event_task_id'];
 
+    public function task()
+    {
+        return $this->belongsTo(EventTask::class, 'event_task_id');
+    }
 }

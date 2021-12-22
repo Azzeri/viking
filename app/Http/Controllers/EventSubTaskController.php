@@ -21,7 +21,7 @@ class EventSubTaskController extends Controller
             $request->validate([
                 'name' => ['required', 'min:1'],
                 'date_due' => ['nullable', 'date', 'after_or_equal:today'],
-                'event_task_id' => ['required', 'integer']
+                'event_task_id' => ['required', 'integer', 'exists:event_tasks,id']
             ])
         );
 

@@ -16,7 +16,7 @@
 				class="w-60 p-2 bg-neutral rounded-lg overflow-y-auto" style="max-height: 80vh;">
 				<div class="flex justify-between items-center text-base-200">
 					<h1 class="font-bold capitalize">{{ state.name }}</h1>
-					<button @click="createTask(state.id)" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i></button>
+					<button v-if="!event.is_finished" @click="createTask(state.id)" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i></button>
 				</div>
 				<div class="mt-4 space-y-3">
 					<template v-for="task in tasks" :key="task.id">
@@ -36,19 +36,21 @@
 
 		<template #side>
 			<!-- Buttons -->
-			<button @click="deleteTask(selectedTask.id)" class="btn btn-error btn-xs">
-				<i class="fas fa-times"></i>
-				<span class="ml-2">Usuń</span>
-			</button>
-			<button v-if="!taskEditMode" @click="editTask(true)" class="btn btn-info btn-xs ml-2">
-				<i class="fas fa-edit"></i>
-				<span class="ml-2">Edytuj</span>
-			</button>
-			<button v-else @click="reset()" class="btn btn-error btn-xs ml-2">
-				<i class="fas fa-times"></i>
-				<span class="ml-2">Anuluj</span>
-			</button>
-			<button @click="updateTask(selectedTask.id)" v-if=taskEditMode class="btn btn-success btn-xs ml-2">Zapisz</button>
+			<template v-if="!event.is_finished">
+				<button @click="deleteTask(selectedTask.id)" class="btn btn-error btn-xs">
+					<i class="fas fa-times"></i>
+					<span class="ml-2">Usuń</span>
+				</button>
+				<button v-if="!taskEditMode" @click="editTask(true)" class="btn btn-info btn-xs ml-2">
+					<i class="fas fa-edit"></i>
+					<span class="ml-2">Edytuj</span>
+				</button>
+				<button v-else @click="reset()" class="btn btn-error btn-xs ml-2">
+					<i class="fas fa-times"></i>
+					<span class="ml-2">Anuluj</span>
+				</button>
+				<button @click="updateTask(selectedTask.id)" v-if=taskEditMode class="btn btn-success btn-xs ml-2">Zapisz</button>
+			</template>
 		</template>
 
 		<template #content>
@@ -89,18 +91,20 @@
 			<div class="flex items-center space-x-2 mt-6">
 				<i class="fas fa-tasks"></i>
 				<h1 class="font-bold">Zadania</h1>
-				<button v-if="!subTaskCreateMode" @click="createSubTask(true)" class="btn btn-ghost btn-xs">
-					<i class="fas fa-plus fa-sm cursor-pointer"></i>
-				</button>	
-				<button v-else @click="createSubTask(false)" class="btn btn-ghost btn-xs">
-					<i class="fas fa-times fa-sm cursor-pointer"></i>
-				</button>	
+				<template v-if="!event.is_finished">
+					<button v-if="!subTaskCreateMode" @click="createSubTask(true)" class="btn btn-ghost btn-xs">
+						<i class="fas fa-plus fa-sm cursor-pointer"></i>
+					</button>	
+					<button v-else @click="createSubTask(false)" class="btn btn-ghost btn-xs">
+						<i class="fas fa-times fa-sm cursor-pointer"></i>
+					</button>	
+				</template>
 				<label v-if="subTaskForm.errors.name" class="label label-text-alt text-error text-sm">{{ subTaskForm.errors.name }}</label>
 			</div>
 
 			<!-- Form -->
 			<div class="mt-2 mx-5">
-				<form v-show="subTaskCreateMode" id="create-subtask-form" class="flex flex-col sm:flex-row gap-2 w-full" @submit.prevent=storeSubTask>
+				<form v-show="subTaskCreateMode && !event.is_finished" id="create-subtask-form" class="flex flex-col sm:flex-row gap-2 w-full" @submit.prevent=storeSubTask>
 					<input v-model="subTaskForm.name" type="text" class="input input-primary input-xs" />
 					<input v-model="subTaskForm.date_due" type="date" :min=currentDate() class="input input-primary input-xs" />
 					<input type="submit" class="btn btn-primary btn-xs" value="Dodaj">
@@ -113,11 +117,11 @@
 					<li v-for="task in selectedTask.subtasks" :key=task.id >
 						<a class="flex flex-col space-y-2">
 							<div class="flex items-center space-x-2 w-full">
-								<input @click=finishSubtask(task) :checked=task.is_finished type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+								<input @click=finishSubtask(task) :checked=task.is_finished :disabled="event.is_finished" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
 								<span :class="{ 'text-gray-600 line-through':task.is_finished }">{{ task.name }}</span>
 							</div>
 							<div v-if="!subTaskEditMode" class="flex items-center space-x-2 w-full">
-								<button @click="editSubTask(task)" class="btn btn-info btn-xs">
+								<button v-if="!event.is_finished" @click="editSubTask(task)" class="btn btn-info btn-xs">
 									<i class="fas fa-edit mr-2"></i>
 									Edytuj
 								</button>
@@ -144,7 +148,7 @@
 	</Modal>
 
 	<!-- Modal - create -->
-	<Modal :show="createModalOpened" @close=close id="modal-create" maxWidth="max-w-sm">
+	<Modal :show="createModalOpened && !event.is_finished" @close=close id="modal-create" maxWidth="max-w-sm">
 		<template #side>
 			<div class="flex items-center space-x-2">
 				<i class="fas fa-thumbtack"></i>
