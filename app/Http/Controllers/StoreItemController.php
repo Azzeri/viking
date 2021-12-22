@@ -21,19 +21,22 @@ class StoreItemController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name,store_category_id,quantity,price']
+            'field' => ['in:id,name,store_category_id,quantity,price']
         ]);
 
         $query = StoreItem::query();
 
         if (request('search')) {
             $query->where('name', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('description', 'ILIKE', '%' . request('search') . '%')
-            ->orWhere('price', 'ILIKE', '%' . request('search') . '%');
+                ->orWhere('description', 'ILIKE', '%' . request('search') . '%')
+                ->orWhere('price', 'ILIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
+            if (request('field') == 'store_category_id')
+                $query->orderBy(StoreCategory::select('name')->whereColumn('store_categories.id', 'store_items.store_category_id'), request('direction'));
+            else
+                $query->orderBy(request('field'), request('direction'));
         } else
             $query->orderBy('id');
 
@@ -76,14 +79,14 @@ class StoreItemController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:store_items'],
-            'store_category_id' => ['required', 'integer','exists:store_categories,id'],
+            'store_category_id' => ['required', 'integer', 'exists:store_categories,id'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
         StoreItem::create([
             'name' => $request->name,
@@ -113,14 +116,13 @@ class StoreItemController extends Controller
                 'required', 'string', 'min:3', 'max:64',
                 Rule::unique('inventory_items')->ignore(StoreItem::find($store_item->id))
             ],
-            'store_category_id' => ['required', 'integer','exists:store_categories,id'],
+            'store_category_id' => ['required', 'integer', 'exists:store_categories,id'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999']
         ]));
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
-
     }
 
     /**
@@ -134,7 +136,7 @@ class StoreItemController extends Controller
         $this->authorize('delete', $store_item, StoreItem::class);
 
         $store_item->delete();
-        Storage::delete('public/'.ltrim($store_item->photo_path, '/storage'));
+        Storage::delete('public/' . ltrim($store_item->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto przedmiot');
     }
