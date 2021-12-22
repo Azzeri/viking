@@ -145,10 +145,10 @@
 		</template>
 
 		<template #content>
-			<form>
+			<form @submit.prevent="store(false)">
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required />
+					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required minlength="3" />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</div> 
 
@@ -163,11 +163,12 @@
 					<label for="upload-file-store" refs="upload-file" class="btn btn-primary">Wybierz zdjęcie</label>
 					<label v-if="form.hasErrors && form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
 				</div>
+				<input type="submit" ref="createCategorySubmit" class="hidden" />
 			</form>
 		</template>
 
 		<template #footer>
-			<button @click=store(false) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full">Dodaj</button>
+			<button @click="$refs.createCategorySubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full">Dodaj</button>
 		</template>
 	</Modal>
 
