@@ -79,8 +79,8 @@
 							<div class="flex space-x-2 items-center">
 								<div class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</div>
 								<div v-if=!editCategoryMode class="font-semibold text-lg">{{ `${selectedCategory.name}` }}</div>
-								<span v-else class="text-lg font-bold">
-									<input v-model="form.name" type="text" class="input input-primary input-sm" required/>
+								<span v-show="editCategoryMode" class="text-lg font-bold">
+									<input v-model="form.name" type="text" class="input input-primary input-sm" id="edit-category-name" required/>
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 								</span>
 							</div>
@@ -103,8 +103,8 @@
 					<button @click=store(true) v-if="createSubcategoryMode" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 
-				<form v-show="createSubcategoryMode" class="mt-4" id="form-subcategory">
-					<input v-model="form.name" id="form-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
+				<form v-show="createSubcategoryMode" class="mt-4">
+					<input v-model="form.name" id="create-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</form>
 
@@ -114,7 +114,7 @@
 						<a class="flex justify-between">
 							<template v-if="editSubcategoryMode && subcategoryIndex == row.id">
 								<form>
-									<input v-model="form.name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
+									<input v-model="form.name" :id="'edit-subcategory-name'+row.id" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 								</form>
 								<div class="flex space-x-2 items-center">
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
@@ -249,7 +249,7 @@ export default defineComponent({
 			createSubcategoryMode.value = !createSubcategoryMode.value
 			form.store_category_id = selectedCategory.value.id
 
-			// focus
+			nextTick(() => document.getElementById('create-subcategory-name').focus())
 		}
 
 		// Subcategory edit
@@ -262,7 +262,12 @@ export default defineComponent({
 			form.name = subcategory.name
 			form.store_category_id = selectedCategory.value.id
 
-			// focus
+			
+			nextTick(() => {
+				const input = document.getElementById('edit-subcategory-name' + subcategory.id)
+				if (input != null)
+					input.focus()
+			})
 		}
 
 		// Category edit
@@ -272,7 +277,7 @@ export default defineComponent({
 			form.name = category.name
 			document.getElementById('category-image').src = category.photo_path
 
-			// focus
+			nextTick(() => document.getElementById('edit-category-name').focus())
 		}
 
 		// CRUD actions for both category and subcategory
