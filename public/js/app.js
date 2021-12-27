@@ -19219,23 +19219,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
-  emits: ['close'],
+  emits: ["close"],
   props: {
     show: Boolean,
     id: String,
     maxWidth: String
   },
-  setup: function setup(props) {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(function () {
       return props.show;
     }, function (_) {
-      return document.getElementById(props.id).classList.contains('modal-open') ? document.getElementById(props.id).classList.remove('modal-open') : document.getElementById(props.id).classList.add('modal-open');
+      return document.getElementById(props.id).classList.contains("modal-open") ? document.getElementById(props.id).classList.remove("modal-open") : document.getElementById(props.id).classList.add("modal-open");
     });
-  },
-  methods: {
-    close: function close() {
-      this.$emit('close');
-    }
+
+    var close = function close(_) {
+      return emit("close");
+    };
+
+    return {
+      close: close
+    };
   }
 }));
 
@@ -24312,9 +24316,13 @@ var _hoisted_5 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     id: _ctx.id,
-    "class": "modal"
+    "class": "modal mt-16",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.close();
+    })
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["modal-box overflow-y-auto mt-10", _ctx.maxWidth]),
+    onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {}, ["stop"])),
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["modal-box overflow-y-auto", _ctx.maxWidth]),
     style: {
       "max-height": "90vh"
     }
