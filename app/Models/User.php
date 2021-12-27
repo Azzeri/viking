@@ -11,6 +11,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -38,6 +40,7 @@ class User extends Authenticatable
         'role',
         'privilege_id',
         'password',
+        'profile_photo_path'
     ];
 
     /**
@@ -70,11 +73,32 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function privilege(){
+    public function privilege()
+    {
         return $this->belongsTo(Privilege::class);
     }
 
-    public function services() {
+    public function services()
+    {
         return $this->hasMany(InventoryService::class);
+    }
+
+    public function updateProfilePhoto(UploadedFile $photo)
+    {
+        $image_path =  '/storage/' . $photo->store('profile-photos', 'public');
+        Storage::delete('public/' . ltrim($this->profile_photo_path, '/storage'));
+
+        $this->update([
+            'profile_photo_path' => $image_path
+        ]);
+    }
+
+    public function deleteProfilePhoto()
+    {
+        Storage::delete('public/' . ltrim($this->profile_photo_path, '/storage'));
+
+        $this->update([
+            'profile_photo_path' => null
+        ]);
     }
 }

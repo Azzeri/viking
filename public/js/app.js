@@ -37680,7 +37680,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "for": "photo",
         value: "Zdjęcie profilowe"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Current Profile Photo "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-        src: _ctx.user.profile_photo_url,
+        src: _ctx.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, "&color=7F9CF5&background=EBF4FF"),
         alt: _ctx.user.name,
         "class": "rounded-full h-20 w-20 object-cover"
       }, null, 8
