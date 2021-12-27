@@ -24,12 +24,12 @@
 
         <!-- Right side -->
         <div class="navbar-end">
-            <!-- Authenticated user options -->
             <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
                 <button class="btn btn-square btn-ghost">
                     <i class="fas fa-moon fa-lg"></i>
                 </button>
             </div>
+            <!-- Authenticated user options -->
             <div v-if="$page.props.user != null" class=" items-center hidden lg:flex">
                 <div data-tip="Panel administracyjny" class="tooltip tooltip-bottom tooltip-primary">
                     <Link :href="route('admin.dashboard')" class="btn btn-square btn-ghost">
@@ -44,7 +44,7 @@
                 <div data-tip="Profil" class="tooltip tooltip-bottom tooltip-primary flex items-center">
                     <Link :href="route('profile.show') " class="avatar mx-3">
                         <div class="rounded-full w-10 h-10 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
-                            <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
+                            <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                         </div>
                     </Link>
                 </div>
