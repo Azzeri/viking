@@ -73,12 +73,12 @@ class InventoryCategoryController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
         InventoryCategory::create([
-           'name' => $request->name,
-           'inventory_category_id' => $request->inventory_category_id,
-           'photo_path' => $image_path ? $image_path : '/images/default.png'
+            'name' => $request->name,
+            'inventory_category_id' => $request->inventory_category_id,
+            'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano kategorię');
@@ -101,11 +101,25 @@ class InventoryCategoryController extends Controller
                 Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
             ],
             'parentCategoryId' => ['nullable', 'integer', Rule::in($inventory_category->inventory_category_id)],
-            // 'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'deleteImage' => ['boolean', 'required']
         ]);
 
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
+            if ($inventory_category->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
+        }
+
+        if ($request->deleteImage) {
+            Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
+            $image_path = '/images/default.png';
+        }
+
         $inventory_category->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'photo_path' => $image_path ? $image_path : $inventory_category->photo_path
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
@@ -122,7 +136,7 @@ class InventoryCategoryController extends Controller
         $this->authorize('delete', $inventory_category, InventoryCategory::class);
 
         $inventory_category->delete();
-        Storage::delete('public/'.ltrim($inventory_category->photo_path, '/storage'));
+        Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }

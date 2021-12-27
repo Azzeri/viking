@@ -21060,7 +21060,8 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       name: null,
       image: null,
-      inventory_category_id: null
+      inventory_category_id: null,
+      deleteImage: false
     }); // Show category details
 
     var showDetails = function showDetails(category) {
@@ -21131,7 +21132,10 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var update = function update(category) {
-      form.put(route('admin.inventory_categories.update', category.id), {
+      form.post(route('admin.inventory_categories.update', {
+        inventory_category: category.id,
+        _method: 'put'
+      }), {
         onSuccess: function onSuccess() {
           resetModes(true, true, true);
           selectedCategory.value = props.categories.data.find(function (element) {
@@ -21163,6 +21167,7 @@ __webpack_require__.r(__webpack_exports__);
 
     var removeImage = function removeImage(_) {
       form.image = null;
+      form.deleteImage = true;
       document.getElementById('category-image').src = "/images/default.png";
     }; // Columns for data table
 

@@ -211,7 +211,8 @@ export default defineComponent({
 		const form = useForm({
 			name: null,
 			image: null,
-            inventory_category_id: null
+            inventory_category_id: null,
+			deleteImage: false,
 		})
 
 		// Show category details
@@ -289,7 +290,7 @@ export default defineComponent({
 		}
 
 		const update = (category) => { 
-			form.put(route('admin.inventory_categories.update', category.id), {
+			form.post(route('admin.inventory_categories.update', { inventory_category:category.id, _method:'put' }), {
 				onSuccess: () => {
 					resetModes(true, true, true)
 					selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
@@ -315,6 +316,7 @@ export default defineComponent({
 
 		const removeImage = _ => {
 			form.image = null
+			form.deleteImage = true
 			document.getElementById('category-image').src = "/images/default.png"
 		}
 
