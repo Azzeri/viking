@@ -68,7 +68,6 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { defineComponent } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import NavLink from '@/Components/NavLink.vue'
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
 import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
@@ -78,7 +77,7 @@ export default defineComponent({
         return { logout }
     },
 
-    components: { JetApplicationMark, Link, NavLink, ResponsiveNavLink },
+    components: { JetApplicationMark, Link, NavLink },
 })
 
 </script>

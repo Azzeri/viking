@@ -61,7 +61,6 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import GroupMember from "@/Components/GroupMember.vue";
 
 export default defineComponent({
   props: {
@@ -70,7 +69,6 @@ export default defineComponent({
 
   components: {
     AppLayout,
-    GroupMember,
   },
 });
 </script>
