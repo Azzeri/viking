@@ -1672,6 +1672,39 @@ html {
 	--tab-border: 1px;
 	--tab-radius: 0.5rem;
 }
+.container {
+	width: 100%;
+}
+@media (min-width: 640px) {
+
+	.container {
+		max-width: 640px;
+	}
+}
+@media (min-width: 768px) {
+
+	.container {
+		max-width: 768px;
+	}
+}
+@media (min-width: 1024px) {
+
+	.container {
+		max-width: 1024px;
+	}
+}
+@media (min-width: 1280px) {
+
+	.container {
+		max-width: 1280px;
+	}
+}
+@media (min-width: 1536px) {
+
+	.container {
+		max-width: 1536px;
+	}
+}
 .prose {
 	color: #374151;
 	max-width: 65ch;
@@ -4434,6 +4467,12 @@ html {
 .max-w-5xl {
 	max-width: 64rem;
 }
+.max-w-md {
+	max-width: 28rem;
+}
+.max-w-screen-md {
+	max-width: 768px;
+}
 .flex-1 {
 	flex: 1 1 0%;
 }
@@ -4944,6 +4983,10 @@ html {
 .px-10 {
 	padding-left: 2.5rem;
 	padding-right: 2.5rem;
+}
+.px-5 {
+	padding-left: 1.25rem;
+	padding-right: 1.25rem;
 }
 .pt-6 {
 	padding-top: 1.5rem;
@@ -6083,6 +6126,11 @@ html {
 
 	.md\:border-l {
 		border-left-width: 1px;
+	}
+
+	.md\:px-5 {
+		padding-left: 1.25rem;
+		padding-right: 1.25rem;
 	}
 }
 @media (min-width: 1024px) {
