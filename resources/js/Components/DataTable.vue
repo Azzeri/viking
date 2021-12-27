@@ -196,31 +196,31 @@ export default {
 
     const filterServices = (option) => (params.filter = option);
 
-    watchEffect(
-      throttle(() => {
-        let paramsPicked = pickBy(params);
-        Inertia.get(route(props.sortRoute), paramsPicked, {
-          replace: true,
-          preserveState: true,
-        });
-      }, 150)
-    );
+    // watchEffect(
+    //   throttle(() => {
+    //     let paramsPicked = pickBy(params);
+    //     Inertia.get(route(props.sortRoute), paramsPicked, {
+    //       replace: true,
+    //       preserveState: true,
+    //     });
+    //   }, 150)
+    // );
 
     return { params, sort, filterServices };
   },
 
-  //   watch: {
-  //     params: {
-  //       handler: throttle(function () {
-  //         let params = pickBy(this.params);
-  //         this.$inertia.get(this.route(this.sortRoute), params, {
-  //           replace: true,
-  //           preserveState: true,
-  //         });
-  //       }, 150),
-  //       deep: true,
-  //     },
-  //   },
+    watch: {
+      params: {
+        handler: throttle(function () {
+          let params = pickBy(this.params);
+          this.$inertia.get(this.route(this.sortRoute), params, {
+            replace: true,
+            preserveState: true,
+          });
+        }, 150),
+        deep: true,
+      },
+    },
 
   components: {
     Pagination,

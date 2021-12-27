@@ -19281,33 +19281,35 @@ __webpack_require__.r(__webpack_exports__);
 
     var filterServices = function filterServices(option) {
       return params.filter = option;
-    };
+    }; // watchEffect(
+    //   throttle(() => {
+    //     let paramsPicked = pickBy(params);
+    //     Inertia.get(route(props.sortRoute), paramsPicked, {
+    //       replace: true,
+    //       preserveState: true,
+    //     });
+    //   }, 150)
+    // );
 
-    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watchEffect)((0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
-      var paramsPicked = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(params);
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get(route(props.sortRoute), paramsPicked, {
-        replace: true,
-        preserveState: true
-      });
-    }, 150));
+
     return {
       params: params,
       sort: sort,
       filterServices: filterServices
     };
   },
-  //   watch: {
-  //     params: {
-  //       handler: throttle(function () {
-  //         let params = pickBy(this.params);
-  //         this.$inertia.get(this.route(this.sortRoute), params, {
-  //           replace: true,
-  //           preserveState: true,
-  //         });
-  //       }, 150),
-  //       deep: true,
-  //     },
-  //   },
+  watch: {
+    params: {
+      handler: (0,lodash__WEBPACK_IMPORTED_MODULE_1__.throttle)(function () {
+        var params = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(this.params);
+        this.$inertia.get(this.route(this.sortRoute), params, {
+          replace: true,
+          preserveState: true
+        });
+      }, 150),
+      deep: true
+    }
+  },
   components: {
     Pagination: _Components_Pagination_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
