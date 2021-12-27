@@ -25,6 +25,7 @@
         lg:hidden lg:group-hover:flex
         rounded-l-none
         w-44
+        overflow-hidden
         justify-start
       "
     >
@@ -36,8 +37,9 @@
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
 import { computed } from "@vue/reactivity";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   props: {
     href: String,
     icon: String,
@@ -45,6 +47,7 @@ export default {
   },
 
   setup(props) {
+    // Changes button color if href is active
     const classes = computed(() => {
       return props.active
         ? "btn-primary text-primary-content"
@@ -57,5 +60,5 @@ export default {
   components: {
     Link,
   },
-};
+});
 </script>
