@@ -1,8 +1,7 @@
 <template>
 	<admin-panel-layout title="Panel administratora">
-		<h1 class="text-2xl font-black my-4">Panel Administratora</h1>
-		<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4">
-			<div v-for="row in links" :key=row class="rounded-lg shadow-lg bg-primary text-primary-content p-4 w-36">
+		<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 justify-items-center my-16">
+			<div v-for="row in links" :key=row class="rounded-lg shadow-lg bg-primary text-primary-content p-4 w-full">
 				<div class="flex flex-col items-center space-y-2">
 					<i :class=row.icon></i>
 					<Link :href=route(row.link) as="button" class="btn w-full btn-sm btn-ghost">{{ row.label }}</Link>
@@ -10,8 +9,8 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 my-16">
-			<div v-for="row in stats" :key=row class="p-4 border rounded-lg shadow w-36">
+		<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 justify-items-center">
+			<div v-for="row in stats" :key=row class="p-4 border rounded-lg shadow w-full xl:px-2">
 				<h1 class="font-semibold text-gray-400">{{ row.label }}</h1>
 				<h2 class="text-3xl font-extrabold ml-4 mt-2">{{ row.value }}</h2>
 			</div>
@@ -23,8 +22,9 @@
 <script>
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
 	props: {
 		stats:Object
 	}, 
@@ -45,5 +45,5 @@ export default {
 		AdminPanelLayout,
 		Link
 	},
-};
+});
 </script>

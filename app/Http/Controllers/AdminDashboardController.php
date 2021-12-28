@@ -8,17 +8,15 @@ use App\Models\InventoryItem;
 use App\Models\InventoryService;
 use App\Models\Post;
 use App\Models\StoreRequest;
-use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $stats = [
             ['label' => 'Członków grupy', 'value' => User::count()],
