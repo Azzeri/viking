@@ -49,7 +49,7 @@
                         </Link>
                     </div>
                     <AdminNavButton :href="route('admin.dashboard')" icon="fas fa-user-shield fa-lg">Panel</AdminNavButton>
-                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" @click=logout>Wyloguj</AdminNavButton>
+                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" @click="Inertia.post(route('logout'))">Wyloguj</AdminNavButton>
                 </div>
             </ul>
         </div>
@@ -59,7 +59,6 @@
 <script>
     import { defineComponent } from 'vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
-    import { Inertia } from '@inertiajs/inertia'
     import Footer from '@/Components/Footer.vue'
     import Navbar from '@/Components/Navbar.vue'
     import FlashMessage from '@/Components/FlashMessage.vue'
@@ -68,12 +67,6 @@
     export default defineComponent({
         props: {
             title: String,
-        },
-
-        setup() {
-            const logout = _ => Inertia.post(route('logout'));
-
-            return { logout }
         },
 
         components: {
