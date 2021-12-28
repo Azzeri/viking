@@ -13,7 +13,7 @@
         <div class="drawer-content">
 
             <!-- Navbar -->
-            <Navbar></Navbar>
+            <Navbar :centerLinks=true :adminPanelLink=true></Navbar>
 
             <!-- Site content -->
             <main class="text-base-content">
@@ -41,7 +41,7 @@
                     <div class="flex">
                         <Link :href="route('profile.show')" class="avatar">
                             <div class="rounded-full w-12 h-12 cursor-pointer transition">
-                                <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
+                                <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                             </div>
                         </Link>
                         <Link as="button" class="btn btn-primary rounded-l-none pl-10 justify-start -ml-6" style="width:200px;">

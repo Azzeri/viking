@@ -1,57 +1,15 @@
 <template>
     <Head :title="title" />
+
     <!-- Success info message -->
     <FlashMessage></FlashMessage>
 
     <!-- Navbar -->
-    <div class="navbar shadow-lg bg-neutral text-neutral-content sticky top-0 z-50 h-16">
-
-        <!-- Left side -->
-        <div class="px-2 mx-2 space-x-2 navbar-start">
-            <!-- Logo -->
-            <Link :href="route('about.index')" as=button class="btn btn-square btn-ghost">
-                <jet-application-mark class="block h-9 w-auto" />
-            </Link>
-            <span class="text-lg font-bold">
-                {{ $page.props.groupInfo.name }}
-            </span>
-        </div> 
-
-        <!-- Right side -->
-        <div class="navbar-end">
-            <!-- User options -->
-            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
-                <button class="btn btn-square btn-ghost">
-                    <i class="fas fa-moon fa-lg"></i>
-                </button>
-            </div>
-            <div data-tip="Wyloguj" class="hidden lg:flex tooltip tooltip-bottom tooltip-primary">
-                <button @click=logout class="btn btn-square btn-ghost">
-                    <i class="fas fa-sign-out-alt fa-lg"></i>
-                </button>
-            </div>
-            <div data-tip="Profil" class="hidden lg:flex tooltip tooltip-bottom tooltip-primary items-center">
-                <Link :href="route('profile.show') " class="avatar mx-3">
-                    <div class="rounded-full w-10 h-10 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
-                        <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
-                    </div>
-                </Link>
-            </div>
-            <!-- Hamburger -->
-            <div class="flex-none lg:hidden">
-                <label for="my-drawer-3" class="btn btn-square btn-ghost">
-                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                    <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                </label>
-            </div> 
-        </div>
-
-    </div>
+    <Navbar></Navbar>
 
     <!-- Drawer  -->
     <div class="shadow bg-base-100 text-base-content drawer drawer-mobile">
-        <input id="my-drawer-3" type="checkbox" class="drawer-toggle"> 
+        <input id="drawer-main" type="checkbox" class="drawer-toggle"> 
         
         <!-- Drawer content -->
         <div class="flex flex-col drawer-content -mt-16 pt-16">
@@ -70,7 +28,7 @@
         
         <!-- Side drawer content -->
         <div class="drawer-side w-64 lg:w-auto lg:fixed h-full">
-            <label for="my-drawer-3" class="drawer-overlay lg:hidden fixed w-full h-full"></label> 
+            <label for="drawer-main" class="drawer-overlay lg:hidden fixed w-full h-full"></label> 
             <ul class="px-4 pb-24 bg-accent text-accent-content menu lg:w-20 lg:hover:w-64 group h-full justify-between pt-8">
                 <div class="flex space-y-4 flex-col">
                     <AdminNavButton icon="fas fa-home fa-lg" :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">Panel</AdminNavButton>
@@ -86,7 +44,7 @@
                     <div class="flex">
                         <Link :href="route('profile.show')" class="avatar">
                             <div class="rounded-full w-12 h-12 cursor-pointer transition">
-                                <img src="http://daisyui.com/tailwind-css-component-profile-1@56w.png">
+                                <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                             </div>
                         </Link>
                         <Link as="button" class="btn btn-primary rounded-l-none pl-10 justify-start -ml-6" style="width:200px;">
@@ -108,6 +66,7 @@
     import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
     import AdminNavButton from '@/Components/AdminNavButton.vue'
     import FlashMessage from '@/Components/FlashMessage.vue'
+    import Navbar from '@/Components/Navbar.vue'
 
     export default defineComponent({
         props: {
@@ -125,7 +84,8 @@
             Link,
             JetApplicationMark,
             AdminNavButton,
-            FlashMessage
+            FlashMessage,
+            Navbar
         },
     })
 </script>

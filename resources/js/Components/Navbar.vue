@@ -13,7 +13,7 @@
         </div> 
 
         <!-- Center links -->
-        <div class="hidden px-2 mx-2 navbar-center lg:flex">
+        <div v-if="centerLinks" class="hidden px-2 mx-2 navbar-center lg:flex">
             <div class="flex items-stretch">
                 <NavLink v-for="row in $page.props.navigation" :key=row :href="route(row.link)" :active="route().current(row.link)">
                     <i :class=row.icon></i>
@@ -31,7 +31,7 @@
             </div>
             <!-- Authenticated user options -->
             <div v-if="$page.props.user != null" class=" items-center hidden lg:flex">
-                <div data-tip="Panel administracyjny" class="tooltip tooltip-bottom tooltip-primary">
+                <div v-if="adminPanelLink" data-tip="Panel administracyjny" class="tooltip tooltip-bottom tooltip-primary">
                     <Link :href="route('admin.dashboard')" class="btn btn-square btn-ghost">
                         <i class="fas fa-user-shield fa-lg"></i>
                     </Link>
@@ -71,6 +71,11 @@ import NavLink from '@/Components/NavLink.vue'
 import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
+    props: {
+        centerLinks: Boolean,
+        adminPanelLink: Boolean
+    },
+
     setup() {
         const logout = _ => Inertia.post(route('logout'));
         
