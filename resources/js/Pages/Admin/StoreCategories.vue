@@ -5,10 +5,10 @@
 	<template v-if="!categories.data.length && filters.search == null">
 		<div class="flex flex-col gap-4 justify-center items-center mt-6 lg:mt-12">
 			<h1 class="text-4xl font-bold text-center">Nie dodano jeszcze żadnej kategorii</h1>
-			<Link :href="route('admin.store_items.index')" class="btn btn-wide btn-secondary mt-4">
+			<Link :href="route('admin.store_items.index')" class="btn btn-wide btn-secondary">
 				Powrót
 			</Link>
-			<button @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
+			<button @click="createCategory" class="btn btn-wide btn-secondary">
 				<i class="fas fa-plus fa-lg mr-3"></i>
 				Dodaj kategorię
 			</button>
@@ -24,7 +24,7 @@
 						<i class="fas fa-arrow-left mr-2"></i>
 						Powrót
 					</Link>
-					<button @click="createModalOpened = true" class="btn btn-primary sm:btn-sm">
+					<button @click="createCategory" class="btn btn-primary sm:btn-sm">
 						<i class="fas fa-plus mr-2"></i>
 						Dodaj kategorię
 					</button>
@@ -37,7 +37,7 @@
 						<td class="font-bold">{{ row.id }}</td>
 						<td>{{ row.name }}</td>
 						<td class="space-x-2 text-center"> 
-							<button @click=showDetails(row) class="btn btn-xs btn-accent">Szczegóły</button>
+							<button @click=showDetails(row) class="btn btn-xs btn-primary">Szczegóły</button>
 							<button @click="deleteRow(row.id, false)" class="btn btn-xs btn-error">
 								<i class="fas fa-trash cursor-pointer"></i>
 								<span class="ml-1">Usuń</span>
@@ -113,20 +113,20 @@
 				<div v-if="selectedCategory.subcategories != null" class="overflow-y-auto max-h-64">
 				<ul class="menu">
 					<li v-for="row in selectedCategory.subcategories" :key="row.id" class="hover-bordered"> 
-						<a class="flex justify-between">
+						<a class="flex flex-col items-center gap-2">
 							<template v-if="editSubcategoryMode && subcategoryIndex == row.id">
-								<form>
+								<form class="self-start">
 									<input v-model="form.name" :id="'edit-subcategory-name'+row.id" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 								</form>
-								<div class="flex space-x-2 items-center">
+								<div class="flex space-x-2 items-center self-start">
 									<button @click="update(row)" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 									<i @click="editSubcategory(row, false)" class="fas fa-times text-error"></i>
 								</div>
 							</template>
 							<template v-else>
-								<div>{{ `${row.name}` }}</div>
-								<div class="flex space-x-2 items-center">
+								<div class="self-start">{{ `${row.name}` }}</div>
+								<div class="flex space-x-2 items-center self-start">
 									<i @click="editSubcategory(row, true)" class="fas fa-edit text-info"></i>
 									<i @click="deleteRow(row.id, true)" class="fas fa-trash text-error"></i>
 								</div>
@@ -141,7 +141,7 @@
 	</template>
 
 	<!-- Create category modal -->
-	<Modal :show=createModalOpened @close=close :id="'modal-1'" :maxWidth="'max-w-sm'">
+	<Modal :show=createModalOpened @close=close :id="'modal-1'" :maxWidth="'md:max-w-sm'">
 		<template #side>
 			<h1 class="text-lg font-semibold">Nowa kategoria</h1>
 		</template>
@@ -150,7 +150,7 @@
 			<form @submit.prevent="store(false)">
 				<div class="form-control mt-4">
 					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required minlength="3" />
+					<input id="focus-create" v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required minlength="3" />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
 				</div> 
 
@@ -244,6 +244,11 @@ export default defineComponent({
 			createModalOpened.value = false
 			detailsModalOpened.value = false
 			resetModes(true, true, true)
+		}
+
+		const createCategory = (_) => {
+			createModalOpened.value = true
+			nextTick(() => document.getElementById("focus-create").focus());
 		}
 
 		// Subcategory create
@@ -354,7 +359,8 @@ export default defineComponent({
 			columns,
 			url,
 			previewImage,
-			removeImage
+			removeImage,
+			createCategory
 		}
 	},
 
