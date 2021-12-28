@@ -39,7 +39,7 @@
 
                 <div v-if="$page.props.user" class="lg:hidden flex space-y-4 flex-col">
                     <div class="flex">
-                        <Link :href="route('profile.show')" class="avatar">
+                        <Link :href="route('profile.show')" class="avatar z-50">
                             <div class="rounded-full w-12 h-12 cursor-pointer transition">
                                 <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                             </div>
@@ -49,7 +49,7 @@
                         </Link>
                     </div>
                     <AdminNavButton :href="route('admin.dashboard')" icon="fas fa-user-shield fa-lg">Panel</AdminNavButton>
-                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" @click="Inertia.post(route('logout'))">Wyloguj</AdminNavButton>
+                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" @click="$inertia.post(route('logout'))">Wyloguj</AdminNavButton>
                 </div>
             </ul>
         </div>

@@ -42,7 +42,7 @@
 
                 <div class="lg:hidden flex space-y-4 flex-col">
                     <div class="flex">
-                        <Link :href="route('profile.show')" class="avatar">
+                        <Link :href="route('profile.show')" class="avatar z-50">
                             <div class="rounded-full w-12 h-12 cursor-pointer transition">
                                 <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                             </div>
@@ -51,7 +51,7 @@
                             Profil
                         </Link>
                     </div>
-                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" :active="route().current('logout')" @click=logout>Wyloguj</AdminNavButton>
+                    <AdminNavButton icon="fas fa-sign-out-alt fa-lg" :active="route().current('logout')" @click="$inertia.post(route('logout'))">Wyloguj</AdminNavButton>
                 </div>
             </ul>
         </div>
@@ -61,7 +61,6 @@
 
 <script>
     import { defineComponent } from 'vue'
-    import { Inertia } from '@inertiajs/inertia'
     import { Head, Link } from '@inertiajs/inertia-vue3';
     import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
     import AdminNavButton from '@/Components/AdminNavButton.vue'
@@ -71,12 +70,6 @@
     export default defineComponent({
         props: {
             title: String,
-        },
-
-        setup() {
-            const logout = _ => Inertia.post(route('logout'));
-            
-            return { logout }
         },
 
         components: {
