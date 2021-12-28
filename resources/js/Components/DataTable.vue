@@ -162,7 +162,7 @@
 <script>
 import Pagination from "@/Components/Pagination.vue";
 import { pickBy, throttle } from "lodash";
-import { reactive, defineComponent, watchEffect } from "vue";
+import { reactive, defineComponent, watchEffect, ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
@@ -179,7 +179,7 @@ export default defineComponent({
       search: props.filters.search,
       field: props.filters.field,
       direction: props.filters.direction,
-      filter: props.filters.filter,
+      filter: props.filters.filter ?? ref(0)
     });
 
     const sort = (field) => {

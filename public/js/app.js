@@ -19274,11 +19274,13 @@ __webpack_require__.r(__webpack_exports__);
     sortRoute: String
   },
   setup: function setup(props) {
+    var _props$filters$filter;
+
     var params = (0,vue__WEBPACK_IMPORTED_MODULE_2__.reactive)({
       search: props.filters.search,
       field: props.filters.field,
       direction: props.filters.direction,
-      filter: props.filters.filter
+      filter: (_props$filters$filter = props.filters.filter) !== null && _props$filters$filter !== void 0 ? _props$filters$filter : (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(0)
     });
 
     var sort = function sort(field) {
