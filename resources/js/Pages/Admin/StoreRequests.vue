@@ -1,7 +1,7 @@
 <template>
 	<admin-panel-layout title="Zamówienia">
 
-		<RequestsDisplay :columns=columns :links=requests.links :filters=filters :frontFilters=frontFilters sortRoute="admin.store_requests.index">
+		<RequestsDisplay :columns=columns :data=requests :filters=filters :frontFilters=frontFilters sortRoute="admin.store_requests.index">
 
 			<template #buttons>
 				<Link :href="route('admin.store_items.index')">

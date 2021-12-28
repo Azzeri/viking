@@ -1,7 +1,7 @@
 <template>
 	<admin-panel-layout title="Serwisy">
 
-		<ServicesDisplay :columns=columns :links=services.links :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory_services.index">
+		<ServicesDisplay :columns=columns :data=services :filters=filters :frontFilters=frontFilters sortRoute="admin.inventory_services.index">
 
 			<template #buttons>
 				<Link :href="route('admin.inventory_items.index')" class="w-1/4 md:w-auto">
