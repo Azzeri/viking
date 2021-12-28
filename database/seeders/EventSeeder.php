@@ -16,17 +16,16 @@ class EventSeeder extends Seeder
     {
         Event::create([
             'name' => 'Ryczyna',
-            'description' => 'Wydarzenie w ryczenie lorem lorem xdddd',
-            'addrStreet' => 'Cicha',
-            'addrNumber' => '3',
+            'description' => 'Dawny gród na Dolnym Śląsku, nad Odrą, znajduje się w odległości ok. 37 km na południowy wschód od Wrocławia, w podoławskich lasach[1]. Ryczyn jest wymieniany w bulli papieskiej w 1093 roku oraz w Kronice Czechów Kosmasa z Pragi.',
+            'addrStreet' => 'Lipowa',
+            'addrNumber' => '1',
             'addrPostCode' => '48-300',
             'addrTown' => 'Ryczyna',
-            'date_start' => '2021-10-10',
-            'date_end' => '2021-10-11',
-            'time_start' => '03:53:10',
-            'items' => '[1,2,3,4]'
+            'date_start' => '2022-10-10',
+            'date_end' => '2022-10-11',
+            'time_start' => '15:00:00',
         ]);
 
-        Event::factory()->count(15)->create();
+        // Event::factory()->count(15)->create();
     }
 }

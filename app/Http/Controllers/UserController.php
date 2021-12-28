@@ -75,7 +75,7 @@ class UserController extends Controller
     public function storeMember(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32'],
+            'userName' => ['required', 'string', 'min:3', 'max:32'],
             'surname' => ['required', 'string', 'min:3', 'max:32'],
             'nickname' => ['nullable', 'string', 'min:3', 'max:32'],
             'role' => ['required', 'string', 'min:3', 'max:64'],
@@ -85,7 +85,7 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name' => $request['name'],
+            'name' => $request['userName'],
             'surname' => $request['surname'],
             'nickname' => $request['nickname'],
             'date_birth' => $request['date_birth'],
@@ -110,16 +110,26 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user, User::class);
-        
-        $user->update($request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:32'],
+
+        $request->validate([
+            'userName' => ['required', 'string', 'min:3', 'max:32'],
             'surname' => ['required', 'string', 'min:3', 'max:32'],
             'nickname' => ['nullable', 'string', 'min:3', 'max:32'],
             'role' => ['required', 'string', 'min:3', 'max:64'],
             'date_birth' => ['required', 'date', 'before:today', 'after:1900-01-01'],
             'description' => ['nullable', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email:filter', 'max:64', Rule::unique('users')->ignore(User::find($user->id))],
-        ]));
+        ]);
+
+        $user->update([
+            'name' => $request->userName,
+            'surname' => $request->surname,
+            'nickname' => $request->nickname,
+            'role' => $request->role,
+            'date_birth' => $request->date_birth,
+            'description' => $request->description,
+            'email' => $request->email,
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano użytkownika');
     }
@@ -148,13 +158,14 @@ class UserController extends Controller
     public function generateLink(Request $request)
     {
         $this->authorize('create', User::class);
-        
+
         $request->validate([
             'email' => ['required', 'string', 'email:filter', 'max:64', 'unique:users', 'unique:allowed_mails'],
             'role' => ['required', 'string', 'min:3', 'max:64']
         ]);
 
         DB::table('allowed_mails')->insert(['email' => $request->email]);
+
         $details = [
             'title' => 'Link do rejestracji',
             'body' => 'Przesyłamy Twój link do rejestracji',

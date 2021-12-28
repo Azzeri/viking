@@ -10,7 +10,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,9 +20,8 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
 
-    // protected $cascadeDeletes = ['services'];
 
     /**
      * The attributes that are mass assignable.
