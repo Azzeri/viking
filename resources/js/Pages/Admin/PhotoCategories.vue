@@ -3,14 +3,16 @@
 	
 	<!-- Data not present -->
 	<template v-if="!categories.data.length && filters.search == null">
-		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnej kategorii</h1>
-		<Link :href="route('admin.photos.index')" class="btn btn-wide btn-secondary mt-4">
-			Powrót
-		</Link>
-		<button @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
-			<i class="fas fa-plus fa-lg mr-3"></i>
-			Dodaj kategorię
-		</button>
+		<div class="flex flex-col gap-4 justify-center items-center mt-6 lg:mt-12">
+			<h1 class="text-4xl font-bold text-center">Nie dodano jeszcze żadnej kategorii</h1>
+			<Link :href="route('admin.photos.index')" class="btn btn-wide btn-secondary">
+				Powrót
+			</Link>
+			<button @click="createModalOpened = true" class="btn btn-wide btn-secondary">
+				<i class="fas fa-plus fa-lg mr-3"></i>
+				Dodaj kategorię
+			</button>
+		</div>
 	</template>
 
 	<!-- Data present -->

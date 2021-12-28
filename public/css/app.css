@@ -6165,6 +6165,11 @@ html {
 		grid-column: span 4 / span 4;
 	}
 
+	.lg\:my-12 {
+		margin-top: 3rem;
+		margin-bottom: 3rem;
+	}
+
 	.lg\:ml-20 {
 		margin-left: 5rem;
 	}
