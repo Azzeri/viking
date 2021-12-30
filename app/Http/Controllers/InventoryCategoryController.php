@@ -51,8 +51,10 @@ class InventoryCategoryController extends Controller
                 ]) : null
             ]);
 
-        return inertia('Admin/InventoryCategories', [
+        return inertia('Admin/Categories', [
             'categories' => $categories,
+            'model' => 'inventory',
+            'title' => 'Kategorie sprzętu',
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
     }
@@ -69,7 +71,7 @@ class InventoryCategoryController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_categories'],
-            'inventory_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id'],
+            'parent_category_id' => ['nullable', 'integer', 'exists:inventory_categories,id'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
@@ -77,7 +79,7 @@ class InventoryCategoryController extends Controller
 
         InventoryCategory::create([
             'name' => $request->name,
-            'inventory_category_id' => $request->inventory_category_id,
+            'inventory_category_id' => $request->parent_category_id,
             'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
@@ -88,19 +90,18 @@ class InventoryCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\InventoryCategory  $inventory_category
+     * @param  \App\Models\InventoryCategory  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InventoryCategory $inventory_category)
+    public function update(Request $request, InventoryCategory $category)
     {
-        $this->authorize('update', $inventory_category, InventoryCategory::class);
+        $this->authorize('update', $category, InventoryCategory::class);
 
         $request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('inventory_categories')->ignore(InventoryCategory::find($inventory_category->id))
+                Rule::unique('inventory_categories')->ignore(InventoryCategory::find($category->id))
             ],
-            'parentCategoryId' => ['nullable', 'integer', Rule::in($inventory_category->inventory_category_id)],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
             'deleteImage' => ['boolean', 'required']
         ]);
@@ -108,18 +109,18 @@ class InventoryCategoryController extends Controller
         $image_path = null;
         if ($request->hasFile('image')) {
             $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
-            if ($inventory_category->photo_path != '/images/default.png')
-                Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
+            if ($category->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
         }
 
         if ($request->deleteImage) {
-            Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
+            Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
             $image_path = '/images/default.png';
         }
 
-        $inventory_category->update([
+        $category->update([
             'name' => $request->name,
-            'photo_path' => $image_path ? $image_path : $inventory_category->photo_path
+            'photo_path' => $image_path ? $image_path : $category->photo_path
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
@@ -128,15 +129,15 @@ class InventoryCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\InventoryCategory  $inventory_category
+     * @param  \App\Models\InventoryCategory  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InventoryCategory $inventory_category)
+    public function destroy(InventoryCategory $category)
     {
-        $this->authorize('delete', $inventory_category, InventoryCategory::class);
+        $this->authorize('delete', $category, InventoryCategory::class);
 
-        $inventory_category->delete();
-        Storage::delete('public/' . ltrim($inventory_category->photo_path, '/storage'));
+        $category->delete();
+        Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }

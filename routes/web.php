@@ -88,7 +88,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/event_sub_tasks', EventSubTaskController::class)->only(['store', 'update', 'destroy']);
 
     // InventoryCategory
-    Route::resource('/inventory_categories', InventoryCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/inventory_categories', InventoryCategoryController::class)->except(['create', 'edit', 'show'])->parameters(['inventory_categories' => 'category']);
 
     // InventoryItem
     Route::resource('/inventory_items', InventoryItemController::class)->except(['create', 'edit', 'show']);

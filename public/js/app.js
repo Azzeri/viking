@@ -27678,7 +27678,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         columns: _ctx.columns,
         data: _ctx.categories,
         filters: _ctx.filters,
-        sortRoute: "admin.store_categories.index"
+        sortRoute: "admin.".concat(_ctx.model, "_categories.index")
       }, {
         buttons: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
@@ -27734,7 +27734,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
       }, 8
       /* PROPS */
-      , ["columns", "data", "filters"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Modal - details "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
+      , ["columns", "data", "filters", "sortRoute"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Modal - details "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
         show: _ctx.detailsModalOpened,
         onClose: _ctx.close,
         id: 'modal-2'

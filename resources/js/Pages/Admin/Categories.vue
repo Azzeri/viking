@@ -17,7 +17,7 @@
 
 	<!-- Data present -->
 	<template v-else>
-		<DataTable :columns=columns :data=categories :filters=filters sortRoute="admin.store_categories.index">
+		<DataTable :columns=columns :data=categories :filters=filters :sortRoute="`admin.${model}_categories.index`">
 			<template #buttons>
 				<div class="flex space-x-2">
 					<Link :href="route(`admin.${model}_items.index`)" class="btn btn-secondary sm:btn-sm">
