@@ -34,7 +34,7 @@
 			<template #content>
 				<template v-for="row in categories.data" :key="row">
 					<tr v-if="row.category.length == false" class="hover">
-						<td class="font-bold">{{ row.id }}</td>
+						<th class="font-bold">{{ row.id }}</th>
 						<td>{{ row.name }}</td>
 						<td class="space-x-2 text-center"> 
 							<button @click=showDetails(row) class="btn btn-xs btn-primary">Szczegóły</button>
@@ -61,13 +61,13 @@
 						<i :class="{'fas fa-edit':!editCategoryMode, 'fas fa-times':editCategoryMode}"></i>
 						<span v-html="editCategoryMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
 					</button>
-					<button v-if="editCategoryMode" @click=update(selectedCategory) :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
+					<button v-if="editCategoryMode" @click="$refs.updateCategorySubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 			</template>
 
 			<template #content>
 				<!-- Form and content -->
-				<form>
+				<form @submit.prevent="update(selectedCategory)">
 					<div class="flex items-start space-x-2 my-3">
 						<input type="file" id="upload-file-update" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 						<div v-if="url && form.image" class="mx-auto indicator">
@@ -79,8 +79,8 @@
 						<img v-else :src="selectedCategory.photo_path" :alt="selectedCategory.name" id="category-image" class="block h-24 w-24 object-cover mask mask-squircle">
 						<div class="flex flex-col">
 							<div class="flex space-x-2 items-center">
-								<div class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</div>
-								<div v-if=!editCategoryMode class="font-semibold text-lg">{{ `${selectedCategory.name}` }}</div>
+								<h1 class="font-bold text-lg">{{ `${selectedCategory.id}.` }}</h1>
+								<h1 v-if=!editCategoryMode class="font-semibold text-lg break-all">{{ `${selectedCategory.name}` }}</h1>
 								<span v-show="editCategoryMode" class="text-lg font-bold">
 									<input v-model="form.name" type="text" class="input input-primary input-sm" id="edit-category-name" required/>
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
@@ -93,6 +93,7 @@
 							</div>
 						</div>
 					</div>
+					<input type="submit" ref="updateCategorySubmit" class="hidden" />
 				</form>
 					
 				<!-- Subcategories -->
@@ -102,30 +103,32 @@
 						<i :class="{'fas fa-plus':!createSubcategoryMode, 'fas fa-times':createSubcategoryMode}"></i>
 						<span v-html="createSubcategoryMode ? 'Anuluj' : 'Dodaj'" class="ml-2"></span>
 					</button>
-					<button @click=store(true) v-if="createSubcategoryMode" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
+					<button @click="$refs.createSubcategorySubmit.click()" v-if="createSubcategoryMode" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 
-				<form v-show="createSubcategoryMode" class="mt-4">
-					<input v-model="form.name" id="create-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
+				<form @submit.prevent="store(true)" v-show="createSubcategoryMode" class="mt-4">
+					<input v-model="form.name" id="create-subcategory-name" type="text" class="input input-primary input-sm" placeholder="Nazwa" minlength="3" maxlength="64" required />
 					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+					<input type="submit" ref="createSubcategorySubmit" class="hidden" />
 				</form>
 
-				<div v-if="selectedCategory.subcategories != null" class="overflow-y-auto max-h-64">
+				<div v-if="selectedCategory.subcategories != null" class="overflow-y-auto" style="max-height:60vh;">
 				<ul class="menu">
 					<li v-for="row in selectedCategory.subcategories" :key="row.id" class="hover-bordered"> 
 						<a class="flex flex-col items-center gap-2">
 							<template v-if="editSubcategoryMode && subcategoryIndex == row.id">
-								<form class="self-start">
-									<input v-model="form.name" :id="'edit-subcategory-name'+row.id" type="text" class="input input-primary input-sm" placeholder="Nazwa" required />
+								<form @submit.prevent="update(row)" class="self-start">
+									<input v-model="form.name" :id="'edit-subcategory-name'+row.id" type="text" class="input input-primary input-sm" placeholder="Nazwa" minlength="3" maxlength="64" required />
 									<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+									<input type="submit" ref="updateSubcategorySubmit" class="hidden" />
 								</form>
 								<div class="flex space-x-2 items-center self-start">
-									<button @click="update(row)" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
+									<button @click="$refs.updateSubcategorySubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }"  class="btn btn-xs btn-success">Zapisz</button>
 									<i @click="editSubcategory(row, false)" class="fas fa-times text-error"></i>
 								</div>
 							</template>
 							<template v-else>
-								<div class="self-start">{{ `${row.name}` }}</div>
+								<h2 class="self-start break-all">{{ `${row.name}` }}</h2>
 								<div class="flex space-x-2 items-center self-start">
 									<i @click="editSubcategory(row, true)" class="fas fa-edit text-info"></i>
 									<i @click="deleteRow(row.id, true)" class="fas fa-trash text-error"></i>
@@ -149,9 +152,7 @@
 		<template #content>
 			<form @submit.prevent="store(false)">
 				<div class="form-control mt-4">
-					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input id="focus-create" v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required minlength="3" />
-					<label v-if="form.hasErrors && form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+					<form-input-field id="focus-create" type="text" name="Nazwa" :required="true" model="name" :form="form" max="64" min="3"></form-input-field>
 				</div> 
 
 				<div class="form-control mt-4 space-y-3">
@@ -184,6 +185,7 @@ import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import DataTable from '@/Components/DataTable.vue'
 import Modal from '@/Components/CrudModal.vue'
+import FormInputField from "@/Components/FormInputField.vue";
 
 export default defineComponent({
 
@@ -214,7 +216,8 @@ export default defineComponent({
 		const form = useForm({
 			name: null,
 			image: null,
-            store_category_id: null
+            store_category_id: null,
+			deleteImage: false,
 		})
 
 		// Show category details
@@ -278,7 +281,6 @@ export default defineComponent({
 			})
 		}
 
-		// Category edit
 		const editCategory = (category) => { 
 			resetModes(false, true, true)
 			editCategoryMode.value = ! editCategoryMode.value
@@ -296,13 +298,14 @@ export default defineComponent({
 					if (is_subcategory) {
 						form.store_category_id = selectedCategory.value.id
 						selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
+						nextTick(() => document.getElementById('create-subcategory-name').focus())
 					}
 				}
 			}) 
 		}
 
 		const update = (category) => { 
-			form.put(route('admin.store_categories.update', category.id), {
+			form.post(route('admin.store_categories.update', { store_category:category.id, _method:'put' }), {
 				onSuccess: () => {
 					resetModes(true, true, true)
 					selectedCategory.value = props.categories.data.find(element => element.id == selectedCategory.value.id)
@@ -328,6 +331,7 @@ export default defineComponent({
 
 		const removeImage = _ => {
 			form.image = null
+			form.deleteImage = true
 			document.getElementById('category-image').src = "/images/default.png"
 		}
 
@@ -369,6 +373,7 @@ export default defineComponent({
 		Link,
 		DataTable,
 		Modal,
+		FormInputField
 	}
 });
 </script>

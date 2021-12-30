@@ -73,12 +73,12 @@ class StoreCategoryController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
         StoreCategory::create([
             'name' => $request->name,
             'store_category_id' => $request->store_category_id,
-           'photo_path' => $image_path ? $image_path : '/images/default.png'
+            'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano kategorię');
@@ -98,14 +98,28 @@ class StoreCategoryController extends Controller
         $request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('inventory_categories')->ignore(StoreCategory::find($store_category->id))
+                Rule::unique('store_categories')->ignore(StoreCategory::find($store_category->id))
             ],
             'parentCategoryId' => ['nullable', 'integer', Rule::in($store_category->store_category_id)],
-            // 'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'deleteImage' => ['boolean', 'required']
         ]);
 
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
+            if ($store_category->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
+        }
+
+        if ($request->deleteImage) {
+            Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
+            $image_path = '/images/default.png';
+        }
+
         $store_category->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'photo_path' => $image_path ? $image_path : $store_category->photo_path
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
@@ -122,7 +136,7 @@ class StoreCategoryController extends Controller
         $this->authorize('delete', $store_category, StoreCategory::class);
 
         $store_category->delete();
-        Storage::delete('public/'.ltrim($store_category->photo_path, '/storage'));
+        Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }
