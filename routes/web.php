@@ -108,8 +108,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/posts', PostController::class)->except(['create', 'edit']);
 
     // StoreCategory
-    Route::resource('/store_categories', StoreCategoryController::class)->except(['create', 'edit', 'show']);
-
+    Route::resource('/store_categories', StoreCategoryController::class)->except(['create', 'edit', 'show'])->parameters(['store_categories' => 'category']);
     // StoreItem
     Route::resource('/store_items', StoreItemController::class)->except(['create', 'edit', 'show']);
 

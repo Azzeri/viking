@@ -51,8 +51,10 @@ class StoreCategoryController extends Controller
                 ]) : null
             ]);
 
-        return inertia('Admin/StoreCategories', [
+        return inertia('Admin/Categories', [
             'categories' => $categories,
+            'model' => 'store',
+            'title' => 'Kategorie w sklepie',
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
     }
@@ -69,7 +71,7 @@ class StoreCategoryController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:store_categories'],
-            'store_category_id' => ['nullable', 'integer', 'exists:store_categories,id'],
+            'parent_category_id' => ['nullable', 'integer', 'exists:store_categories,id'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
@@ -77,7 +79,7 @@ class StoreCategoryController extends Controller
 
         StoreCategory::create([
             'name' => $request->name,
-            'store_category_id' => $request->store_category_id,
+            'store_category_id' => $request->parent_category_id,
             'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
@@ -91,16 +93,15 @@ class StoreCategoryController extends Controller
      * @param  \App\Models\StoreCategory  $store_category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StoreCategory $store_category)
+    public function update(Request $request, StoreCategory $category)
     {
-        $this->authorize('update', $store_category, StoreCategory::class);
+        $this->authorize('update', $category, StoreCategory::class);
 
         $request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
-                Rule::unique('store_categories')->ignore(StoreCategory::find($store_category->id))
+                Rule::unique('store_categories')->ignore(StoreCategory::find($category->id))
             ],
-            'parentCategoryId' => ['nullable', 'integer', Rule::in($store_category->store_category_id)],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
             'deleteImage' => ['boolean', 'required']
         ]);
@@ -108,18 +109,18 @@ class StoreCategoryController extends Controller
         $image_path = null;
         if ($request->hasFile('image')) {
             $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
-            if ($store_category->photo_path != '/images/default.png')
-                Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
+            if ($category->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
         }
 
         if ($request->deleteImage) {
-            Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
+            Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
             $image_path = '/images/default.png';
         }
 
-        $store_category->update([
+        $category->update([
             'name' => $request->name,
-            'photo_path' => $image_path ? $image_path : $store_category->photo_path
+            'photo_path' => $image_path ? $image_path : $category->photo_path
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano kategorię');
@@ -131,12 +132,12 @@ class StoreCategoryController extends Controller
      * @param  \App\Models\StoreCategory  $store_category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StoreCategory $store_category)
+    public function destroy(StoreCategory $category)
     {
-        $this->authorize('delete', $store_category, StoreCategory::class);
+        $this->authorize('delete', $category, StoreCategory::class);
 
-        $store_category->delete();
-        Storage::delete('public/' . ltrim($store_category->photo_path, '/storage'));
+        $category->delete();
+        Storage::delete('public/' . ltrim($category->photo_path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto kategorię');
     }
