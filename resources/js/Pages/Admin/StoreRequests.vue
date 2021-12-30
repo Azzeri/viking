@@ -13,7 +13,7 @@
 			</template>
 
 			<template #content v-if="requests.data.length">
-				<div class="overflow-y-auto mt-4" style="height: 75vh;">
+				<div class="overflow-y-auto mt-4">
 					<ul class="menu">
 						<li v-for="row in requests.data" :key="row.id" @click="showDetails(row)" class="hover-bordered">
 							<a class="flex flex-col" style="align-items:flex-start;">
@@ -36,11 +36,11 @@
 			<template #side>
 				<div class="flex space-x-2">
 					<template v-if="!selectedRequest.is_accepted && !selectedRequest.is_finished">
-						<button @click="acceptRequestMode = !acceptRequestMode" :class="{'btn-success':!acceptRequestMode, 'btn-error':acceptRequestMode}" class="btn btn-xs">
+						<button @click="enableAcceptMode" :class="{'btn-success':!acceptRequestMode, 'btn-error':acceptRequestMode}" class="btn btn-xs">
 							<i :class="{'fas fa-check':!acceptRequestMode, 'fas fa-times':acceptRequestMode}"></i>
 							<span v-html="acceptRequestMode ? 'Anuluj' : 'Zaakceptuj'" class="ml-2"></span>
 						</button>
-						<button v-if="acceptRequestMode" @click="acceptRequest(selectedRequest.id)" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-info">Zapisz</button>
+						<button v-if="acceptRequestMode" @click="$refs.acceptRequestSubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-info">Zapisz</button>
 					</template>
 					<button @click="deleteRow(selectedRequest.id)" class="btn btn-error btn-xs">
 						<i class="fas fa-trash"></i>
@@ -53,8 +53,11 @@
 			<template #content>
 				<ul class="mt-3">
 					<li v-if="acceptRequestMode">
-						<textarea v-model=form.note class="textarea h-24 textarea-bordered textarea-primary resize-none w-full" placeholder="Notatka..." max=255 min=3></textarea>
-						<label v-if="form.errors.note" class="label label-text-alt text-error text-sm">{{ form.errors.note }}</label>
+						<form @submit.prevent="acceptRequest(selectedRequest.id)">
+							<textarea v-model=form.note id="note-textarea" class="textarea h-24 textarea-bordered textarea-primary resize-none w-full" placeholder="Notatka..." maxlength=255 minlength=3></textarea>
+							<label v-if="form.errors.note" class="label label-text-alt text-error text-sm">{{ form.errors.note }}</label>
+							<input type="submit" class="hidden" ref="acceptRequestSubmit" />
+						</form>
 					</li>
 					<li>
 						<h1 class="mt-4 font-semibold text-lg">{{ `Zamówienie nr ${selectedRequest.id}`}}</h1>
@@ -78,7 +81,7 @@
 					</li>
 					<li v-if="selectedRequest.description" class="mt-2 flex flex-col">
 						<span class="font-semibold">Opis</span>
-						<p class="text-sm">{{ selectedRequest.description }}</p>
+						<p class="text-sm text-justify">{{ selectedRequest.description }}</p>
 					</li>
 					<li v-if="selectedRequest.note" class="mt-2 flex flex-col">
 						<span class="font-semibold">Notatka</span>
@@ -107,8 +110,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
-import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
+import { defineComponent, ref, nextTick } from "vue";
+import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import RequestsDisplay from '@/Components/ServicesDisplay.vue'
@@ -148,6 +151,14 @@ export default defineComponent({
 			acceptRequestMode.value = false
 			form.reset()
 			form.clearErrors()
+		}
+
+		const enableAcceptMode = _ => {
+			acceptRequestMode.value = !acceptRequestMode.value
+			nextTick(() => {
+				if (document.getElementById('note-textarea'))
+					document.getElementById('note-textarea').focus()
+			})
 		}
 
 		// Delete request
@@ -204,7 +215,8 @@ export default defineComponent({
 			deleteRow, 
 			finishRequest, 
 			showDetails, 
-			acceptRequest
+			acceptRequest,
+			enableAcceptMode
 		}
 	},
 

@@ -61,8 +61,23 @@ class StoreController extends Controller
 
     public function show(StoreItem $store_item)
     {
+       $item = array(
+        'id' => $store_item->id,
+        'name' => $store_item->name,
+        'photo_path' => $store_item->photo_path,
+        'description' => $store_item->description,
+        'quantity' => $store_item->quantity,
+        'price' => $store_item->price,
+        'store_category_id' => $store_item->store_category_id,
+        'category' => array(
+            'id' => $store_item->category->id,
+            'name' => $store_item->category->name
+        )
+
+       );
+
         return inertia('ItemDetails', [
-            'item' => $store_item->with('category')->first()
+            'item' => $item
         ]);
     }
 }

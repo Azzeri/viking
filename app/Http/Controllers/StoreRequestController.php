@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StoreItem;
 use App\Models\StoreRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class StoreRequestController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:created_at,store_item_id,client_name,id']
+            'field' => ['in:created_at,store_item_id,client_name,id'],
+            'filter' => ['in:0,1,2']
         ]);
 
         $query = StoreRequest::query();
@@ -45,15 +47,18 @@ class StoreRequestController extends Controller
         }
 
         if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
+            if (request('field') == 'store_item_id')
+                $query->orderBy(StoreItem::select('name')->whereColumn('store_items.id', 'store_requests.store_item_id'), request('direction'));
+            else
+                $query->orderBy(request('field'), request('direction'));
         } else
             $query->orderBy('created_at', 'desc');
 
-        $requests = $query->paginate(9)->withQueryString()
+        $requests = $query->paginate(10)->withQueryString()
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,
-                'created_at' => Carbon::parse($storeRequest->created_at)->format('Y-m-d'),
+                'created_at' => Carbon::parse($storeRequest->created_at)->toFormattedDateString(),
                 'client_name' => $storeRequest->client_name,
                 'client_phone' => $storeRequest->client_phone,
                 'client_email' => $storeRequest->client_email,
@@ -62,7 +67,7 @@ class StoreRequestController extends Controller
                 'store_item_id' => $storeRequest->store_item_id,
                 'store_item_name' => $storeRequest->item->name,
                 'note' => $storeRequest->note,
-                'date_finished' => $storeRequest->date_finished
+                'date_finished' => Carbon::parse($storeRequest->date_finished)->toFormattedDateString(),
             ]);
 
         return inertia('Admin/StoreRequests', [

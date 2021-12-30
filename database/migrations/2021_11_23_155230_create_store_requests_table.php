@@ -19,7 +19,7 @@ class CreateStoreRequestsTable extends Migration
             $table->text('note', 255)->nullable();
             $table->date('date_finished')->nullable();
             $table->string('client_name', 64);
-            $table->string('client_phone', 64)->nullable();
+            $table->string('client_phone', 20)->nullable();
             $table->string('client_email', 64);
             $table->boolean('is_accepted')->default(false);
             $table->boolean('is_finished')->default(false);

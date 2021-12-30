@@ -168,6 +168,10 @@ return [
         'parentCategoryId' => 'ID kategorii nadrzędnej',
         'deleteImage' => 'czy usunąć zdjęcie',
         'parent_category_id' => 'ID kategorii nadrzędnej',
+        'store_item_id' => 'ID przedmiotu w sklepie',
+        'client_name' => 'Imię klienta',
+        'client_phone' => 'Telefon klienta',
+        'client_email' => 'Email klienta',
     ],
 
 ];
