@@ -166,7 +166,8 @@ return [
         'store_category_id' => 'ID kategorii sklepu',
         'image' => 'zdjęcie',
         'parentCategoryId' => 'ID kategorii nadrzędnej',
-        'deleteImage' => 'Czy usunąć zdjęcie'
+        'deleteImage' => 'czy usunąć zdjęcie',
+        'parent_category_id' => 'ID kategorii nadrzędnej',
     ],
 
 ];

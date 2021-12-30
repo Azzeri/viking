@@ -1,5 +1,5 @@
 <template>
-  <label class="label"
+  <label v-if="label" class="label"
     ><span class="label-text"
       >{{ name }}<span v-if="required" class="ml-1 text-red-500">*</span></span
     ></label
@@ -16,6 +16,7 @@
     :maxlength="max"
     :class="extraClass"
     :autocomplete="model"
+    :step="step"
     class="input input-primary input-bordered"
   />
   <label
@@ -39,6 +40,11 @@ export default defineComponent({
     min: String,
     max: String,
     extraClass: String,
+    step: String,
+    label: {
+      type: Boolean,
+      default: true
+    }
   },
 });
 </script>

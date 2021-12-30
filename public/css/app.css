@@ -4206,6 +4206,14 @@ html {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 }
+.mx-1 {
+	margin-left: 0.25rem;
+	margin-right: 0.25rem;
+}
+.my-1 {
+	margin-top: 0.25rem;
+	margin-bottom: 0.25rem;
+}
 .ml-3 {
 	margin-left: 0.75rem;
 }
@@ -4548,6 +4556,9 @@ html {
 }
 .items-start {
 	align-items: flex-start;
+}
+.items-end {
+	align-items: flex-end;
 }
 .items-center {
 	align-items: center;
@@ -5467,6 +5478,12 @@ html {
 .hover\:opacity-80:hover {
 	opacity: 0.8;
 }
+.hover\:opacity-50:hover {
+	opacity: 0.5;
+}
+.hover\:opacity-70:hover {
+	opacity: 0.7;
+}
 .hover\:ring:hover {
 	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
 	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
@@ -6153,6 +6170,11 @@ html {
 
 	.lg\:col-span-4 {
 		grid-column: span 4 / span 4;
+	}
+
+	.lg\:my-12 {
+		margin-top: 3rem;
+		margin-bottom: 3rem;
 	}
 
 	.lg\:ml-20 {
