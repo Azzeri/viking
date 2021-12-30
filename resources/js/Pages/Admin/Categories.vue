@@ -5,7 +5,7 @@
 	<template v-if="!categories.data.length && filters.search == null">
 		<div class="flex flex-col gap-4 justify-center items-center mt-6 lg:mt-12">
 			<h1 class="text-4xl font-bold text-center">Nie dodano jeszcze żadnej kategorii</h1>
-			<Link :href="route(`admin.${model}_items.index`)" class="btn btn-wide btn-secondary">
+			<Link :href="route(returnPath)" class="btn btn-wide btn-secondary">
 				Powrót
 			</Link>
 			<button @click="createCategory" class="btn btn-wide btn-secondary">
@@ -20,7 +20,7 @@
 		<DataTable :columns=columns :data=categories :filters=filters :sortRoute="`admin.${model}_categories.index`">
 			<template #buttons>
 				<div class="flex space-x-2">
-					<Link :href="route(`admin.${model}_items.index`)" class="btn btn-secondary sm:btn-sm">
+					<Link :href="route(returnPath)" class="btn btn-secondary sm:btn-sm">
 						<i class="fas fa-arrow-left mr-2"></i>
 						Powrót
 					</Link>
@@ -192,6 +192,7 @@ export default defineComponent({
 	props: {
 		categories: Object,
 		model: String,
+		returnPath: String,
 		title: String,
 		filters: Object
 	},

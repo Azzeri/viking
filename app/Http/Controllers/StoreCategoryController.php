@@ -55,6 +55,7 @@ class StoreCategoryController extends Controller
             'categories' => $categories,
             'model' => 'store',
             'title' => 'Kategorie w sklepie',
+            'returnPath' => 'admin.store_items.index',
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
     }

@@ -54,6 +54,7 @@ class InventoryCategoryController extends Controller
         return inertia('Admin/Categories', [
             'categories' => $categories,
             'model' => 'inventory',
+            'returnPath' => 'admin.inventory_items.index',
             'title' => 'Kategorie sprzętu',
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);

@@ -102,7 +102,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     Route::resource('/photos', PhotoController::class)->except(['create', 'edit', 'show', 'update']);
 
     // PhotoCategory
-    Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('/photo_categories', PhotoCategoryController::class)->except(['create', 'edit', 'show'])->parameters(['photo_categories' => 'category']);
 
     // Post
     Route::resource('/posts', PostController::class)->except(['create', 'edit']);
