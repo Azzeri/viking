@@ -169,9 +169,14 @@ return [
         'deleteImage' => 'czy usunąć zdjęcie',
         'parent_category_id' => 'ID kategorii nadrzędnej',
         'store_item_id' => 'ID przedmiotu w sklepie',
-        'client_name' => 'Imię klienta',
-        'client_phone' => 'Telefon klienta',
-        'client_email' => 'Email klienta',
+        'client_name' => 'imię klienta',
+        'client_phone' => 'telefon klienta',
+        'client_email' => 'email klienta',
+        'title' => 'tytuł',
+        'body' => 'treść',
+        'resource_link' => 'odnośnik',
+        'user_id' => 'ID użytkownika',
+
     ],
 
 ];

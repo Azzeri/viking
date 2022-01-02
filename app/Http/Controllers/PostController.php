@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,19 +34,23 @@ class PostController extends Controller
         }
 
         if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
+            if (request('field') == 'user_id')
+                $query->orderBy(User::select('surname')->whereColumn('users.id', 'posts.user_id'), request('direction'));
+            else
+                $query->orderBy(request('field'), request('direction'));
         } else
             $query->orderBy('id');
 
         $posts = $query->paginate()->withQueryString()
             ->through(fn ($post) => [
                 'id' => $post->id,
-                'title' => strlen($post->title) > 48 ? substr($post->title, 0, 48) . '...' : $post->title,
+                'title' => strlen($post->title) > 43 ? substr($post->title, 0, 43) . '...' : $post->title,
                 'photo_path' => $post->photo_path,
                 'body' => $post->body,
                 'resource_link' => $post->resource_link,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
                 'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+                'date_time_created_formatted' => Carbon::parse($post->created_at)->toDayDateTimeString(),
                 'user' => array(
                     'id' => $post->user->id,
                     'name' => $post->user->name,
@@ -76,7 +81,7 @@ class PostController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
-        $image_path = $request->hasFile('image') ? '/storage/'.$request->file('image')->store('image', 'public') : null;
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
         Post::create([
             'title' => request()->title,
@@ -152,10 +157,8 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post, Post::class);
 
-        if (Storage::exists('public/' . ltrim($post->path, '/storage'))) {
-            $post->delete();
-            Storage::delete('public/' . ltrim($post->path, '/storage'));
-        }
+        $post->delete();
+        Storage::delete('public/' . ltrim($post->path, '/storage'));
 
         return redirect()->route('admin.posts.index')->with('message', 'Pomyślnie usunięto post');
     }
