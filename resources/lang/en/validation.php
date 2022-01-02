@@ -176,6 +176,8 @@ return [
         'body' => 'treść',
         'resource_link' => 'odnośnik',
         'user_id' => 'ID użytkownika',
+        'photo_category_id' => 'ID kategorii zdjęć',
+        'images' => 'zdjęcia'
 
     ],
 

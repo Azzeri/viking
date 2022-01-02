@@ -18,7 +18,13 @@ class PhotoController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Photo::class);
-        //walidacja filtra
+
+        request()->validate([
+            'filter' => [Rule::exists('photo_categories', 'id')->where(function ($query) {
+                return $query->where('photo_category_id', '!=', null);
+            })],
+        ]);
+
         $categories = PhotoCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
@@ -39,9 +45,10 @@ class PhotoController extends Controller
 
         if (request('filter'))
             $query->where('photo_category_id', request('filter'));
+        else
+            $query->where('photo_category_id', $subcategories[0]);
 
-
-        $photos = $query->paginate(12)->withQueryString()
+        $photos = $query->paginate(25)->withQueryString()
             ->through(fn ($category) => [
                 'id' => $category->id,
                 'path' => $category->path,
@@ -102,10 +109,8 @@ class PhotoController extends Controller
     {
         $this->authorize('delete', $photo, Photo::class);
 
-        if (Storage::exists('public/' . ltrim($photo->path, '/storage'))) {
-            $photo->delete();
-            Storage::delete('public/' . ltrim($photo->path, '/storage'));
-        }
+        $photo->delete();
+        Storage::delete('public/' . ltrim($photo->path, '/storage'));
 
         return redirect()->back()->with('message', 'Pomyślnie usunięto zdjęcie');
     }
