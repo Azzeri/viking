@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <div class="card-title">
                         <span>{{ post.title }}</span>
-                        <h2 class="text-gray-500 text-base">
+                        <h2 class="text-gray-500 text-basez">
                             <div>{{ `${post.user.name} ${post.user.nickname ? `"${post.user.nickname}"` : ''} ${post.user.surname}` }}</div> 
                             <div class="text-sm">{{ `${post.date_created} ${post.time_created}` }}</div>
                         </h2>

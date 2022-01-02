@@ -76,7 +76,7 @@ class PostController extends Controller
 
         $request->validate([
             'title' => ['required', 'min:3', 'max:128', 'string'],
-            'body' => ['required', 'min:3'],
+            'body' => ['required', 'min:3', 'max:2048'],
             'resource_link' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
@@ -112,6 +112,7 @@ class PostController extends Controller
             'resource_link' => $post->resource_link,
             'time_created' => Carbon::parse($post->created_at)->format('H:i'),
             'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+            'date_time_created_formatted' => Carbon::parse($post->created_at)->toDayDateTimeString(),
             'user' => array(
                 'id' => $post->user->id,
                 'name' => $post->user->name,
@@ -136,13 +137,26 @@ class PostController extends Controller
     {
         $this->authorize('update', $post, Post::class);
 
-        $post->update(
-            $request->validate([
-                'title' => ['required', 'min:3', 'max:128', 'string'],
-                'body' => ['required', 'min:3'],
-                'resource_link' => ['nullable', 'string']
-            ])
-        );
+        $request->validate([
+            'title' => ['required', 'min:3', 'max:128', 'string'],
+            'body' => ['required', 'min:3', 'max:2048'],
+            'resource_link' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+        ]);
+
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
+            if ($post->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($post->photo_path, '/storage'));
+        }
+
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'resource_link' => $request->resource_link,
+            'photo_path' => $image_path ? $image_path : $post->photo_path
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano post');
     }

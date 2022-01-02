@@ -36,7 +36,7 @@
                     <AdminNavButton icon="fas fa-calendar-week fa-lg" :href="route('admin.events.index')" :active="route().current('admin.events.index') || route().current('admin.events.show') || route().current('admin.events.task_manager')">Wydarzenia</AdminNavButton>
                     <AdminNavButton icon="fas fa-shopping-basket fa-lg" :href="route('admin.store_items.index')" :active="route().current('admin.store_items.index') || route().current('admin.store_categories.index') || route().current('admin.store_requests.index')">Sklep</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-ankh fa-lg" :href="route('admin.inventory_items.index')" :active="route().current('admin.inventory_items.index') || route().current('admin.inventory_categories.index') || route().current('admin.inventory_services.index')">Sprzęt</AdminNavButton>
-                    <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index')">Posty</AdminNavButton>
+                    <AdminNavButton icon="fas fas fa-clone fa-lg" :href="route('admin.posts.index')" :active="route().current('admin.posts.index') || route().current('admin.posts.show')">Posty</AdminNavButton>
                     <AdminNavButton icon="fas fas fa-images fa-lg" :href="route('admin.photos.index')" :active="route().current('admin.photo_categories.index') || route().current('admin.photos.index')">Zdjęcia</AdminNavButton>
                 </div>
 
