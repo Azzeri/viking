@@ -18,19 +18,19 @@ class InventoryService extends Model
 
     public function assignedUser()
     {
-        return $this->belongsTo(User::class, 'assigned_user');
+        return $this->belongsTo(User::class, 'assigned_user')->withTrashed();
         
     }
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
         
     }
 
     public function performedBy()
     {
-        return $this->belongsTo(User::class, 'performed_by');
+        return $this->belongsTo(User::class, 'performed_by')->withTrashed();
         
     }
 }

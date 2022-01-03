@@ -179,6 +179,9 @@ return [
         'photo_category_id' => 'ID kategorii zdjęć',
         'images' => 'zdjęcia',
         'inventory_category_id' => 'ID kategorii sprzętu',
+        'date_due' => 'termin',
+        'notification' => 'przypomnienie',
+        'assigned_user' => 'przypisany użytkownik'
 
     ],
 

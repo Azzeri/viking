@@ -56,28 +56,56 @@ class InventoryServiceController extends Controller
         }
 
         if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
+            if (request('field') == 'inventory_item_id')
+                $query->orderBy(InventoryItem::select('name')->whereColumn('inventory_items.id', 'inventory_services.inventory_item_id'), request('direction'));
+            else
+                $query->orderBy(request('field'), request('direction'));
         } else
             $query->orderBy('date_due', 'desc');
 
-        $services = $query->paginate(9)->withQueryString()
+        $services = $query->paginate(10)->withQueryString()
             ->through(fn ($inventoryItem) => [
                 'id' => $inventoryItem->id,
                 'name' => $inventoryItem->name,
                 'description' => $inventoryItem->description,
-                'created_at' => $inventoryItem->created_at,
-                'created_by' => $inventoryItem->created_by,
-                'created_by_name' =>  $inventoryItem->createdBy->name . ' ' . $inventoryItem->createdBy->surname,
+
+                'created_at_formatted' => Carbon::parse($inventoryItem->created_at)->toFormattedDateString(),
                 'date_due' => $inventoryItem->date_due,
-                'date_performed' => $inventoryItem->date_performed,
+                'date_due_formatted' => Carbon::parse($inventoryItem->date_due)->toFormattedDateString(),
+                'date_performed_formatted' => Carbon::parse($inventoryItem->date_performed)->toFormattedDateString(),
+
                 'notification' => $inventoryItem->notification,
                 'is_finished' => $inventoryItem->is_finished,
-                'assigned_user' => $inventoryItem->assigned_user,
-                'assigned_user_name' => $inventoryItem->assignedUser ? $inventoryItem->assignedUser->name . ' ' . $inventoryItem->assignedUser->surname : null,
-                'assigned_user_id' => $inventoryItem->assignedUser ? $inventoryItem->assignedUser->id : null,
-                'performed_by' => $inventoryItem->performedBy ? $inventoryItem->performedBy->name . ' ' . $inventoryItem->performedBy->surname : null,
-                'inventory_item_id' => $inventoryItem->item->id,
-                'inventory_item_name' => $inventoryItem->item->name,
+
+                'created_by' => array(
+                    'id' => $inventoryItem->createdBy->id,
+                    'name' => $inventoryItem->createdBy->name,
+                    'nickname' => $inventoryItem->createdBy->nickname,
+                    'surname' => $inventoryItem->createdBy->surname
+                ),
+
+                'assigned_user' => $inventoryItem->assigned_user
+                    ? array(
+                        'id' => $inventoryItem->assignedUser->id,
+                        'name' => $inventoryItem->assignedUser->name,
+                        'nickname' => $inventoryItem->assignedUser->nickname,
+                        'surname' => $inventoryItem->assignedUser->surname
+                    )
+                    : null,
+
+                'performed_by' => $inventoryItem->performed_by
+                    ? array(
+                        'id' => $inventoryItem->performedBy->id,
+                        'name' => $inventoryItem->performedBy->name,
+                        'nickname' => $inventoryItem->performedBy->nickname,
+                        'surname' => $inventoryItem->performedBy->surname
+                    )
+                    : null,
+
+                'inventory_item' => array(
+                    'id' => $inventoryItem->item->id,
+                    'name' => $inventoryItem->item->name,
+                )
             ]);
 
         $items = InventoryItem::orderBy('name')->get()->map(fn ($item) => [
