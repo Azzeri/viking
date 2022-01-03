@@ -32,7 +32,10 @@ class InventoryItemController extends Controller
         }
 
         if (request()->has(['field', 'direction'])) {
-            $query->orderBy(request('field'), request('direction'));
+            if (request('field') == 'inventory_category_id')
+                $query->orderBy(InventoryCategory::select('name')->whereColumn('inventory_categories.id', 'inventory_items.inventory_category_id'), request('direction'));
+            else
+                $query->orderBy(request('field'), request('direction'));
         } else
             $query->orderBy('id');
 
@@ -106,15 +109,40 @@ class InventoryItemController extends Controller
     {
         $this->authorize('update', $inventory_item, InventoryItem::class);
 
-        $inventory_item->update($request->validate([
+        $request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
                 Rule::unique('inventory_items')->ignore(InventoryItem::find($inventory_item->id))
             ],
-            'inventory_category_id' => ['required', 'integer', 'exists:inventory_categories,id'],
+            'inventory_category_id' => ['required', 'integer', Rule::exists('inventory_categories', 'id')->where(function ($query) {
+                return $query->where('inventory_category_id', '!=', null);
+            })],
             'description' => ['nullable', 'min:3', 'max:255'],
-            'quantity' => ['required', 'integer', 'min:0', 'max:9999']
-        ]));
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'deleteImage' => ['boolean', 'required']
+        ]);
+
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
+            if ($inventory_item->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($inventory_item->photo_path, '/storage'));
+        }
+
+        if ($request->deleteImage) {
+            Storage::delete('public/' . ltrim($inventory_item->photo_path, '/storage'));
+            $image_path = '/images/default.png';
+        }
+
+        $inventory_item->update([
+            'name' => $request->name,
+            'inventory_category_id' => $request->inventory_category_id,
+            'description' => $request->description,
+            'quantity' => $request->quantity,
+            'photo_path' => $image_path ? $image_path : $inventory_item->photo_path
+
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
     }

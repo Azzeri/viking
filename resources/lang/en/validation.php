@@ -177,7 +177,8 @@ return [
         'resource_link' => 'odnośnik',
         'user_id' => 'ID użytkownika',
         'photo_category_id' => 'ID kategorii zdjęć',
-        'images' => 'zdjęcia'
+        'images' => 'zdjęcia',
+        'inventory_category_id' => 'ID kategorii sprzętu',
 
     ],
 

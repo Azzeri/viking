@@ -3,15 +3,17 @@
 <admin-panel-layout title="Sprzęt">
 	
 	<!-- Data not present -->
-	<template v-if="(!items.data.length || !categories.length) && filters.search == null">
-		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego przedmiotu</h1>
-		<Link :href="route('admin.inventory_categories.index')" class="btn btn-wide btn-secondary mt-4">
-			Kategorie
-		</Link>
-		<button v-if="categories.length" @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
-			<i class="fas fa-plus fa-lg mr-3"></i>
-			Dodaj przedmiot
-		</button>
+		<template v-if="(!items.data.length || !categories.length) && filters.search == null">
+		<h1 class="text-4xl font-bold text-center my-6 lg:my-12">Nie dodano jeszcze żadnego przedmiotu</h1>
+		<div class="flex flex-col gap-4 justify-center items-center">
+			<Link :href="route('admin.inventory_categories.index')" class="btn btn-wide btn-secondary">
+				Kategorie
+			</Link>
+			<button v-if="categories.length" @click="createModalOpened = true" class="btn btn-wide btn-secondary">
+				<i class="fas fa-plus fa-lg mr-3"></i>
+				Dodaj przedmiot
+			</button>
+		</div>
 	</template>
 
 	<!-- Data present -->
@@ -23,10 +25,10 @@
 					Dodaj przedmiot
 				</button>
 				<div class="flex justify-center space-x-2">
-					<Link :href="route('admin.inventory_categories.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+					<Link :href="route('admin.inventory_categories.index')" class="btn btn-secondary sm:btn-sm">
 						Kategorie
 					</Link>
-					<Link :href="route('admin.inventory_services.index')" class="btn btn-secondary sm:w-auto sm:btn-sm">
+					<Link :href="route('admin.inventory_services.index')" class="btn btn-secondary sm:btn-sm">
 						Serwisy
 					</Link>
 				</div>
@@ -34,12 +36,12 @@
 
 			<template #content>
 				<tr v-for="row in items.data" :key="row" class="hover">
-					<td class="font-bold">{{ row.id }}</td>
+					<th class="font-bold">{{ row.id }}</th>
 					<td>{{ row.name }}</td>
 					<td>{{ row.category.name }}</td>
 					<td>{{ row.quantity }}</td>
 					<td class="space-x-2 text-center">
-						<button @click=showDetails(row) class="btn btn-xs btn-accent">Szczegóły</button>
+						<button @click=showDetails(row) class="btn btn-xs btn-primary">Szczegóły</button>
 						<button @click="deleteRow(row)" class="btn btn-xs btn-error">
 							<i class="fas fa-trash cursor-pointer"></i>
 							<span class="ml-1">Usuń</span>
@@ -62,42 +64,56 @@
 						<i :class="{'fas fa-edit':!editMode, 'fas fa-times':editMode}"></i>
 						<span v-html="editMode ? 'Anuluj' : 'Edytuj'" class="ml-2"></span>
 					</button>
-					<button v-if="editMode" @click=update :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
+					<button v-if="editMode" @click="$refs.updateItem.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-xs btn-success">Zapisz</button>
 				</div>
 			</template>
 
 			<template #content>
-				<!-- Form and labels -->
-				<form>
-					<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
-					<div class="flex items-start justify-between my-4">
-						<div>
-							<template v-if=!editMode>
-								<span class="font-bold text-lg">{{ selectedItem.id }}.</span>
-								<span class="mx-2 text-lg">{{ selectedItem.name }}</span>
-								<span class="font-bold">{{ selectedItem.quantity }}szt.</span>
-							</template>
-							<h1 v-else class="text-lg font-bold">
-								{{`${selectedItem.id}.`}}
-								<input v-model="form.name" type="text" class="input input-primary input-sm w-60" required/>
-								<input v-model="form.quantity" type="number" class="input input-primary input-sm w-20 ml-2" min=0 max=9999 required />
-								<span class="ml-1">szt.</span>
-							</h1>
-
-							<h2 v-if=!editMode class="text-gray-600">{{ selectedItem.category.name }}</h2>
-							<select v-else v-model=form.inventory_category_id class="select select-bordered select-primary select-sm mt-2 ml-5 w-60 text-sm">
-								<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
-							</select>
-						</div>						
+				<template v-if="!editMode">
+					<div class="flex mt-4">
+						<img :src="selectedItem.photo_path" :alt="selectedItem.name" class="block h-24 w-24 object-cover mask mask-squircle">
+						<div class="flex flex-col">
+							<div class="flex gap-1 ml-1 mt-1">
+								<h1 class="text-lg font-bold">{{ `${selectedItem.id}.` }}</h1>
+								<h1	class="text-lg font-semibold">{{ selectedItem.name }}</h1>
+							</div>
+							<h2 class="text-xm text-gray-500 ml-1">{{ selectedItem.category.name }}</h2>
+							<div class="flex gap-2 ml-1 mt-2">
+								<span class="font-semibold">{{ `${selectedItem.quantity}szt.` }}</span>
+							</div>
+						</div>
 					</div>
+					<p class="ml-1 mt-4 text-justify">{{ selectedItem.description }}</p>
+				</template>
+				<template v-else>
+					<form @submit.prevent="update">
+						<input type="file" id="upload-file-update" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
+						<div class="flex my-4 space-x-2 w-full">
+							<div class="mx-auto indicator flex-shrink-0">
+								<div class="indicator-item indicator-start">
+									<label @click="removeImage()" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></label>
+								</div> 
+								<img @click="$refs.photo.click()" v-if="url && form.image" :src="url" class="block h-24 w-24 object-cover mask mask-squircle hover:opacity-70 cursor-pointer" />
+								<img @click="$refs.photo.click()" v-else :src="selectedItem.photo_path" :alt="selectedItem.name" id="category-image" class="hover:opacity-70 cursor-pointer block h-24 w-24 object-cover mask mask-squircle">
+							</div>
+							<div class="flex flex-col mt-1 gap-2 justify-center w-full">
+								<select v-model=form.inventory_category_id class="select select-bordered select-primary select-sm text-sm w-full">
+									<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
+								</select>
+								<form-input-field id="edit-item-name" type="text" name="Nazwa" :required="true" model="name" :form="form" min="3" max="64" :label="false" extraClass="input-sm w-full"></form-input-field>							
+							</div>
+						</div>
+						<div class="flex flex-col gap-2">
+							<div class="flex gap-2 items-end">
+								<form-input-field type="number" name="Ilość" :required="true" model="quantity" :form="form" min="0" max="9999" :label="false" extraClass="input-sm w-full"></form-input-field>szt.
+							</div>
+							<textarea v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
+						</div>
 
-					<!-- Content -->
-					<div class="mt-4 flex space-x-4">
-						<img :src="selectedItem.photo_path" :alt="selectedItem.name" class="block h-24 w-24 object-cover mask mask-squircle" />
-						<p v-if=!editMode class="text-justify">{{ selectedItem.description ?? 'Nie dodano opisu'}}</p>
-						<textarea v-else v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..."></textarea>
-					</div>
-				</form>
+						<input type="submit" ref="updateItem" class="hidden" />
+					</form>
+					
+				</template>
 			</template>
 
 		</Modal>
@@ -110,7 +126,7 @@
 		</template>
 
 		<template #content>
-			<form>
+			<form @submit.prevent="store">
 				<div class="form-control mt-4">
 
 					<label class="label"><span class="label-text">Kategoria<span class="ml-1 text-red-500">*</span></span></label> 
@@ -118,18 +134,13 @@
 						<option v-for="row in categories" :key=row.id :value=row.id>{{ row.name }}</option>
 					</select>
 
-					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa" class="input input-primary input-bordered" required>
-					<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
-
-					<label class="label"><span class="label-text">Ilość<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.quantity type="number" placeholder="Ilość" class="input input-primary input-bordered" min=0 max=9999 required>
-					<label v-if="form.errors.quantity" class="label label-text-alt text-error text-sm">{{ form.errors.quantity }}</label>
+					<form-input-field type="text" name="Nazwa" :required="true" model="name" :form="form" min="3" max="64" ></form-input-field>
+					<form-input-field type="number" name="Ilość" :required="true" model="quantity" :form="form" min="0" max="9999" ></form-input-field>
 
 					<label class="label">
 						<span class="label-text">Opis</span>
 					</label> 
-					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." max=255 min=3></textarea>
+					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." maxlength=255 minlength=3></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
 
 					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
@@ -143,11 +154,12 @@
 					<label v-if="form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
 
 				</div> 
+				<input type="submit" ref="createItemSubmit" class="hidden" />
 			</form>
 		</template>
 
 		<template #footer>
-			<button @click=store :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
+			<button @click="$refs.createItemSubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn  btn-info w-full ">Dodaj</button>
 		</template>
 	</Modal>
 
@@ -155,12 +167,13 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import DataTable from '@/Components/DataTable.vue'
 import Modal from '@/Components/CrudModal.vue'
+import FormInputField from "@/Components/FormInputField.vue";
 
 export default defineComponent({
 	props: {
@@ -190,7 +203,8 @@ export default defineComponent({
 			image: null,
             description: null,
             quantity: null,
-            inventory_category_id: props.categories.length ? props.categories[0].id : 0
+            inventory_category_id: props.categories.length ? props.categories[0].id : 0,
+			deleteImage: false
 		})
 
 		// Reset form
@@ -226,6 +240,11 @@ export default defineComponent({
             form.description = row.description
 			form.inventory_category_id = row.inventory_category_id
             form.quantity = row.quantity
+
+			nextTick(() => {
+				if(document.getElementById('edit-item-name'))
+					document.getElementById('edit-item-name').focus()
+			}) 
 		}
 
 		// Store item
@@ -237,7 +256,7 @@ export default defineComponent({
 
 		// Update item
 		const update = _ => { 
-			form.put(route('admin.inventory_items.update', form.id), {
+			form.post(route(`admin.inventory_items.update`, { inventory_item:selectedItem.value.id, _method:'put' }), {
 				onSuccess: () => {
 					reset()
 					selectedItem.value = props.items.data.find(element => element.id == selectedItem.value.id)
@@ -258,6 +277,7 @@ export default defineComponent({
 
 		const removeImage = _ => {
 			form.image = null
+			form.deleteImage = true
 			document.getElementById('category-image').src = "/images/default.png"
 		}
 
@@ -295,6 +315,7 @@ export default defineComponent({
 		Link,
 		DataTable,
 		Modal,
+		FormInputField
 	},
 
 });
