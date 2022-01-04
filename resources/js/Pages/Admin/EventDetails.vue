@@ -3,18 +3,15 @@
 
         <!-- Name and actions -->
         <div class="flex flex-col space-y-3 w-full items-center sm:mt-8">
-            <div class="flex space-x-2 self-start">
+            <div class="flex flex-wrap gap-2 self-start shadow-lg p-3 rounded-2xl border w-full justify-center">
                 <Link :href="route('admin.events.index')" as="button" class="btn btn-sm btn-primary">
                     <i class="fas fa-arrow-left mr-1"></i>
                     Powrót
                 </Link>
-                <h1 class="text-2xl font-bold">{{ event.name }}</h1>
-            </div>
-            <div class="flex flex-wrap gap-2 self-start shadow-lg p-3 rounded-2xl border w-full justify-center">
-                <Link :href="route('admin.events.task_manager', event)" as="button" class="btn btn-sm btn-primary">Zadania</Link>
+                <Link :href="route('admin.events.task_manager', event)" as="button" class="btn btn-sm btn-accent">Zadania</Link>
                 <template v-if="!event.is_finished">
-                    <button v-if="!userInParticipants($page.props.user.id)" @click=confirmParticipation() class="btn btn-sm">Biorę udział</button>
-                    <button v-else @click=confirmParticipation() class="btn btn-sm">Nie biorę udziału</button>
+                    <button v-if="!userInParticipants($page.props.user.id)" @click=confirmParticipation class="btn btn-sm">Biorę udział</button>
+                    <button v-else @click=confirmParticipation class="btn btn-sm">Nie biorę udziału</button>
                     <button @click="openSummary()" class="btn btn-sm">Podsumuj</button>
                     <button @click="openEdit()" class="btn btn-sm btn-info">
                         <i class="fas fa-edit mr-1"></i>
@@ -29,16 +26,20 @@
         </div>
 
         <!-- Cards -->
-        <div class="w-full flex flex-col space-y-5 max-w-4xl">
+        <div class="w-full flex flex-col lg:flex-row justify-between max-w-4xl mt-5 gap-2">
             <!-- Details card -->
-            <div class="card border shadow-lg">
+            <div class="card border shadow-lg w-full">
                 <div class="pt-8 pl-8">
                     <div class="card-title sticky top-0 mb-0">
-                        <h1>Szczegóły</h1>
+                        <h1>{{ event.name }}</h1>
                     </div>
                 </div>
-                <div class="card-body overflow-y-auto pt-6 pl-10">
-                    <div class="flex space-x-2 items-center">
+                <div class="card-body pt-6 pl-10">
+                    <div class="flex">
+                        <img :src="event.photo_path" :alt="event.name" class="w-64 h-64 object-cover rounded-lg" />
+
+                    </div>
+                    <div class="flex space-x-2 items-center mt-4">
                         <i class="fas fa-calendar-week"></i>
                         <span>{{ `${event.date_start_parsed} - ${event.date_end_parsed}` }}</span>
                     </div>
@@ -46,6 +47,7 @@
                         <i class="fas fa-clock"></i>
                         <span>{{ `${event.time_start} ${event.time_end ? ` - ${event.time_end}` : ''}` }}</span>
                     </div>
+
                     <div class="flex space-x-2 items-center mt-6">
                         <i class="fas fa-map"></i>
                         <span>Adres</span>
@@ -60,7 +62,7 @@
                         <i class="fas fa-align-justify"></i>
                         <span>Opis</span>
                     </div>
-                    <p>{{ event.description }}</p>
+                    <p class="text-justify">{{ event.description }}</p>
 
                     <div v-if="event.is_finished" class="flex space-x-2 items-center mt-6">
                         <i class="fas fa-align-justify"></i>
@@ -71,7 +73,7 @@
             </div> 
 
             <!-- Participants card -->
-            <div class="card border shadow-lg">
+            <div class="card border shadow-lg w-full">
                 <div class="pt-8 pl-8">
                     <div class="card-title sticky top-0 mb-0">
                         <h1>Uczestnicy</h1>
@@ -83,7 +85,7 @@
                             <div class="flex space-x-2 items-center">
                                 <div class="avatar">
                                     <div class="rounded-full w-10 h-10">
-                                        <img src="http://daisyui.com/tailwind-css-component-profile-1@40w.png">
+                                        <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
                                     </div>
                                 </div>
                                 <span>{{ `${row.name} ${row.nickname ? `"${row.nickname}"` : ''} ${row.surname}` }}</span>
@@ -106,89 +108,88 @@
 
                 <!-- Summary -->
                 <template v-if="modals.summary">
-                    <form @submit.prevent=update>
+                    <form @submit.prevent=finish>
                         <div class="form-control mt-4">
-					        <textarea v-model=formSummary.description_summary class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Podsumowanie..."></textarea>
+					        <textarea v-model=formSummary.description_summary class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Podsumowanie..." minlength="3" maxlength="512"></textarea>
 					        <label v-if="formSummary.errors.description_summary" class="label label-text-alt text-error text-sm">{{ formSummary.errors.description_summary }}</label>
                         </div> 
+                        <input type="submit" ref="finishEventSubmit" class="hidden" />
                     </form>
                 </template>
 
                 <!-- Edit -->
                 <template v-if="modals.edit">
-                    <form>
+                    <form @submit.prevent="update">
                         <div class="form-control mt-4">
-                            <label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-                            <input v-model=formEdit.name type="text" placeholder="Nazwa wydarzenia" class="input input-primary input-bordered" required>
-                            <label v-if="formEdit.errors.name" class="label label-text-alt text-error text-sm">{{ formEdit.errors.name }}</label>
+                            <form-input-field id="focus-create" type="text" name="Nazwa" :required="true" model="name" :form="formEdit" max="128" min="3"></form-input-field>
 
                             <div class="flex space-x-2 mt-4">
                                 <div class="w-1/2">
-                                    <label class="label"><span class="label-text">Rozpoczęcie<span class="ml-1 text-red-500">*</span></span></label> 
-                                    <input v-model=formEdit.date_start type="date" :min=currentDate() class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="date" name="Rozpoczęcie" :required="true" model="date_start" :form="formEdit" :min="currentDate()" extraClass="w-full"></form-input-field>
                                 </div>
                                 <div class="w-1/2">
                                     <label class="label"><span class="label-text text-white">Rozpoczęcie</span></label> 
-                                    <input v-model=formEdit.time_start type="time" class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="time" name="Rozpoczęcie" :required="true" model="time_start" :form="formEdit" :label=false extraClass="w-full"></form-input-field>
                                 </div>
                             </div>
-                            <label v-if="formEdit.errors.date_start" class="label label-text-alt text-error text-sm">{{ formEdit.errors.date_start }}</label>
-                            <label v-if="formEdit.errors.time_start" class="label label-text-alt text-error text-sm">{{ formEdit.errors.time_start }}</label>
 
                             <div class="flex space-x-2">
                                 <div class="w-1/2">
-                                    <label class="label"><span class="label-text">Zakończenie<span class="ml-1 text-red-500">*</span> (czas opcjonalny)</span></label> 
-                                    <input v-model=formEdit.date_end type="date" :min=currentDate() class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="date" name="Zakończenie" :required="true" model="date_end" :form="formEdit" :min="currentDate()" extraClass="w-full"></form-input-field>
                                 </div>
                                 <div class="w-1/2">
-                                    <label class="label"><span class="label-text text-white">Zakończenie (czas opcjonalny)</span></label> 
-                                    <input v-model=formEdit.time_end type="time" class="input input-primary input-bordered w-full">
+                                    <label class="label"><span class="label-text text-white">Zakończenie</span></label> 
+                                    <form-input-field type="time" name="Zakończenie" :required="false" model="time_end" :form="formEdit" :label=false extraClass="w-full"></form-input-field>
                                 </div>
                             </div>
-                            <label v-if="formEdit.errors.date_end" class="label label-text-alt text-error text-sm">{{ formEdit.errors.date_end }}</label>
-                            <label v-if="formEdit.errors.time_end" class="label label-text-alt text-error text-sm">{{ formEdit.errors.time_end }}</label>
 
                             <div class="flex mt-4 space-x-2">
                                 <div class="w-full">
-                                    <label class="label"><span class="label-text">Ulica<span class="ml-1 text-red-500">*</span></span></label> 
-                                    <input v-model=formEdit.addrStreet type="text" placeholder="Ulica" class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="text" name="Ulica" :required="true" model="addrStreet" :form="formEdit" extraClass="w-full" min="3" max="64"></form-input-field>
                                 </div>
                                 <div class="w-24">
-                                    <label class="label"><span class="label-text">Nr<span class="ml-1 text-red-500">*</span></span></label> 
-                                    <input v-model=formEdit.addrNumber type="text" placeholder="Nr" class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="text" name="Nr" :required="true" model="addrNumber" :form="formEdit" extraClass="w-full" min="1" max="10"></form-input-field>
                                 </div>
                             </div>
 
                             <div class="flex space-x-2">
                                 <div class="w-48">
-                                    <label class="label"><span class="label-text">Kod<span class="ml-1 text-red-500">*</span></span></label> 
-                                    <input v-model=formEdit.addrPostCode type="text" placeholder="Kod pocztowy" class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="text" name="Kod" :required="true" model="addrPostCode" :form="formEdit" extraClass="w-full" min="3" max="10"></form-input-field>
                                 </div>
                                 <div class="w-full">
-                                    <label class="label"><span class="label-text">Miejscowość<span class="ml-1 text-red-500">*</span></span></label> 
-                                    <input v-model=formEdit.addrTown type="text" placeholder="Miejscowość" class="input input-primary input-bordered w-full" required>
+                                    <form-input-field type="text" name="Miejscowość" :required="true" model="addrTown" :form="formEdit" extraClass="w-full" min="3" max="64"></form-input-field>
                                 </div>
                             </div>
-                            <label v-if="formEdit.errors.addrStreet" class="label label-text-alt text-error text-sm">{{ formEdit.errors.addrStreet }}</label>
-                            <label v-if="formEdit.errors.addrNumber" class="label label-text-alt text-error text-sm">{{ formEdit.errors.addrNumber }}</label>
-                            <label v-if="formEdit.errors.addrPostCode" class="label label-text-alt text-error text-sm">{{ formEdit.errors.addrPostCode }}</label>
-                            <label v-if="formEdit.errors.addrTown" class="label label-text-alt text-error text-sm">{{ formEdit.errors.addrTown }}</label>
 
                             <label class="label mt-4">
                                 <span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
                             </label> 
-                            <textarea v-model=formEdit.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required></textarea>
+                            <textarea v-model=formEdit.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required min="3" max="512"></textarea>
                             <label v-if="formEdit.errors.description" class="label label-text-alt text-error text-sm">{{ formEdit.errors.description }}</label>
+                                
+                            <img id="event-image-update-form" v-if="formEdit.image == null" :src="event.photo_path" class="block h-24 w-24 object-cover mask mask-squircle mt-2 self-center" />
+
+                            <input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="formEdit.image = $event.target.files[0]" class="hidden" />
+                            <div v-if="url && formEdit.image" class="mx-auto indicator mt-2">
+                                <div class="indicator-item">
+                                    <button v-if="url && formEdit.image" @click="formEdit.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
+                                </div> 
+                                <img :src="url" class="block h-24 w-24 object-cover mask mask-squircle" />
+                            </div>
+                            <label for="upload-file-store" refs="upload-file" class="btn btn-primary mt-2">Zmień zdjęcie</label>
+                            <label v-if="formEdit.hasErrors && formEdit.errors.image" class="label label-text-alt text-error text-sm">{{ formEdit.errors.image }}</label>
+							<label v-if="event.photo_path != '/images/default.png'" @click=removeImage class="btn btn-error mt-2">Usuń zdjęcie</label>
                             
                         </div>
+                        <input type="submit" ref="updateEventSubmit" class="hidden" />
                     </form>
                 </template>
 
             </template>
 
             <template #footer>
-                <button v-if="modals.summary" @click=finish() :disabled="formSummary.processing" :class="{ 'loading': formSummary.processing }" class="btn btn-primary w-full">Zapisz</button>
-                <button v-else @click=update() :disabled="formEdit.processing" :class="{ 'loading': formEdit.processing }" class="btn btn-primary w-full">Zapisz</button>
+                <button v-if="modals.summary" @click="$refs.finishEventSubmit.click()" :disabled="formSummary.processing" :class="{ 'loading': formSummary.processing }" class="btn btn-primary w-full">Zapisz</button>
+                <button v-else @click="$refs.updateEventSubmit.click()" :disabled="formEdit.processing" :class="{ 'loading': formEdit.processing }" class="btn btn-primary w-full">Zapisz</button>
             </template>
         </Modal> 
 
@@ -201,6 +202,7 @@ import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Modal from '@/Components/CrudModal.vue'
+import FormInputField from "@/Components/FormInputField.vue";
 
 export default defineComponent({
 
@@ -212,6 +214,8 @@ export default defineComponent({
         // Modal visibility
         const modalOpened = ref(false)
         const modals = ref({ edit:false, summary:false })
+
+        const url = ref(null)
 
         // Edit form
 		const formEdit = useForm({
@@ -227,7 +231,9 @@ export default defineComponent({
 			addrPostCode:props.event.addrPostCode,
 			addrTown:props.event.addrTown,
 
-			description:props.event.description
+			description:props.event.description,
+            image: null,
+            deleteImage:false
 		})
 
         // Summary form
@@ -271,7 +277,7 @@ export default defineComponent({
 
         // Update event data
         const update = _ => { 
-			formEdit.put(route('admin.events.update', props.event.id), {
+			formEdit.post(route(`admin.events.update`, { event:props.event.id, _method:'put' }), {
 				onSuccess: () => close()
 			}) 
 		}
@@ -290,6 +296,18 @@ export default defineComponent({
             if(props.event.participants)
                 return props.event.participants.some((ele) => ele.id == id)
         }
+
+        const previewImage = (e) => {
+            url.value = URL.createObjectURL(e.target.files[0])
+            formEdit.deleteImage = false
+        }
+
+		const removeImage = _ => {
+			formEdit.image = null
+            const element = document.getElementById('event-image-update-form')
+            if (element)
+			    element.src = "/images/default.png"
+		}
 
         // Checks if authenticated user has an administrator privileges
 		const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
@@ -310,13 +328,17 @@ export default defineComponent({
             currentDate, 
             openSummary, 
             openEdit, 
+            url,
+            previewImage,
+            removeImage
         }
 	},
 
 	components: {
 		AdminPanelLayout,
 		Link,
-        Modal
+        Modal,
+        FormInputField
 	},
 
 });

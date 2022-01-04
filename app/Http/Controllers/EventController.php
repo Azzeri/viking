@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class EventController extends Controller
@@ -72,16 +73,16 @@ class EventController extends Controller
         $this->authorize('create', Event::class);
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:events'],
+            'name' => ['required', 'string', 'min:3', 'max:128', 'unique:events'],
             'date_start' => ['required', 'date', 'after_or_equal:today'],
             'time_start' => ['required', 'date_format:H:i'],
             'date_end' => ['required', 'date', 'after_or_equal:date_start'],
             'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
-            'addrStreet' => ['required'],
-            'addrNumber' => ['required', 'alpha_num'],
-            'addrPostCode' => ['required', 'alpha_dash'],
-            'addrTown' => ['required'],
-            'description' => ['required', 'min:3', 'max:255'],
+            'addrStreet' => ['required', 'min:3', 'max:64'],
+            'addrNumber' => ['required', 'alpha_num', 'min:1', 'max:10'],
+            'addrPostCode' => ['required', 'alpha_dash', 'min:3', 'max:10'],
+            'addrTown' => ['required', 'min:3', 'max:64'],
+            'description' => ['required', 'min:3', 'max:512'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
         ]);
 
@@ -120,16 +121,13 @@ class EventController extends Controller
             'time_start' => substr($event->time_start, 0, 5),
             'time_end' => substr($event->time_end, 0, 5),
             'is_finished' => $event->is_finished,
+            'photo_path' => $event->photo_path,
             'participants' => $event->participants ? User::whereIn('id', json_decode($event->participants))->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
             ]) : null,
-            // 'items' => $event->items ? InventoryItem::whereIn('id', json_decode($event->items))->orderBy('name')->get()->map(fn ($item) => [
-            //     'id' => $item->id,
-            //     'name' => $item->name,
-            // ]) : null
         );
 
         return inertia('Admin/EventDetails', [
@@ -189,20 +187,36 @@ class EventController extends Controller
     {
         $this->authorize('update', $event, Event::class);
 
-        $event->update(
-            $request->validate([
-                'name' => ['required', 'string', 'min:3', 'max:64', Rule::unique('events')->ignore($event)],
-                'date_start' => ['required', 'date', 'after_or_equal:today'],
-                'time_start' => ['required', 'date_format:H:i'],
-                'date_end' => ['required', 'date', 'after_or_equal:date_start'],
-                'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
-                'addrStreet' => ['required'],
-                'addrNumber' => ['required', 'alpha_num'],
-                'addrPostCode' => ['required', 'alpha_dash'],
-                'addrTown' => ['required'],
-                'description' => ['required', 'min:3', 'max:255']
-            ])
-        );
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:128', Rule::unique('events')->ignore($event)],
+            'date_start' => ['required', 'date', 'after_or_equal:today'],
+            'time_start' => ['required', 'date_format:H:i'],
+            'date_end' => ['required', 'date', 'after_or_equal:date_start'],
+            'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+            'addrStreet' => ['required', 'min:3', 'max:64'],
+            'addrNumber' => ['required', 'alpha_num', 'min:1', 'max:10'],
+            'addrPostCode' => ['required', 'alpha_dash', 'min:3', 'max:10'],
+            'addrTown' => ['required', 'min:3', 'max:64'],
+            'description' => ['required', 'min:3', 'max:512'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'deleteImage' => ['boolean', 'required']
+        ]);
+
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
+            if ($event->photo_path != '/images/default.png')
+                Storage::delete('public/' . ltrim($event->photo_path, '/storage'));
+        }
+
+        if ($request->deleteImage) {
+            Storage::delete('public/' . ltrim($event->photo_path, '/storage'));
+            $image_path = '/images/default.png';
+        }
+
+        $event->update($validated + [
+            'photo_path' => $image_path ? $image_path : $event->photo_path
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano wydarzenie');
     }
@@ -218,6 +232,7 @@ class EventController extends Controller
         $this->authorize('delete', $event, Event::class);
 
         $event->delete();
+        Storage::delete('public/' . ltrim($event->photo_path, '/storage'));
 
         return redirect()->route('admin.events.index')->with('message', 'Pomyślnie usunięto wydarzenie');
     }
@@ -235,7 +250,7 @@ class EventController extends Controller
 
         $event->update(
             $request->validate([
-                'description_summary' => ['nullable', 'min:3', 'max:255'],
+                'description_summary' => ['nullable', 'min:3', 'max:512'],
                 'is_finished' => ['required', 'boolean', 'accepted']
             ])
         );
@@ -257,19 +272,17 @@ class EventController extends Controller
         $participants = $event->participants ? json_decode($event->participants) : array();
 
         if (!in_array(Auth::user()->id, $participants)) {
+            $message = 'Potwierdzono Twój udział w wydarzeniu';
             array_push($participants, Auth::user()->id);
-            $event->update([
-                'participants' => $participants
-            ]);
-
-            return redirect()->back()->with('message', 'Potwierdzono Twój udział w wydarzeniu');
         } else {
+            $message = 'Wypisano Cię z wydarzenia';
             unset($participants[array_search(Auth::user()->id, $participants)]);
-            $event->update([
-                'participants' => $participants
-            ]);
-
-            return redirect()->back()->with('message', 'Wypisano Cię z wydarzenia');
         }
+
+        $event->update([
+            'participants' => $participants
+        ]);
+
+        return redirect()->back()->with('message', $message);
     }
 }

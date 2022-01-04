@@ -4174,6 +4174,9 @@ html {
 .m-1 {
 	margin: 0.25rem;
 }
+.m-0 {
+	margin: 0px;
+}
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
@@ -4209,6 +4212,14 @@ html {
 .my-4 {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
+}
+.my-8 {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+.my-5 {
+	margin-top: 1.25rem;
+	margin-bottom: 1.25rem;
 }
 .ml-3 {
 	margin-left: 0.75rem;
@@ -4429,6 +4440,18 @@ html {
 .w-1\/4 {
 	width: 25%;
 }
+.w-3 {
+	width: 0.75rem;
+}
+.w-3\/5 {
+	width: 60%;
+}
+.w-3\/6 {
+	width: 50%;
+}
+.w-4\/6 {
+	width: 66.666667%;
+}
 .min-w-0 {
 	min-width: 0px;
 }
@@ -4464,6 +4487,9 @@ html {
 }
 .flex-shrink-0 {
 	flex-shrink: 0;
+}
+.flex-grow-0 {
+	flex-grow: 0;
 }
 .origin-top-left {
 	transform-origin: top left;
@@ -4878,9 +4904,17 @@ html {
 .bg-no-repeat {
 	background-repeat: no-repeat;
 }
+.object-contain {
+	-o-object-fit: contain;
+	   object-fit: contain;
+}
 .object-cover {
 	-o-object-fit: cover;
 	   object-fit: cover;
+}
+.object-fill {
+	-o-object-fit: fill;
+	   object-fit: fill;
 }
 .p-2 {
 	padding: 0.5rem;
