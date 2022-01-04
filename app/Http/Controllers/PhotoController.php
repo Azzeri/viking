@@ -41,6 +41,8 @@ class PhotoController extends Controller
             'name' => $category->name,
         ]);
 
+        if (sizeof($subcategories) == 0)
+            return redirect()->route('admin.photo_categories.index');
         $query = Photo::query();
 
         if (request('filter'))
