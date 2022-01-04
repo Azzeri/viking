@@ -4381,6 +4381,9 @@ html {
 .h-32 {
 	height: 8rem;
 }
+.h-40 {
+	height: 10rem;
+}
 .max-h-64 {
 	max-height: 16rem;
 }
@@ -4907,6 +4910,10 @@ html {
 	--tw-bg-opacity: 1;
 	background-color: hsla(var(--p) / var(--tw-bg-opacity));
 }
+.bg-red-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
 }
@@ -4925,8 +4932,20 @@ html {
 .bg-cover {
 	background-size: cover;
 }
+.bg-contain {
+	background-size: contain;
+}
+.bg-fixed {
+	background-attachment: fixed;
+}
+.bg-local {
+	background-attachment: local;
+}
 .bg-center {
 	background-position: center;
+}
+.bg-bottom {
+	background-position: bottom;
 }
 .bg-no-repeat {
 	background-repeat: no-repeat;
@@ -4960,6 +4979,9 @@ html {
 }
 .p-4 {
 	padding: 1rem;
+}
+.p-8 {
+	padding: 2rem;
 }
 .px-4 {
 	padding-left: 1rem;
@@ -5305,6 +5327,15 @@ html {
 }
 .opacity-25 {
 	opacity: 0.25;
+}
+.opacity-80 {
+	opacity: 0.8;
+}
+.opacity-90 {
+	opacity: 0.9;
+}
+.bg-blend-screen {
+	background-blend-mode: screen;
 }
 .shadow-sm {
 	--tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
