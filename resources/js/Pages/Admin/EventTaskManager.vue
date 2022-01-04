@@ -2,7 +2,7 @@
 	<admin-panel-layout title="Menedżer zadań">
 
 		<!-- Name and return button -->
-		<div class="flex space-x-2 self-start items-center">
+		<div class="flex space-x-2 self-start items-center my-2">
 			<Link :href="route('admin.events.show', event)" as="button" class="btn btn-sm btn-primary">
 				<i class="fas fa-arrow-left mr-1"></i>
 				Powrót

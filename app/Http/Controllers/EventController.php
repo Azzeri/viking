@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\EventTask;
 use App\Models\EventTaskState;
-use App\Models\InventoryItem;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -49,7 +48,7 @@ class EventController extends Controller
         $events = $query->paginate()->withQueryString()
             ->through(fn ($event) => [
                 'id' => $event->id,
-                'name' => $event->name,
+                'name' => strlen($event->name) > 43 ? substr($event->name, 0, 43) . '...' : $event->name,
                 'addrTown' => $event->addrTown,
                 'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
                 'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
@@ -72,20 +71,25 @@ class EventController extends Controller
     {
         $this->authorize('create', Event::class);
 
-        Event::create(
-            $request->validate([
-                'name' => ['required', 'string', 'min:3', 'max:64', 'unique:events'],
-                'date_start' => ['required', 'date', 'after_or_equal:today'],
-                'time_start' => ['required', 'date_format:H:i'],
-                'date_end' => ['required', 'date', 'after_or_equal:date_start'],
-                'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
-                'addrStreet' => ['required'],
-                'addrNumber' => ['required', 'alpha_num'],
-                'addrPostCode' => ['required', 'alpha_dash'],
-                'addrTown' => ['required'],
-                'description' => ['required', 'min:3', 'max:255']
-            ])
-        );
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:64', 'unique:events'],
+            'date_start' => ['required', 'date', 'after_or_equal:today'],
+            'time_start' => ['required', 'date_format:H:i'],
+            'date_end' => ['required', 'date', 'after_or_equal:date_start'],
+            'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+            'addrStreet' => ['required'],
+            'addrNumber' => ['required', 'alpha_num'],
+            'addrPostCode' => ['required', 'alpha_dash'],
+            'addrTown' => ['required'],
+            'description' => ['required', 'min:3', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+        ]);
+
+        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
+
+        Event::create($validated + [
+            'photo_path' => $image_path ? $image_path : '/images/default.png'
+        ]);
 
         return redirect()->back()->with('message', 'Pomyślnie utworzono wydarzenie');
     }

@@ -4198,6 +4198,10 @@ html {
 	margin-top: 4rem;
 	margin-bottom: 4rem;
 }
+.my-2 {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
 .mx-5 {
 	margin-left: 1.25rem;
 	margin-right: 1.25rem;
@@ -4205,10 +4209,6 @@ html {
 .my-4 {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
-}
-.my-2 {
-	margin-top: 0.5rem;
-	margin-bottom: 0.5rem;
 }
 .ml-3 {
 	margin-left: 0.75rem;

@@ -181,8 +181,20 @@ return [
         'inventory_category_id' => 'ID kategorii sprzętu',
         'date_due' => 'termin',
         'notification' => 'przypomnienie',
-        'assigned_user' => 'przypisany użytkownik'
+        'assigned_user' => 'przypisany użytkownik',
 
+
+        'date_start' => 'data rozpoczęcia',
+        'time_start' => 'czas rozpoczęcia',
+        'date_end' => 'data zakończenia',
+        'time_end' => 'czas zakończenia',
+        'addrStreet' => 'ulica',
+        'addrNumber' => 'nr',
+        'addrPostCode' => 'kod pocztowy',
+        'addrTown' => 'miejscowość',
+        'description_summary' => 'podsumowanie',
+        'is_finished' => 'czy zakończono',
+        'participants' => 'uczestnicy'
     ],
 
 ];

@@ -4,7 +4,7 @@
 	<!-- Data not present -->
     <template v-if="!events.data.length && filters.search == null && filters.filter != null && filters.filter != 1">
 		<h1 class="text-4xl font-bold text-center mt-6 lg:mt-12">Nie dodano jeszcze żadnego wydarzenia</h1>
-		<button @click="createModalOpened = true" class="btn btn-wide btn-secondary mt-4">
+		<button @click="createEvent" class="btn btn-wide btn-secondary mt-4">
 			<i class="fas fa-plus fa-lg mr-3"></i>
 			Dodaj wydarzenie
 		</button>
@@ -15,7 +15,7 @@
 		<DataTable :columns=columns :data=events :filters=filters :frontFilters=frontFilters sortRoute="admin.events.index">
 
 			<template #buttons>
-				<button @click="createModalOpened = true" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
+				<button @click="createEvent" class="btn btn-primary w-full sm:w-auto sm:btn-sm">
 					<i class="fas fa-plus fa-lg mr-2"></i>
 					Dodaj wydarzenie
 				</button>
@@ -23,7 +23,7 @@
 
 			<template #content>
 				<tr v-for="row in events.data" :key="row" class="hover">
-					<td class="font-bold">{{ row.id }}</td>
+					<th class="font-bold">{{ row.id }}</th>
 					<td>{{ row.name }}</td>
 					<td>{{ row.addrTown }}</td>
 					<td>{{ `${row.date_start} - ${row.date_end}` }}</td>
@@ -41,76 +41,71 @@
 		</template>
 
 		<template #content>
-			<form>
+			<form @submit.prevent="store">
 				<div class="form-control mt-4">
-					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=form.name type="text" placeholder="Nazwa wydarzenia" class="input input-primary input-bordered" required>
-					<label v-if="form.errors.name" class="label label-text-alt text-error text-sm">{{ form.errors.name }}</label>
+					<form-input-field id="focus-create" type="text" name="Nazwa" :required="true" model="name" :form="form" max="128" min="3"></form-input-field>
 
 					<div class="flex space-x-2 mt-4">
 						<div class="w-1/2">
-							<label class="label"><span class="label-text">Rozpoczęcie<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.date_start type="date" :min=currentDate() class="input input-primary input-bordered w-full" required>
+							<form-input-field type="date" name="Rozpoczęcie" :required="true" model="date_start" :form="form" :min="currentDate()" extraClass="w-full"></form-input-field>
 						</div>
 						<div class="w-1/2">
 							<label class="label"><span class="label-text text-white">Rozpoczęcie</span></label> 
-							<input v-model=form.time_start type="time" class="input input-primary input-bordered w-full" required>
+							<form-input-field type="time" name="Rozpoczęcie" :required="true" model="time_start" :form="form" :label=false extraClass="w-full"></form-input-field>
 						</div>
 					</div>
-					<label v-if="form.errors.date_start" class="label label-text-alt text-error text-sm">{{ form.errors.date_start }}</label>
-					<label v-if="form.errors.time_start" class="label label-text-alt text-error text-sm">{{ form.errors.time_start }}</label>
 
 					<div class="flex space-x-2">
 						<div class="w-1/2">
-							<label class="label"><span class="label-text">Zakończenie<span class="ml-1 text-red-500">*</span> (czas opcjonalny)</span></label> 
-							<input v-model=form.date_end type="date" :min=currentDate() class="input input-primary input-bordered w-full" required>
+							<form-input-field type="date" name="Zakończenie" :required="true" model="date_end" :form="form" :min="currentDate()" extraClass="w-full"></form-input-field>
 						</div>
 						<div class="w-1/2">
-							<label class="label"><span class="label-text text-white">Zakończenie (czas opcjonalny)</span></label> 
-							<input v-model=form.time_end type="time" class="input input-primary input-bordered w-full">
+							<label class="label"><span class="label-text text-white">Zakończenie</span></label> 
+							<form-input-field type="time" name="Zakończenie" :required="false" model="time_end" :form="form" :label=false extraClass="w-full"></form-input-field>
 						</div>
 					</div>
-					<label v-if="form.errors.date_end" class="label label-text-alt text-error text-sm">{{ form.errors.date_end }}</label>
-					<label v-if="form.errors.time_end" class="label label-text-alt text-error text-sm">{{ form.errors.time_end }}</label>
 
 					<div class="flex mt-4 space-x-2">
 						<div class="w-full">
-							<label class="label"><span class="label-text">Ulica<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrStreet type="text" placeholder="Ulica" class="input input-primary input-bordered w-full" required>
+							<form-input-field type="text" name="Ulica" :required="true" model="addrStreet" :form="form" extraClass="w-full" min="3" max="64"></form-input-field>
 						</div>
 						<div class="w-24">
-							<label class="label"><span class="label-text">Nr<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrNumber type="text" placeholder="Nr" class="input input-primary input-bordered w-full" required>
+							<form-input-field type="text" name="Nr" :required="true" model="addrNumber" :form="form" extraClass="w-full" min="1" max="10"></form-input-field>
 						</div>
 					</div>
 
 					<div class="flex space-x-2">
 						<div class="w-48">
-							<label class="label"><span class="label-text">Kod<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrPostCode type="text" placeholder="Kod pocztowy" class="input input-primary input-bordered w-full" required>
+							<form-input-field type="text" name="Kod" :required="true" model="addrPostCode" :form="form" extraClass="w-full" min="3" max="10"></form-input-field>
 						</div>
 						<div class="w-full">
-							<label class="label"><span class="label-text">Miejscowość<span class="ml-1 text-red-500">*</span></span></label> 
-							<input v-model=form.addrTown type="text" placeholder="Miejscowość" class="input input-primary input-bordered w-full" required>
+							<form-input-field type="text" name="Miejscowość" :required="true" model="addrTown" :form="form" extraClass="w-full" min="3" max="64"></form-input-field>
 						</div>
 					</div>
-					<label v-if="form.errors.addrStreet" class="label label-text-alt text-error text-sm">{{ form.errors.addrStreet }}</label>
-					<label v-if="form.errors.addrNumber" class="label label-text-alt text-error text-sm">{{ form.errors.addrNumber }}</label>
-					<label v-if="form.errors.addrPostCode" class="label label-text-alt text-error text-sm">{{ form.errors.addrPostCode }}</label>
-					<label v-if="form.errors.addrTown" class="label label-text-alt text-error text-sm">{{ form.errors.addrTown }}</label>
 
 					<label class="label mt-4">
 						<span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
 					</label> 
-					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required></textarea>
+					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required min="3" max="512"></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+
+					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
+					<div v-if="url && form.image" class="mx-auto indicator mt-2">
+						<div class="indicator-item">
+							<button v-if="url && form.image" @click="form.image=null" class="btn btn-xs btn-ghost"><i class="fas fa-times text-error"></i></button>
+						</div> 
+						<img :src="url" class="block h-24 w-24 object-cover mask mask-squircle" />
+					</div>
+					<label for="upload-file-store" refs="upload-file" class="btn btn-primary mt-2">Wybierz zdjęcie</label>
+					<label v-if="form.hasErrors && form.errors.image" class="label label-text-alt text-error text-sm">{{ form.errors.image }}</label>
 					
-				</div> 
+				</div>
+				<input type="submit" ref="createEventSubmit" class="hidden" />
 			</form>
 		</template>
 
 		<template #footer>
-			<button @click=store :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full ">Dodaj</button>
+			<button @click="$refs.createEventSubmit.click()" :disabled="form.processing" :class="{ 'loading': form.processing }" class="btn btn-info w-full ">Dodaj</button>
 		</template>
 	</Modal> 
 	
@@ -118,11 +113,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import DataTable from '@/Components/DataTable.vue'
 import Modal from '@/Components/CrudModal.vue'
+import FormInputField from "@/Components/FormInputField.vue";
 
 export default defineComponent({
 
@@ -134,7 +130,9 @@ export default defineComponent({
 	setup() {
 		// Modal visibility
 		const createModalOpened = ref(false)
-		
+
+		const url = ref(null)
+
 		// Data form
 		const form = useForm({
 			name:null,
@@ -149,7 +147,8 @@ export default defineComponent({
 			addrPostCode:null,
 			addrTown:null,
 
-			description:null
+			description:null,
+			image:null
 		})
 
 		// Close modal and reset form
@@ -157,6 +156,11 @@ export default defineComponent({
 			createModalOpened.value = false
 			form.reset() 
 			form.clearErrors()
+		}
+
+		const createEvent = (_) => {
+			createModalOpened.value = true
+			nextTick(() => document.getElementById("focus-create").focus());
 		}
 
 		// Store event in database
@@ -168,6 +172,13 @@ export default defineComponent({
 
 		// Return current date
 		const currentDate = _ => new Date().toISOString().split('T')[0]
+
+		const previewImage = (e) => url.value = URL.createObjectURL(e.target.files[0])
+
+		const removeImage = _ => {
+			form.image = null
+			document.getElementById('category-image').src = "/images/default.png"
+		}
 
 		// Columns for data table
 		const columns = [
@@ -185,7 +196,7 @@ export default defineComponent({
 		]
 
 		// Returned data
-		return { form, columns, createModalOpened, frontFilters, close, currentDate, store }
+		return { form, columns, createModalOpened, frontFilters, close, currentDate, createEvent, store, previewImage, removeImage, url }
 	},
 
 	components: {
@@ -193,6 +204,7 @@ export default defineComponent({
 		Link,
 		DataTable,
 		Modal,
+		FormInputField
 	},
 
 });
