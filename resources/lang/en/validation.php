@@ -182,8 +182,6 @@ return [
         'date_due' => 'termin',
         'notification' => 'przypomnienie',
         'assigned_user' => 'przypisany użytkownik',
-
-
         'date_start' => 'data rozpoczęcia',
         'time_start' => 'czas rozpoczęcia',
         'date_end' => 'data zakończenia',
@@ -194,7 +192,9 @@ return [
         'addrTown' => 'miejscowość',
         'description_summary' => 'podsumowanie',
         'is_finished' => 'czy zakończono',
-        'participants' => 'uczestnicy'
+        'participants' => 'uczestnicy',
+        'event_task_state_id' => 'ID statusu zadania',
+        'event_id' => 'ID wydarzenia'
     ],
 
 ];

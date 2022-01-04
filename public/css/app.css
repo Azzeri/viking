@@ -4221,6 +4221,10 @@ html {
 	margin-top: 1.25rem;
 	margin-bottom: 1.25rem;
 }
+.mx-1 {
+	margin-left: 0.25rem;
+	margin-right: 0.25rem;
+}
 .ml-3 {
 	margin-left: 0.75rem;
 }
@@ -4310,6 +4314,12 @@ html {
 }
 .mb-0 {
 	margin-bottom: 0px;
+}
+.ml-5 {
+	margin-left: 1.25rem;
+}
+.ml-7 {
+	margin-left: 1.75rem;
 }
 .block {
 	display: block;
@@ -4452,6 +4462,17 @@ html {
 .w-4\/6 {
 	width: 66.666667%;
 }
+.w-max {
+	width: -webkit-max-content;
+	width: -moz-max-content;
+	width: max-content;
+}
+.w-screen {
+	width: 100vw;
+}
+.w-96 {
+	width: 24rem;
+}
 .min-w-0 {
 	min-width: 0px;
 }
@@ -4478,6 +4499,9 @@ html {
 }
 .max-w-5xl {
 	max-width: 64rem;
+}
+.max-w-lg {
+	max-width: 32rem;
 }
 .flex-1 {
 	flex: 1 1 0%;
@@ -4678,6 +4702,9 @@ html {
 }
 .self-center {
 	align-self: center;
+}
+.justify-self-start {
+	justify-self: start;
 }
 .overflow-auto {
 	overflow: auto;
@@ -6225,6 +6252,14 @@ html {
 
 	.lg\:w-1\/2 {
 		width: 50%;
+	}
+
+	.lg\:max-w-md {
+		max-width: 28rem;
+	}
+
+	.lg\:max-w-sm {
+		max-width: 24rem;
 	}
 
 	.lg\:grid-cols-3 {

@@ -15,14 +15,9 @@
         <div class="flex flex-col drawer-content -mt-16 pt-16">
             <!-- Main content -->
             <main class="lg:ml-20 text-base-content">
-                <!-- <div class="hero min-h-screen -mt-16 pt-16 place-items-start"> -->
-                    <!-- <div class="hero-content flex-col mx-auto"> -->
-                        <div class="container max-w-4xl mx-auto min-h-screen -mt-16 pt-16 px-2 md:px-5">
-                            <slot></slot>
-                        </div>
-                        
-                    <!-- </div> -->
-                <!-- </div> -->
+                <div class="container mx-auto min-h-screen -mt-16 pt-16 px-2 md:px-5" :class="contentMaxWidth">
+                    <slot></slot>
+                </div>
             </main>
         </div> 
         
@@ -70,6 +65,10 @@
     export default defineComponent({
         props: {
             title: String,
+            contentMaxWidth: {
+                type:String,
+                default:'max-w-4xl'
+            }
         },
 
         components: {

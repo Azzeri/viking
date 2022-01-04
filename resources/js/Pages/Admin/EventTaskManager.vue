@@ -1,8 +1,8 @@
 <template>
-	<admin-panel-layout title="Menedżer zadań">
+	<admin-panel-layout title="Menedżer zadań" contentMaxWidth="max-w-7xl">
 
 		<!-- Name and return button -->
-		<div class="flex space-x-2 self-start items-center my-2">
+		<div class="flex space-x-2 self-start items-center my-4">
 			<Link :href="route('admin.events.show', event)" as="button" class="btn btn-sm btn-primary">
 				<i class="fas fa-arrow-left mr-1"></i>
 				Powrót
@@ -13,7 +13,7 @@
 		<!-- Task states -->
 		<div class="flex space-x-2">
 			<div v-for="state in task_states" :key=state.id @drop="onDrop($event, state)" @dragenter.prevent @dragover.prevent 
-				class="w-60 p-2 bg-neutral rounded-lg overflow-y-auto" style="max-height: 80vh;">
+				class="w-64 p-2 bg-neutral rounded-lg overflow-y-auto flex-shrink-0" style="max-height: 80vh;">
 				<div class="flex justify-between items-center text-base-200">
 					<h1 class="font-bold capitalize">{{ state.name }}</h1>
 					<button v-if="!event.is_finished" @click="createTask(state.id)" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i></button>
@@ -49,33 +49,29 @@
 					<i class="fas fa-times"></i>
 					<span class="ml-2">Anuluj</span>
 				</button>
-				<button @click="updateTask(selectedTask.id)" v-if=taskEditMode class="btn btn-success btn-xs ml-2">Zapisz</button>
+				<button @click="$refs.updateTaskSubmit.click()" v-if=taskEditMode :disabled="taskForm.processing" :class="{ 'loading': taskForm.processing }" class="btn btn-success btn-xs ml-2">Zapisz</button>
 			</template>
 		</template>
 
 		<template #content>
 			<!-- Update Task Form and info-->
-			<form>
+			<form @submit.prevent="updateTask(selectedTask.id)">
 				<!-- Task name -->
 				<div class="flex justify-between items-center mt-6">
-					<div class="flex items-center space-x-2">
+					<div class="flex items-center space-x-2 w-full">
 						<i class="fas fa-thumbtack"></i>
 						<h1 v-if="!taskEditMode" class="font-bold text-lg capitalize">{{ selectedTask.name }}</h1>
-						<input v-else v-model="taskForm.name" type="text" class="input input-primary input-sm" required/>
-						<label v-if="taskForm.errors.name" class="label label-text-alt text-error text-sm">{{ taskForm.errors.name }}</label>
+						<form-input-field v-else id="focus-update-task" type="text" name="Nazwa" :required="true" model="name" :form="taskForm" max="128" min="3" extraClass="input-sm w-full max-w-sm" :label=false></form-input-field>
 					</div>
 				</div>
-				<!-- ERROR LABELS -->
 
 				<!-- Date due -->
 				<div class="flex items-center space-x-2 mt-3">
 					<i class="fas fa-calendar-week"></i>
 					<h1 class="font-bold">Termin</h1>
 				</div>
-				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.date_due ?? 'Nie określono' }}</h2>
-				<input v-else v-model="taskForm.date_due" type="date" class="input input-primary input-sm ml-6" :min="currentDate()" />
-				<label v-if="taskForm.errors.date_due" class="label label-text-alt text-error text-sm">{{ taskForm.errors.date_due }}</label>
-
+				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.date_due ? selectedTask.date_due_formatted : 'Nie określono' }}</h2>
+				<form-input-field v-else type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="input-sm ml-5 w-full max-w-sm" :label=false></form-input-field>
 
 				<!-- Description -->
 				<div class="flex items-center space-x-2 mt-6">
@@ -83,8 +79,9 @@
 					<h1 class="font-bold">Opis</h1>
 				</div>
 				<p v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.description ?? 'Brak opisu' }}</p>
-				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary" v-model="taskForm.description"></textarea>
+				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary resize-none max-w-sm" v-model="taskForm.description"></textarea>
 				<label v-if="taskForm.errors.description" class="label label-text-alt text-error text-sm">{{ taskForm.errors.description }}</label>
+				<input type="submit" ref="updateTaskSubmit" class="hidden" />
 			</form>
 
 			<!-- Subtasks -->
@@ -102,10 +99,10 @@
 				<label v-if="subTaskForm.errors.name" class="label label-text-alt text-error text-sm">{{ subTaskForm.errors.name }}</label>
 			</div>
 
-			<!-- Form -->
+			<!-- Create subtask form -->
 			<div class="mt-2 mx-5">
 				<form v-show="subTaskCreateMode && !event.is_finished" id="create-subtask-form" class="flex flex-col sm:flex-row gap-2 w-full" @submit.prevent=storeSubTask>
-					<input v-model="subTaskForm.name" type="text" class="input input-primary input-xs" />
+					<input id="focus-create-subtask" v-model="subTaskForm.name" type="text" class="input input-primary input-xs" required minlength="1" maxlength="128"/>
 					<input v-model="subTaskForm.date_due" type="date" :min=currentDate() class="input input-primary input-xs" />
 					<input type="submit" class="btn btn-primary btn-xs" value="Dodaj">
 				</form>
@@ -114,28 +111,23 @@
 			<!-- List -->
 			<div class="mt-2">
 				<ul class="menu max-h-64 overflow-y-auto">
-					<li v-for="task in selectedTask.subtasks" :key=task.id >
+					<li v-for="task in selectedTask.subtasks" :key=task.id class="hover-bordered" @click="editSubTask(task)">
 						<a class="flex flex-col space-y-2">
-							<div class="flex items-center space-x-2 w-full">
-								<input @click=finishSubtask(task) :checked=task.is_finished :disabled="event.is_finished" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
-								<span :class="{ 'text-gray-600 line-through':task.is_finished }">{{ task.name }}</span>
-							</div>
-							<div v-if="!subTaskEditMode" class="flex items-center space-x-2 w-full">
-								<button v-if="!event.is_finished" @click="editSubTask(task)" class="btn btn-info btn-xs">
-									<i class="fas fa-edit mr-2"></i>
-									Edytuj
-								</button>
-								<span v-if="task.date_due"><i class="fas fa-calendar-week mr-1"></i>{{ task.date_due }}</span>
-							</div>
-								
-
-							<div v-if="subTaskEditMode && subTaskIndex == task.id" class="w-full flex flex-col space-y-2">
+							<template v-if="!subTaskEditMode">
+								<div class="flex items-center space-x-2 w-full">
+									<input @click.stop @click=finishSubtask(task) :checked=task.is_finished :disabled="event.is_finished" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+									<span :class="{ 'text-gray-600 line-through':task.is_finished }">{{ task.name }}</span>
+								</div>
+								<div v-if="task.date_due" class="self-start"><i class="fas fa-calendar-week ml-7 mr-1" ></i>{{ task.date_due_formatted }}</div>
+							</template>
+							<div v-if="subTaskEditMode && subTaskIndex == task.id" class="w-full flex flex-col space-y-2" @click.stop>
 								<form @submit.prevent="updateSubTask(task.id)" class="flex flex-col gap-2 w-full">
-									<input v-model="subTaskForm.name" type="text" class="input input-primary input-xs">
-									<input v-model="subTaskForm.date_due" type="date" :min="currentDate()" class="input input-primary input-xs">
+									<input id="focus-edit-subtask" v-model="subTaskForm.name" type="text" class="input input-primary input-xs">
+									<input v-model="subTaskForm.date_due" type="date" :min="currentDate()" class="input input-primary input-xs w-full">
+									<input type="submit" ref="updateSubtaskSubmit" class="hidden"/>
 								</form>
 								<div class="flex space-x-2">
-									<button @click="updateSubTask(task.id)" class="btn btn-success btn-xs">Zapisz</button>
+									<button @click="$refs.updateSubtaskSubmit.click()" class="btn btn-success btn-xs" :disabled="subTaskForm.processing" :class="{ 'loading': subTaskForm.processing }">Zapisz</button>
 									<button @click=deleteSubTask(task) class="btn btn-error btn-xs">Usuń</button>
 									<button @click="reset()" class="btn btn-error btn-xs">Anuluj</button>
 								</div>
@@ -148,7 +140,7 @@
 	</Modal>
 
 	<!-- Modal - create -->
-	<Modal :show="createModalOpened && !event.is_finished" @close=close id="modal-create" maxWidth="max-w-sm">
+	<Modal :show="createModalOpened && !event.is_finished" @close=close id="modal-create" maxWidth="md:max-w-sm">
 		<template #side>
 			<div class="flex items-center space-x-2">
 				<i class="fas fa-thumbtack"></i>
@@ -157,36 +149,33 @@
 		</template>
 
 		<template #content>
-			<form>
+			<form @submit.prevent="storeTask">
 				<div class="form-control mt-4">
-					<label class="label"><span class="label-text">Nazwa<span class="ml-1 text-red-500">*</span></span></label> 
-					<input v-model=taskForm.name type="text" placeholder="Nazwa zadania" class="input input-primary input-bordered" required>
-					<label v-if="taskForm.errors.name" class="label label-text-alt text-error text-sm">{{ taskForm.errors.name }}</label>
-					
-					<label class="label"><span class="label-text">Termin</span></label> 
-					<input v-model=taskForm.date_due type="date" :min=currentDate() class="input input-primary input-bordered">
-					<label v-if="taskForm.errors.date_due" class="label label-text-alt text-error text-sm">{{ taskForm.errors.date_due }}</label>
+					<form-input-field id="focus-create-task" type="text" name="Nazwa" :required="true" model="name" :form="taskForm" max="128" min="3"></form-input-field>
+					<form-input-field type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="w-full"></form-input-field>
 
 					<label class="label"><span class="label-text">Opis</span></label> 
-					<textarea v-model=taskForm.description class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Opis..."></textarea>
+					<textarea v-model=taskForm.description class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
 					<label v-if="taskForm.errors.description" class="label label-text-alt text-error text-sm">{{ taskForm.errors.description }}</label>
 				</div> 
+				<input type="submit" ref="storeTaskSubmit" class="hidden" />
 			</form>
 		</template>
 
 		<template #footer>
-			<button @click="storeTask()" class="btn w-full">Dodaj</button>
+			<button @click="$refs.storeTaskSubmit.click()" :disabled="taskForm.processing" :class="{ 'loading': taskForm.processing }" class="btn btn-primary w-full">Dodaj</button>
 		</template>
 	</Modal>
 
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from "@inertiajs/inertia";
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Modal from '@/Components/CrudModal.vue'
+import FormInputField from "@/Components/FormInputField.vue";
 
 export default defineComponent({
 
@@ -255,6 +244,7 @@ export default defineComponent({
 		const createTask = (id) => {
 			taskForm.event_task_state_id = id
 			createModalOpened.value = true
+			nextTick(() => document.getElementById('focus-create-task').focus())
 		}
 
 		const editTask = _ => {
@@ -264,6 +254,8 @@ export default defineComponent({
 			taskForm.name = selectedTask.value.name
 			taskForm.description = selectedTask.value.description
 			taskForm.date_due = selectedTask.value.date_due
+
+			nextTick(() => document.getElementById('focus-update-task').focus())
 		}
 
 		const storeTask = _ => {
@@ -293,7 +285,10 @@ export default defineComponent({
 			reset()
 			subTaskCreateMode.value = mode
 
-			if (mode) subTaskForm.event_task_id = selectedTask.value.id
+			if (mode) {
+				subTaskForm.event_task_id = selectedTask.value.id
+				nextTick(() => document.getElementById('focus-create-subtask').focus())
+			}
 		}
 
 	    const editSubTask = (subTask) => {
@@ -303,6 +298,8 @@ export default defineComponent({
 
 			subTaskForm.name = subTask.name
 			subTaskForm.date_due = subTask.date_due
+
+			nextTick(() => document.getElementById('focus-edit-subtask').focus())
 		}
 
 		const storeSubTask = _ => {
@@ -311,6 +308,7 @@ export default defineComponent({
 					subTaskForm.name = null
 					subTaskForm.date_due = null
 					selectedTask.value = props.tasks.find(element => element.id == selectedTask.value.id)
+					nextTick(() => document.getElementById('focus-create-subtask').focus())
 				}
 			})
 		}
@@ -389,7 +387,8 @@ export default defineComponent({
 	components: {
 		AdminPanelLayout,
 		Link,
-		Modal
+		Modal,
+		FormInputField
 	},
 
 });

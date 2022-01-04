@@ -156,12 +156,14 @@ class EventController extends Controller
             'name' => $task->name,
             'description' => $task->description,
             'date_due' => $task->date_due,
+            'date_due_formatted' => Carbon::parse($task->date_due)->toFormattedDateString(),
             'event_task_state_id' => $task->event_task_state_id,
             'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
                 'id' => $subtask->id,
                 'name' => $subtask->name,
                 'is_finished' => $subtask->is_finished,
                 'date_due' => $subtask->date_due,
+                'date_due_formatted' => Carbon::parse($subtask->date_due)->toFormattedDateString(),
                 'date_created' => $subtask->created_at,
                 'event_task_id' => $subtask->event_task_id
             ]) : null

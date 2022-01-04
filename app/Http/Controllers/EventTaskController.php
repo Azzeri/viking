@@ -20,8 +20,8 @@ class EventTaskController extends Controller
     {
         $this->authorize('create', EventTask::class);
 
-        $request->validate([
-            'event_id' => ['required', 'integer', Rule::exists('events','id')->where(function ($query) {
+        $validated = $request->validate([
+            'event_id' => ['required', 'integer', Rule::exists('events', 'id')->where(function ($query) {
                 return $query->where('is_finished', false);
             })],
             'name' => ['required', 'string', 'min:3', 'max:128'],
@@ -30,12 +30,7 @@ class EventTaskController extends Controller
             'event_task_state_id' => ['required', 'integer'],
         ]);
 
-        EventTask::create([
-            'name' => $request['name'],
-            'description' => $request['description'],
-            'date_due' => $request['date_due'],
-            'event_id' => $request['event_id'],
-            'event_task_state_id' => $request['event_task_state_id'],
+        EventTask::create($validated + [
             'user_id' => Auth::user()->id,
         ]);
 
@@ -89,7 +84,7 @@ class EventTaskController extends Controller
     public function change_state(EventTask $eventTask, EventTaskState $eventTaskState)
     {
         $this->authorize('update', $eventTask, EventTask::class);
-
+        
         $eventTask->update([
             'event_task_state_id' => $eventTaskState->id
         ]);

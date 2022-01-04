@@ -15,8 +15,8 @@ class CreateEventTasksTable extends Migration
     {
         Schema::create('event_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('name',128);
+            $table->text('description',255)->nullable();
             $table->date('date_due')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('event_id')->constrained();

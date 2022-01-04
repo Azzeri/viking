@@ -15,7 +15,7 @@ class CreateEventSubTasksTable extends Migration
     {
         Schema::create('event_sub_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name',128);
             $table->date('date_due')->nullable();
             $table->boolean('is_finished')->default(false);
             $table->foreignId('event_task_id')->constrained();
