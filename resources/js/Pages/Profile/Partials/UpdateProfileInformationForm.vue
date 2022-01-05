@@ -77,15 +77,6 @@
 				<label v-if="form.errors.email" class="label label-text-alt text-error text-sm">{{ form.errors.email }}</label>
             </div>
 
-            <!-- Role -->
-            <div v-if="$page.props.user.privilege_id == $page.props.privileges.IS_ADMIN" class="col-span-6 sm:col-span-4 form-control">
-                <label class="label">
-                    <span class="label-text">Rola</span>
-                </label> 
-                <input type="text" placeholder="Rola" class="input input-primary input-bordered w-full" v-model="form.role">
-				<label v-if="form.errors.role" class="label label-text-alt text-error text-sm">{{ form.errors.role }}</label>
-            </div>
-
             <!-- Date birth -->
             <div class="col-span-6 sm:col-span-4 form-control">
                 <label class="label">
@@ -93,6 +84,15 @@
                 </label> 
                 <input type="date" :max="currentDate()" class="input input-primary input-bordered w-full" v-model="form.date_birth">
 				<label v-if="form.errors.date_birth" class="label label-text-alt text-error text-sm">{{ form.errors.date_birth }}</label>
+            </div>
+
+            <!-- Role -->
+            <div class="col-span-6 sm:col-span-4 form-control">
+                <label class="label">
+                    <span class="label-text">Rola</span>
+                </label> 
+                <input type="text" class="input input-primary input-bordered w-full" :disabled="$page.props.user.privilege_id != $page.props.privileges.IS_ADMIN" v-model="form.role">
+				<label v-if="form.errors.role" class="label label-text-alt text-error text-sm">{{ form.errors.role }}</label>
             </div>
 
             <!-- Description -->
