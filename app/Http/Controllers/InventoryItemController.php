@@ -21,7 +21,7 @@ class InventoryItemController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:id,name,inventory_category_id,quantity']
+            'field' => ['in:id,name,inventory_category_id,quantity,is_functional']
         ]);
 
         $query = InventoryItem::query();
@@ -47,6 +47,7 @@ class InventoryItemController extends Controller
                 'description' => $inventoryItem->description,
                 'quantity' => $inventoryItem->quantity,
                 'inventory_category_id' => $inventoryItem->inventory_category_id,
+                'is_functional' => $inventoryItem->is_functional,
                 'category' => array(
                     'id' => $inventoryItem->category->id,
                     'name' => $inventoryItem->category->name,
@@ -120,7 +121,8 @@ class InventoryItemController extends Controller
             'description' => ['nullable', 'min:3', 'max:255'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
-            'deleteImage' => ['boolean', 'required']
+            'deleteImage' => ['boolean', 'required'],
+            'is_functional' => ['boolean', 'required']
         ]);
 
         $image_path = null;
@@ -140,8 +142,8 @@ class InventoryItemController extends Controller
             'inventory_category_id' => $request->inventory_category_id,
             'description' => $request->description,
             'quantity' => $request->quantity,
-            'photo_path' => $image_path ? $image_path : $inventory_item->photo_path
-
+            'photo_path' => $image_path ? $image_path : $inventory_item->photo_path,
+            'is_functional' => $request->is_functional
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');

@@ -20,6 +20,7 @@ class CreateInventoryItemsTable extends Migration
             $table->text('description', 255)->nullable();
             $table->unsignedSmallInteger('quantity')->default(0);
             $table->foreignId('inventory_category_id')->constrained();
+            $table->boolean('is_functional')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

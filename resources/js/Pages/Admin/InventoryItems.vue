@@ -40,6 +40,7 @@
 					<td>{{ row.name }}</td>
 					<td>{{ row.category.name }}</td>
 					<td>{{ row.quantity }}</td>
+					<td :class="{'text-success':row.is_functional, 'text-error':!row.is_functional}">{{ row.is_functional ? 'sprawny' : 'niesprawny' }}</td>
 					<td class="space-x-2 text-center">
 						<button @click=showDetails(row) class="btn btn-xs btn-primary">Szczegóły</button>
 						<button @click="deleteRow(row)" class="btn btn-xs btn-error">
@@ -78,8 +79,9 @@
 								<h1	class="text-lg font-semibold">{{ selectedItem.name }}</h1>
 							</div>
 							<h2 class="text-xm text-gray-500 ml-1">{{ selectedItem.category.name }}</h2>
-							<div class="flex gap-2 ml-1 mt-2">
+							<div class="flex flex-col ml-1 mt-2">
 								<span class="font-semibold">{{ `${selectedItem.quantity}szt.` }}</span>
+								<span :class="{'text-success':selectedItem.is_functional, 'text-error':!selectedItem.is_functional}">{{ selectedItem.is_functional ? 'sprawny' : 'niesprawny' }}</span>
 							</div>
 						</div>
 					</div>
@@ -106,6 +108,10 @@
 						<div class="flex flex-col gap-2">
 							<div class="flex gap-2 items-end">
 								<form-input-field type="number" name="Ilość" :required="true" model="quantity" :form="form" min="0" max="9999" :label="false" extraClass="input-sm w-full"></form-input-field>szt.
+								<div class="flex mt-4 items-center space-x-2">
+									<input v-model="form.is_functional" type="checkbox" class="checkbox checkbox-primary">
+									<span class="label-text">Sprawny</span> 
+								</div>
 							</div>
 							<textarea v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
 						</div>
@@ -203,6 +209,7 @@ export default defineComponent({
 			image: null,
             description: null,
             quantity: null,
+			is_functional: true,
             inventory_category_id: props.categories.length ? props.categories[0].id : 0,
 			deleteImage: false
 		})
@@ -240,6 +247,7 @@ export default defineComponent({
             form.description = row.description
 			form.inventory_category_id = row.inventory_category_id
             form.quantity = row.quantity
+			form.is_functional = row.is_functional
 
 			nextTick(() => {
 				if(document.getElementById('edit-item-name'))
@@ -287,6 +295,7 @@ export default defineComponent({
 			{name:'name', label:'Przedmiot', sortable: true},
             {name:'inventory_category_id', label:'Kategoria', sortable: true},
 			{name:'quantity', label:'Ilość', sortable: true},
+			{name:'is_functional', label:'Sprawność', sortable: true},
 			{name:'actions', label:''}
         ]
 
