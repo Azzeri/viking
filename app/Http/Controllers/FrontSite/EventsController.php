@@ -21,10 +21,34 @@ class EventsController extends Controller
                 'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
                 'is_finished' => $event->is_finished,
                 'photo_path' => $event->photo_path
-        ]);
-        
+            ]);
+
         return inertia('Events', [
             'events' => $events,
+        ]);
+    }
+
+    public function show(Event $event)
+    {
+        $mapped = array(
+            'id' => $event->id,
+            'name' => $event->name,
+            'description' => $event->description,
+            'description_summary' => $event->description_summary,
+            'addrStreet' => $event->addrStreet,
+            'addrNumber' => $event->addrNumber,
+            'addrPostCode' => $event->addrPostCode,
+            'addrTown' => $event->addrTown,
+            'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
+            'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
+            'time_start' => substr($event->time_start, 0, 5),
+            'time_end' => substr($event->time_end, 0, 5),
+            'is_finished' => $event->is_finished,
+            'photo_path' => $event->photo_path
+        );
+
+        return inertia('EventDetails', [
+            'event' => $mapped,
         ]);
     }
 }

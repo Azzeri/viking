@@ -36,7 +36,7 @@
               <div class="card-actions">
                 <Link
                   as="button"
-                  :href="route('news.show', row.id)"
+                  :href="route('events.show', row.id)"
                   class="btn btn-primary w-full md:w-auto"
                   >Więcej</Link
                 >

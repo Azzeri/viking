@@ -46,6 +46,7 @@ Route::get('/dashboard', function () {
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
 // Events
+Route::get('/events/{event}', [EventsController::class, 'show'])->name('events.show');
 Route::get('/events', [EventsController::class, 'index'])->name('events.index');
 
 // Gallery
