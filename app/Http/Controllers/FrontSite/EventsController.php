@@ -11,7 +11,7 @@ class EventsController extends Controller
 {
     public function index()
     {
-        $events = Event::orderBy('date_start', 'asc')->paginate()
+        $events = Event::orderBy('date_start', 'desc')->paginate(30)
             ->through(fn ($event) => [
                 'id' => $event->id,
                 'name' => $event->name,
@@ -20,7 +20,7 @@ class EventsController extends Controller
                 'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
                 'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
                 'is_finished' => $event->is_finished,
-                'photo_path' => 'https://picsum.photos/600/400/?random'
+                'photo_path' => $event->photo_path
         ]);
         
         return inertia('Events', [
