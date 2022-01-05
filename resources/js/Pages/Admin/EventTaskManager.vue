@@ -22,7 +22,8 @@
 					<template v-for="task in tasks" :key="task.id">
 						<div v-if="task.event_task_state_id == state.id" @click=showTask(task) draggable=true @dragstart="startDrag($event, task)"
 						class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
-							<h1>{{ task.name }}</h1>					
+							<h1>{{ task.name }}</h1>	
+							<h2 class="text-gray-500 text-xs">{{ task.date_due }}</h2>				
 						</div>
 					</template>
 				</div>
