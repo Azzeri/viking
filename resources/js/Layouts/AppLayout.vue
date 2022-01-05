@@ -14,12 +14,11 @@
 
             <!-- Navbar -->
             <Navbar :centerLinks=true :adminPanelLink=true></Navbar>
-            <div class="w-full self-start opacity-90 bg-no-repeat bg-cover shadow-md" :class="navbarHeight"
+            <div v-if="displayNavbar" class="w-full self-start opacity-90 bg-no-repeat bg-cover shadow-md" :class="navbarHeight"
                  style='background-position:0 62%;background-image:url("https://images.unsplash.com/photo-1609894851180-7be27983da7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");'></div>
             <!-- Site content -->
             <main class="text-base-content">
                 <div class="hero min-h-screen -mt-16 pt-16">
-                    
                     <slot></slot>
                 </div>
             </main>
@@ -72,6 +71,10 @@
             navbarHeight: {
                 type:String,
                 default:'h-40'
+            },
+            displayNavbar: {
+                type:Boolean,
+                default:true
             }
         },
 
