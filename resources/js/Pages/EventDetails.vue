@@ -25,11 +25,11 @@
           >
             {{ event.is_finished ? "minione" : "nadchodzące" }}
           </div>
-          <p class="mt-2">{{ event.description }}</p>
+          <p class="mt-2 text-justify">{{ event.description }}</p>
           <h1 v-if="event.description_summary" class="mt-4 card-title">
             Podsumowanie
           </h1>
-          <p>{{ event.description_summary }}</p>
+          <p class="text-justify">{{ event.description_summary }}</p>
           <div class="card-title mt-4">
             <span>Czas i miejsce</span>
             <h2 class="text-sm mt-2">

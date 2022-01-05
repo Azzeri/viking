@@ -25,7 +25,7 @@
                   <div class="text-sm">{{ `${row.addrTown}` }}</div>
                 </h2>
               </div>
-              <p>{{ row.description }}</p>
+              <p class="text-justify">{{ row.description }}</p>
               <div
                 class="badge mt-2"
                 :class="{

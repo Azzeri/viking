@@ -1,6 +1,6 @@
 <template>
     <app-layout title="Aktualności">
-        <div class="flex-col hero-content place-self-start">
+        <div class="flex-col hero-content place-self-start mx-auto">
 
             <template v-if="posts == null">
                 <h1 class="text-lg font-semibold">Nie dodano jeszcze żadnych postów</h1>
@@ -10,7 +10,7 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16">
                     <article v-for="row in posts.data" :key="row.id" class="card shadow-lg bordered rounded-lg">
                         <figure>
-                            <img :src=row.photo_path class="">
+                            <img :src=row.photo_path class="h-64 object-cover">
                         </figure> 
                         <div class="card-body justify-between">
                             <div class="card-title">
@@ -20,7 +20,7 @@
                                     <div class="text-sm">{{ `${row.date_created} ${row.time_created}` }}</div>
                                 </h2>
                             </div>
-                            <p>{{ row.body }}</p>
+                            <p class="text-justify">{{ row.body }}</p>
                             <div class="card-actions">
                                 <Link as="button" :href="route('news.show', row.id)" class="btn btn-primary w-full md:w-auto">Więcej</Link>
                             </div>

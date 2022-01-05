@@ -7,7 +7,7 @@
             </Link>
             <div class="card bordered shadow-lg max-w-3xl">
                 <figure>
-                    <img :src=post.photo_path class="">
+                    <img :src=post.photo_path class="h-96 object-cover">
                 </figure> 
                 <div class="card-body">
                     <div class="card-title">
@@ -17,7 +17,7 @@
                             <div class="text-sm">{{ `${post.date_created} ${post.time_created}` }}</div>
                         </h2>
                     </div>
-                    <p>{{ post.body }}</p>
+                    <p class="text-justify">{{ post.body }}</p>
                     <div class="card-actions">
                         <button v-if="post.resource_link" class="btn btn-sm btn-secondary">Szczegóły</button>
                     </div>

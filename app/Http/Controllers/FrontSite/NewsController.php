@@ -10,7 +10,7 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate()
+        $posts = Post::orderBy('created_at', 'desc')->paginate(30)
             ->through(fn ($post) => [
                 'id' => $post->id,
                 'title' => $post->title,
