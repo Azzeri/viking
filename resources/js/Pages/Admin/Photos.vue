@@ -31,7 +31,7 @@
 					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 						<template v-for="row in categories" :key="row.id">
 							<ul v-if="row.category == null && row.subcategories.length" class="menu">
-								<li class="menu-title"><span>{{ row.name }}</span></li>
+								<span><img :src="row.photo_path" class="w-6 h-6 mr-1" />{{ row.name }}</span>
 								<li v-for="sub in row.subcategories" :key="sub.id" @click="filterServices(sub)">
 									<a>{{ sub.name }}</a>
 								</li>

@@ -11,11 +11,13 @@
             <template v-else>
                 <!-- Categories dropdown -->
                 <div class="dropdown w-full">
-                    <div tabindex="0" class="m-1 btn">Dropdown</div> 
-                    <div tabindex="0" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
+                    <div @click="showDropdown('drop-filter')" tabindex="0" class="m-1 btn">{{ currentFilter }}</div> 
+                    <div id="drop-filter" tabindex="0" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
                          <template v-for="row in categories" :key="row.id">
 							<ul v-if="row.subcategories.length" class="menu">
-								<li class="menu-title"><span>{{ row.name }}</span></li>
+								<li class="menu-title">
+                                    <span><img :src="row.photo_path" class="w-6 h-6 mr-1" />{{ row.name }}</span>
+                                </li>
 								<li v-for="sub in row.subcategories" :key="sub.id" @click="filterServices(sub)">
 									<a>{{ sub.name }}</a>
 								</li>
@@ -32,20 +34,24 @@
                 <!-- Category has photos -->
                 <template v-else>
                     <input type="checkbox" id="modal-carousel" class="modal-toggle"> 
-                    <div class="modal">
-                        <div class="modal-box max-w-7xl self-center p-0">
+                    <label for="modal-carousel" class="modal mt-16">
+                        <div @click.prevent class="modal-box max-w-5xl self-center p-0 overflow-y-auto" style="max-height: 90vh">
                             <div class="w-full carousel">
                                 <div id="slide1" class="relative w-full carousel-item">
-                                    <img :src="selectedPhoto.path" class="w-full"> 
+                                    <img v-if="selectedPhoto" :src="selectedPhoto.path" class="w-full"> 
+                                    <div class="absolute right-0 md:right-3 md:top-3">
+                                        <label @click.stop for="modal-carousel" class="btn btn-ghost btn-square">
+                                            <i class="fas fa-times fa-lg"></i>
+                                        </label>
+                                    </div>
                                     <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                                         <button @click="switchPhoto(false)" class="btn btn-circle">❮</button> 
                                         <button @click="switchPhoto(true)" class="btn btn-circle">❯</button>
                                     </div>
                                 </div> 
                             </div>
-                        <label for="modal-carousel" class="btn btn-primary modal-button">Zamknij</label> 
                         </div>
-                    </div>
+			        </label>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 overflow-y-auto no-scrollbar">
                         <div @click="openCarousel(row)" v-for="row in photos" :key="row.id" class="rounded-lg grid items-center group hover:opacity-80 hover:cursor-pointer transition ease-in-out">
                             <img :src="row.path" :alt="row.id" class="rounded-lg h-64 w-full object-cover" />
@@ -68,6 +74,7 @@ export default defineComponent({
     props: {
         photos:Object,
         categories:Object,
+        subcategories: Object,
         filters: Object
     },
 
@@ -75,18 +82,18 @@ export default defineComponent({
         // Magnified photo
         const selectedPhoto = ref(props.photos[0]) ?? ref(null)
 
-        // Filter label
-        const currentFilter = ref("kategoria")
-
         // Filter and sort parameters
         const params = reactive({
             filter: props.filters.filter
         })
+        // Filter label
+        const currentFilter = params.filter ? ref(props.subcategories.filter((item) => item.id == params.filter)[0].name) : ref('wszystkie')
 
         // Filter function
         const filterServices = (option) => {
             params.filter = option.id
             currentFilter.value = option.name
+            document.getElementById('drop-filter').style.visibility = "hidden"
         }
 
         // Open carousel and magnify photo
@@ -102,6 +109,12 @@ export default defineComponent({
             selectedPhoto.value = props.photos.at(nextPhotoIndex)
         }
 
+        const showDropdown = (id) =>
+			(document.getElementById(id).style.visibility = "visible");
+			
+		const hideDropdown = (id) =>
+			(document.getElementById(id).style.visibility = "hidden");
+
         // Returned data
         return {
             currentFilter,
@@ -109,7 +122,9 @@ export default defineComponent({
             selectedPhoto,
             filterServices,
             switchPhoto,
-            openCarousel
+            openCarousel,
+            showDropdown,
+            hideDropdown
         }
       
     },

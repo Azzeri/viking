@@ -20,10 +20,16 @@ class GalleryController extends Controller
         $categories = PhotoCategory::where('photo_category_id', null)->orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
+            'photo_path' => $category->photo_path,
             'subcategories' => $category->subcategories ? $category->subcategories->map(fn ($subcategory) => [
                 'id' => $subcategory->id,
                 'name' => $subcategory->name
             ]) : null
+        ]);
+
+        $subcategories = PhotoCategory::where('photo_category_id', '!=', null)->orderBy('id')->get()->map(fn ($category) => [
+            'id' => $category->id,
+            'name' => $category->name,
         ]);
 
         $query = Photo::query();
@@ -38,6 +44,7 @@ class GalleryController extends Controller
         return inertia('Gallery', [
             'photos' => $photos,
             'categories' => $categories,
+            'subcategories' => $subcategories,
             'filters' => request()->all(['filter']),
         ]);
     }
