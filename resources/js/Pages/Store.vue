@@ -56,10 +56,10 @@
 
             <!-- Category has items -->
             <template v-else>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16">
+                <div class="flex flex-wrap gap-4 mt-16 justify-center">
                     <article v-for="row in items.data" :key="row.id" class="card shadow-lg bordered rounded-lg">
                         <figure>
-                            <img :src=row.photo_path class="">
+                            <img :src=row.photo_path class="h-64 object-cover">
                         </figure> 
                         <div class="card-body justify-between">
                             <div class="card-title">
@@ -76,7 +76,7 @@
                         </div>
                     </article>
                 </div>
-                <Pagination :links=items.links :lg="true" class="md:self-start"></Pagination>
+                <Pagination :links=items.links :lg="true" class=""></Pagination>
             </template>
 
         </template>

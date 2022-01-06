@@ -4556,6 +4556,12 @@ html {
 .max-w-sm {
 	max-width: 24rem;
 }
+.max-w-md {
+	max-width: 28rem;
+}
+.max-w-lg {
+	max-width: 32rem;
+}
 .flex-1 {
 	flex: 1 1 0%;
 }
@@ -4977,6 +4983,10 @@ html {
 }
 .bg-no-repeat {
 	background-repeat: no-repeat;
+}
+.object-contain {
+	-o-object-fit: contain;
+	   object-fit: contain;
 }
 .object-cover {
 	-o-object-fit: cover;

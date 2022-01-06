@@ -37372,7 +37372,7 @@ var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Brak produktów w tej kategorii ");
 
 var _hoisted_23 = {
-  "class": "grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16"
+  "class": "flex flex-wrap gap-4 mt-16 justify-center"
 };
 var _hoisted_24 = ["src"];
 var _hoisted_25 = {
@@ -37483,7 +37483,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "class": "card shadow-lg bordered rounded-lg"
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("figure", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
           src: row.photo_path,
-          "class": ""
+          "class": "h-64 object-cover"
         }, null, 8
         /* PROPS */
         , _hoisted_24)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.name), 1
@@ -37513,7 +37513,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
         links: _ctx.items.links,
         lg: true,
-        "class": "md:self-start"
+        "class": ""
       }, null, 8
       /* PROPS */
       , ["links"])], 64
