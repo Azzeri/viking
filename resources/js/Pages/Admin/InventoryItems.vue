@@ -41,6 +41,7 @@
 					<td>{{ row.category.name }}</td>
 					<td>{{ row.quantity }}</td>
 					<td :class="{'text-success':row.is_functional, 'text-error':!row.is_functional}">{{ row.is_functional ? 'sprawny' : 'niesprawny' }}</td>
+					<td>{{ row.owner ? row.owner.name : 'Nie określono' }}</td>
 					<td class="space-x-2 text-center">
 						<button @click=showDetails(row) class="btn btn-xs btn-primary">Szczegóły</button>
 						<button @click="deleteRow(row)" class="btn btn-xs btn-error">
@@ -85,6 +86,7 @@
 							</div>
 						</div>
 					</div>
+					<div class="ml-1 mt-2">{{ `Właściciel: ${selectedItem.owner ? selectedItem.owner.name : 'Nie określono'}` }}</div>
 					<p class="ml-1 mt-4 text-justify">{{ selectedItem.description }}</p>
 				</template>
 				<template v-else>
@@ -113,6 +115,11 @@
 									<span class="label-text">Sprawny</span> 
 								</div>
 							</div>
+							<label class="label"><span class="label-text">Właściciel<span class="ml-1 text-red-500">*</span></span></label> 
+							<select v-model=form.owner class="select select-bordered select-primary select-sm text-sm w-full">
+								<option :value="null">Brak</option>
+								<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+							</select>
 							<textarea v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
 						</div>
 
@@ -148,6 +155,12 @@
 					</label> 
 					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." maxlength=255 minlength=3></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+
+					<label class="label"><span class="label-text">Właściciel<span class="ml-1 text-red-500">*</span></span></label> 
+					<select v-model=form.owner class="select select-bordered select-primary w-full">
+						<option :value="null">Brak</option>
+						<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+					</select>
 
 					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 					<div v-if="url && form.image" class="mx-auto indicator mt-6">
@@ -185,7 +198,8 @@ export default defineComponent({
 	props: {
 		categories: Object,
         items: Object,
-		filters: Object
+		filters: Object,
+		users: Object
 	},
 
 	setup(props) {
@@ -211,7 +225,8 @@ export default defineComponent({
             quantity: null,
 			is_functional: true,
             inventory_category_id: props.categories.length ? props.categories[0].id : 0,
-			deleteImage: false
+			deleteImage: false,
+			owner: null
 		})
 
 		// Reset form
@@ -248,6 +263,7 @@ export default defineComponent({
 			form.inventory_category_id = row.inventory_category_id
             form.quantity = row.quantity
 			form.is_functional = row.is_functional
+			form.owner = row.owner.id
 
 			nextTick(() => {
 				if(document.getElementById('edit-item-name'))
@@ -296,6 +312,7 @@ export default defineComponent({
             {name:'inventory_category_id', label:'Kategoria', sortable: true},
 			{name:'quantity', label:'Ilość', sortable: true},
 			{name:'is_functional', label:'Sprawność', sortable: true},
+			{name:'owner', label:'Właściciel', sortable: true},
 			{name:'actions', label:''}
         ]
 

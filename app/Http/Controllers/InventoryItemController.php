@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -21,7 +22,7 @@ class InventoryItemController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:id,name,inventory_category_id,quantity,is_functional']
+            'field' => ['in:id,name,inventory_category_id,quantity,is_functional,owner']
         ]);
 
         $query = InventoryItem::query();
@@ -34,6 +35,8 @@ class InventoryItemController extends Controller
         if (request()->has(['field', 'direction'])) {
             if (request('field') == 'inventory_category_id')
                 $query->orderBy(InventoryCategory::select('name')->whereColumn('inventory_categories.id', 'inventory_items.inventory_category_id'), request('direction'));
+            else if (request('field') == 'owner')
+                $query->orderBy(User::select('name')->whereColumn('users.id', 'inventory_items.owner'), request('direction'));
             else
                 $query->orderBy(request('field'), request('direction'));
         } else
@@ -48,11 +51,21 @@ class InventoryItemController extends Controller
                 'quantity' => $inventoryItem->quantity,
                 'inventory_category_id' => $inventoryItem->inventory_category_id,
                 'is_functional' => $inventoryItem->is_functional,
+                'owner' => $inventoryItem->ownerUser,
+                'owner' => $inventoryItem->owner ? array(
+                    'id' => $inventoryItem->ownerUser->id,
+                    'name' => $inventoryItem->ownerUser->getFullName(),
+                ) : null,
                 'category' => array(
                     'id' => $inventoryItem->category->id,
                     'name' => $inventoryItem->category->name,
                 ),
             ]);
+
+        $users = User::get()->map(fn ($user) => [
+            'id' => $user->id,
+            'name' => $user->getFullName(),
+        ]);
 
         $categories = InventoryCategory::where('inventory_category_id', '!=', null)->orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
@@ -62,6 +75,7 @@ class InventoryItemController extends Controller
         return inertia('Admin/InventoryItems', [
             'items' => $items,
             'categories' => $categories,
+            'users' => $users,
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
     }
@@ -76,23 +90,20 @@ class InventoryItemController extends Controller
     {
         $this->authorize('create', InventoryItem::class);
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:64', 'unique:inventory_items'],
             'inventory_category_id' => ['required', 'integer', Rule::exists('inventory_categories', 'id')->where(function ($query) {
                 return $query->where('inventory_category_id', '!=', null);
             })],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'description' => ['nullable', 'min:3', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'owner' => ['nullable', 'integer', 'exists:users,id']
         ]);
 
         $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
-        InventoryItem::create([
-            'name' => $request->name,
-            'inventory_category_id' => $request->inventory_category_id,
-            'quantity' => $request->quantity,
-            'description' => $request->description,
+        InventoryItem::create($validated + [
             'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
 
@@ -110,7 +121,7 @@ class InventoryItemController extends Controller
     {
         $this->authorize('update', $inventory_item, InventoryItem::class);
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => [
                 'required', 'string', 'min:3', 'max:64',
                 Rule::unique('inventory_items')->ignore(InventoryItem::find($inventory_item->id))
@@ -122,7 +133,8 @@ class InventoryItemController extends Controller
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
             'deleteImage' => ['boolean', 'required'],
-            'is_functional' => ['boolean', 'required']
+            'is_functional' => ['boolean', 'required'],
+            'owner' => ['nullable', 'integer', 'exists:users,id']
         ]);
 
         $image_path = null;
@@ -137,13 +149,8 @@ class InventoryItemController extends Controller
             $image_path = '/images/default.png';
         }
 
-        $inventory_item->update([
-            'name' => $request->name,
-            'inventory_category_id' => $request->inventory_category_id,
-            'description' => $request->description,
-            'quantity' => $request->quantity,
+        $inventory_item->update($validated + [
             'photo_path' => $image_path ? $image_path : $inventory_item->photo_path,
-            'is_functional' => $request->is_functional
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');

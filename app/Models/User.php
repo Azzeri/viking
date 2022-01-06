@@ -99,4 +99,9 @@ class User extends Authenticatable
             'profile_photo_path' => null
         ]);
     }
+
+    public function getFullName()
+    {
+        return $this->name . ($this->nickname ? ' "' . $this->nickname . '" ' : ' ') . $this->surname;
+    }
 }
