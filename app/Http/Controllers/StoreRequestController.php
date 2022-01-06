@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Privilege;
 use App\Models\StoreItem;
 use App\Models\StoreRequest;
 use Carbon\Carbon;
@@ -55,9 +56,12 @@ class StoreRequestController extends Controller
         } else
             $query->orderBy('created_at', 'desc');
 
-        $requests = $query->whereHas('item', function ($q) {
-            $q->whereJsonContains('craftspeople', Auth::user()->id);
-        })->paginate(10)->withQueryString()
+        if (Auth::user()->privilege_id != Privilege::IS_ADMIN)
+            $query->whereHas('item', function ($q) {
+                $q->whereJsonContains('craftspeople', Auth::user()->id);
+            });
+
+        $requests = $query->paginate(10)->withQueryString()
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,
