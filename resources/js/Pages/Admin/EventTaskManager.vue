@@ -39,19 +39,26 @@
 		<template #side>
 			<!-- Buttons -->
 			<template v-if="!event.is_finished">
-				<button @click="deleteTask(selectedTask.id)" class="btn btn-error btn-xs">
-					<i class="fas fa-times"></i>
-					<span class="ml-2">Usuń</span>
-				</button>
-				<button v-if="!taskEditMode" @click="editTask(true)" class="btn btn-info btn-xs ml-2">
-					<i class="fas fa-edit"></i>
-					<span class="ml-2">Edytuj</span>
-				</button>
-				<button v-else @click="reset()" class="btn btn-error btn-xs ml-2">
-					<i class="fas fa-times"></i>
-					<span class="ml-2">Anuluj</span>
-				</button>
-				<button @click="$refs.updateTaskSubmit.click()" v-if=taskEditMode :disabled="taskForm.processing" :class="{ 'loading': taskForm.processing }" class="btn btn-success btn-xs ml-2">Zapisz</button>
+				<div class="flex flex-wrap gap-2 items-center">
+					<button @click="deleteTask(selectedTask.id)" class="btn btn-error btn-xs">
+						<i class="fas fa-times"></i>
+						<span class="ml-2">Usuń</span>
+					</button>
+					<button v-if="!taskEditMode" @click="editTask(true)" class="btn btn-info btn-xs">
+						<i class="fas fa-edit"></i>
+						<span class="ml-2">Edytuj</span>
+					</button>
+					<button v-else @click="reset()" class="btn btn-error btn-xs ">
+						<i class="fas fa-times"></i>
+						<span class="ml-2">Anuluj</span>
+					</button>
+					<button @click="$refs.updateTaskSubmit.click()" v-if=taskEditMode :disabled="taskForm.processing" :class="{ 'loading': taskForm.processing }" class="btn btn-success btn-xs">
+						Zapisz
+					</button>
+					<select @change="changeTaskState" v-model="selectedTask.event_task_state_id" class="select select-bordered select-primary select-sm text-xs">
+						<option v-for="state in task_states" :key="state.id" :value="state.id">{{ state.name }}</option>
+					</select>
+				</div>
 			</template>
 		</template>
 
@@ -379,6 +386,12 @@ export default defineComponent({
 			Inertia.put(route('admin.event_tasks.change_state', [itemID, state]))
 		}
 
+		const changeTaskState = _ => {
+			subTaskForm.put(route('admin.event_tasks.change_state', [selectedTask.value.id, selectedTask.value.event_task_state_id]), {
+				onSuccess: () => close()
+			})
+		}
+
 		// Return current date
 		const currentDate = _ => new Date().toISOString().split('T')[0]
 
@@ -410,6 +423,7 @@ export default defineComponent({
 			reset, 
 			currentDate,   
 			close,  
+			changeTaskState
 		}
 	},
 
