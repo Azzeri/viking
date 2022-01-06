@@ -4384,6 +4384,9 @@ html {
 .ml-7 {
 	margin-left: 1.75rem;
 }
+.mb-16 {
+	margin-bottom: 4rem;
+}
 .block {
 	display: block;
 }
@@ -5881,6 +5884,10 @@ html {
 
 	.sm\:w-auto {
 		width: auto;
+	}
+
+	.sm\:w-1\/2 {
+		width: 50%;
 	}
 
 	.sm\:max-w-md {

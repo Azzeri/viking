@@ -16,6 +16,43 @@
 			</div>
 		</div>
 
+		<h1 class="text-xl font-bold mt-16">Moje zadania</h1>
+		<!-- Event Tasks -->
+		<div class="flex flex-col gap-3">
+			<h2 class="text-lg font-bold mt-2">Wydarzenia</h2>
+			<div v-for="task in eventTasks" :key="task" class="shadow border w-full rounded-lg p-4 flex flex-col sm:flex-row gap-4">
+				<div class="sm:w-1/2">
+					<h3 class="font-semibold text-gray-700 text-justify">{{ task.name }}</h3>
+					<h4 class="font-gray-500 text-sm">{{ task.event }}</h4>
+					<div class="flex items-center space-x-2 mt-1">
+						<i class="fas fa-calendar-week"></i>
+						<h1 class="text-sm font-gray-500">{{ task.date_due }}</h1>
+					</div>
+				</div>
+				<div class="sm:w-1/2">
+					<p class="text-justify">{{ task.description }}</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Inventory services Tasks -->
+		<div class="flex flex-col gap-3 mb-16 mt-2">
+			<h2 class="text-lg font-bold mt-2">Wydarzenia</h2>
+			<div v-for="task in inventoryTasks" :key="task" class="shadow border w-full rounded-lg p-4 flex flex-col sm:flex-row gap-4">
+				<div class="sm:w-1/2">
+					<h3 class="font-semibold text-gray-700 text-justify">{{ task.name }}</h3>
+					<h4 class="font-gray-500 text-sm">{{ task.item }}</h4>
+					<div class="flex items-center space-x-2 mt-1">
+						<i class="fas fa-calendar-week"></i>
+						<h1 class="text-sm font-gray-500">{{ task.date_due }}</h1>
+					</div>
+				</div>
+				<div class="sm:w-1/2">
+					<p class="text-justify">{{ task.description }}</p>
+				</div>
+			</div>
+		</div>
+
 	</admin-panel-layout>
 </template>
 
@@ -26,7 +63,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
 	props: {
-		stats:Object
+		stats: Object,
+		eventTasks: Object,
+		inventoryTasks: Object
 	}, 
 	setup() {
 		const links = [

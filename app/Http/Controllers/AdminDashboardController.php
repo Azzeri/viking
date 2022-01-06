@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\EventTask;
 use App\Models\InventoryItem;
 use App\Models\InventoryService;
 use App\Models\Post;
 use App\Models\StoreRequest;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
@@ -27,6 +30,20 @@ class AdminDashboardController extends Controller
             ['label' => 'Umieszczonych postów', 'value' => Post::count()],
         ];
 
-        return inertia('Admin/Dashboard', ['stats' => $stats]);
+        $eventTasks = EventTask::where('assigned_user', Auth::user()->id)->get()->map(fn ($task) => [
+            'name' => $task->name,
+            'date_due' => $task->date_due ? Carbon::parse($task->date_due)->toFormattedDateString() : 'Nie określono',
+            'description' => $task->description,
+            'event' => $task->event->name
+        ]);
+
+        $inventoryTasks = InventoryService::where('assigned_user', Auth::user()->id)->get()->map(fn ($task) => [
+            'name' => $task->name,
+            'date_due' => $task->date_due ? Carbon::parse($task->date_due)->toFormattedDateString() : 'Nie określono',
+            'description' => $task->description,
+            'item' => $task->item->name
+        ]);
+
+        return inertia('Admin/Dashboard', ['stats' => $stats, 'eventTasks' => $eventTasks, 'inventoryTasks' => $inventoryTasks]);
     }
 }

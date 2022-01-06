@@ -98,7 +98,7 @@
 					<i class="fas fa-align-justify"></i>
 					<h1 class="font-bold">Opis</h1>
 				</div>
-				<p v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.description ?? 'Brak opisu' }}</p>
+				<p v-if="!taskEditMode" class="ml-6 mt-2 text-justify">{{ selectedTask.description ?? 'Brak opisu' }}</p>
 				<textarea v-else class="ml-6 textarea w-full h-32 textarea-primary resize-none max-w-sm" v-model="taskForm.description"></textarea>
 				<label v-if="taskForm.errors.description" class="label label-text-alt text-error text-sm">{{ taskForm.errors.description }}</label>
 				<input type="submit" ref="updateTaskSubmit" class="hidden" />
