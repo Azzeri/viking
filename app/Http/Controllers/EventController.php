@@ -158,6 +158,14 @@ class EventController extends Controller
             'date_due' => $task->date_due,
             'date_due_formatted' => Carbon::parse($task->date_due)->toFormattedDateString(),
             'event_task_state_id' => $task->event_task_state_id,
+            'created_by' => array(
+                'id' => $task->user->id,
+                'name' => $task->user->getFullName(),
+            ),
+            'assigned_user' => $task->assigned_user ? array(
+                'id' => $task->assignedUser->id,
+                'name' => $task->assignedUser->getFullName(),
+            ) : null,
             'subtasks' => $task->subtasks ? $task->subtasks->map(fn ($subtask) => [
                 'id' => $subtask->id,
                 'name' => $subtask->name,
@@ -171,9 +179,16 @@ class EventController extends Controller
 
         $task_states = EventTaskState::all();
 
+        $users = User::get()->map(fn ($user) => [
+            'id' => $user->id,
+            'name' => $user->getFullName(),
+        ]);
+
+
         return inertia('Admin/EventTaskManager', [
             'event' => $eventMapped,
             'tasks' => $tasks,
+            'users' => $users,
             'task_states' => $task_states
         ]);
     }

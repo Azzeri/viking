@@ -20,6 +20,7 @@ class CreateEventTasksTable extends Migration
             $table->date('date_due')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('event_id')->constrained();
+            $table->foreignId('assigned_user')->nullable()->constrained('users');
             $table->foreignId('event_task_state_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

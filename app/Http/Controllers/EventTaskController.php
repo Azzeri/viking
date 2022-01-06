@@ -28,6 +28,7 @@ class EventTaskController extends Controller
             'description' => ['nullable', 'min:3', 'max:255'],
             'date_due' => ['nullable', 'date', 'after_or_equal:today'],
             'event_task_state_id' => ['required', 'integer'],
+            'assigned_user' => ['nullable', 'integer', 'exists:users,id']
         ]);
 
         EventTask::create($validated + [
@@ -54,6 +55,7 @@ class EventTaskController extends Controller
                 'description' => ['nullable', 'min:3', 'max:255'],
                 'date_due' => ['nullable', 'date', 'after_or_equal:today'],
                 'event_id' => ['required', 'integer'],
+                'assigned_user' => ['nullable', 'integer', 'exists:users,id']
             ])
         );
 

@@ -23,7 +23,8 @@
 						<div v-if="task.event_task_state_id == state.id" @click=showTask(task) draggable=true @dragstart="startDrag($event, task)"
 						class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
 							<h1>{{ task.name }}</h1>	
-							<h2 class="text-gray-500 text-xs">{{ task.date_due }}</h2>				
+							<h2 class="text-gray-500 text-xs">{{ task.date_due }}</h2>			
+							<h3 class="text-gray-500 text-xs">{{ task.assigned_user ? task.assigned_user.name : '' }}</h3>		
 						</div>
 					</template>
 				</div>
@@ -73,6 +74,24 @@
 				</div>
 				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.date_due ? selectedTask.date_due_formatted : 'Nie określono' }}</h2>
 				<form-input-field v-else type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="input-sm ml-5 w-full max-w-sm" :label=false></form-input-field>
+				
+				<!-- Assigned user -->
+				<div class="flex items-center space-x-2 mt-3">
+					<i class="fas fa-user"></i>
+					<h1 class="font-bold">Przydzielony użytkownik:</h1>
+				</div>
+				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.assigned_user ? selectedTask.assigned_user.name : 'Brak' }}</h2>
+				<select v-else v-model=taskForm.assigned_user class="select select-bordered select-primary select-sm text-sm ml-6 w-full max-w-sm">
+					<option :value="null">Brak</option>
+					<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+				</select>
+
+				<!-- Created by -->
+				<div v-if="!taskEditMode" class="flex items-center space-x-2 mt-3">
+					<i class="fas fa-user"></i>
+					<h1 class="font-bold">Dodane przez:</h1>
+				</div>
+				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.created_by.name }}</h2>
 
 				<!-- Description -->
 				<div class="flex items-center space-x-2 mt-6">
@@ -155,6 +174,12 @@
 					<form-input-field id="focus-create-task" type="text" name="Nazwa" :required="true" model="name" :form="taskForm" max="128" min="3"></form-input-field>
 					<form-input-field type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="w-full"></form-input-field>
 
+					<label class="label"><span class="label-text">Przydziel użytkownika<span class="ml-1 text-red-500">*</span></span></label> 
+					<select v-model=taskForm.assigned_user class="select select-bordered select-primary w-full">
+						<option :value="null">Brak</option>
+						<option v-for="row in users" :key=row.id :value=row.id>{{ row.name }}</option>
+					</select>
+
 					<label class="label"><span class="label-text">Opis</span></label> 
 					<textarea v-model=taskForm.description class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
 					<label v-if="taskForm.errors.description" class="label label-text-alt text-error text-sm">{{ taskForm.errors.description }}</label>
@@ -183,7 +208,8 @@ export default defineComponent({
 	props: {
 		event: Object,
 		tasks: Object,
-		task_states: Object
+		task_states: Object,
+		users: Object
 	},
 
 	setup(props) {
@@ -192,7 +218,7 @@ export default defineComponent({
 		const createModalOpened = ref(false)
 
 		// Task for details modal and subTask to edit
-		const selectedTask = ref({'name':''})
+		const selectedTask = ref({'name':'', 'created_by':'', 'assigned_user':''})
 		const subTaskIndex = ref(0)
 
 		// Modal modes
@@ -207,6 +233,7 @@ export default defineComponent({
 			date_due:null,
 			event_id:props.event.id,
 			event_task_state_id:null,
+			assigned_user: null
 		})
 
 		const subTaskForm = useForm({
@@ -255,6 +282,7 @@ export default defineComponent({
 			taskForm.name = selectedTask.value.name
 			taskForm.description = selectedTask.value.description
 			taskForm.date_due = selectedTask.value.date_due
+			taskForm.assigned_user = selectedTask.value.assigned_user ? selectedTask.value.assigned_user.id : null
 
 			nextTick(() => document.getElementById('focus-update-task').focus())
 		}
