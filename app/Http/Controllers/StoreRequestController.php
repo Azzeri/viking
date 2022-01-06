@@ -6,6 +6,7 @@ use App\Models\StoreItem;
 use App\Models\StoreRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoreRequestController extends Controller
 {
@@ -54,7 +55,9 @@ class StoreRequestController extends Controller
         } else
             $query->orderBy('created_at', 'desc');
 
-        $requests = $query->paginate(10)->withQueryString()
+        $requests = $query->whereHas('item', function ($q) {
+            $q->whereJsonContains('craftspeople', Auth::user()->id);
+        })->paginate(10)->withQueryString()
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,
