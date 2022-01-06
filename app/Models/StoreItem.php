@@ -11,7 +11,7 @@ class StoreItem extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['name', 'photo_path', 'description', 'quantity', 'price', 'store_category_id'];
+    protected $fillable = ['name', 'photo_path', 'description', 'quantity', 'price', 'store_category_id', 'craftspeople'];
     protected $cascadeDeletes = ['requests'];
 
     public function category()

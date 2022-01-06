@@ -76,7 +76,7 @@
 						<div class="flex flex-col">
 							<div class="flex gap-1 ml-1 mt-1">
 								<h1 class="text-lg font-bold">{{ `${selectedItem.id}.` }}</h1>
-								<h1	class="text-lg font-semibold">{{ selectedItem.name }}</h1>
+								<h2	class="text-lg font-semibold">{{ selectedItem.name }}</h2>
 							</div>
 							<h2 class="text-xm text-gray-500 ml-1">{{ selectedItem.category.name }}</h2>
 							<div class="flex gap-2 ml-1 mt-2">
@@ -85,6 +85,12 @@
 							</div>
 						</div>
 					</div>
+					<h3 class="ml-1 mt-4 font-semibold">Wykonawcy</h3>
+					<ul class="ml-1 list-none space-y-1 mt-2">
+						<li v-for="row in selectedItem.craftspeople" :key="row.id">
+							{{ row.name }}
+						</li>
+					</ul>
 					<p class="ml-1 mt-4 text-justify">{{ selectedItem.description }}</p>
 				</template>
 				<template v-else>
@@ -110,6 +116,18 @@
 								<form-input-field type="number" name="Cena" :required="true" model="price" :form="form" min="0" max="999999" step="0.1" :label="false" extraClass="input-sm w-full"></form-input-field>zł
 								<form-input-field type="number" name="Ilość" :required="true" model="quantity" :form="form" min="0" max="9999" :label="false" extraClass="input-sm w-full"></form-input-field>szt.
 							</div>
+							<h3 class="ml-1 mt-4 font-semibold">Wykonawcy</h3>
+							<div class="max-h-44 overflow-y-auto">
+								<ul class="list-none">
+									<li v-for="user in users" :key="user.id" class="pl-2">
+										<div class="flex mt-4 items-center space-x-2">
+											<input @click="addOrRemoveCraftsman(user)" :checked="form.craftspeople.includes(user.id)" type="checkbox" class="checkbox checkbox-primary checkbox-xs">
+											<span class="label-text">{{ user.name }}</span> 
+										</div>
+									</li>
+								</ul>
+							</div>
+							<label v-if="form.errors.craftspeople" class="label label-text-alt text-error text-sm">{{ form.errors.craftspeople }}</label>
 							<textarea v-model=form.description class="textarea h-32 w-full textarea-bordered textarea-primary resize-none" placeholder="Opis..." minlength="3" maxlength="255"></textarea>
 						</div>
 
@@ -141,11 +159,22 @@
 					<form-input-field type="number" name="Ilość" :required="true" model="quantity" :form="form" min="0" max="9999" ></form-input-field>
 					<form-input-field type="number" name="Cena" :required="true" model="price" :form="form" min="0" max="999999" step="0.1"></form-input-field>
 
-					<label class="label">
-						<span class="label-text">Opis</span>
-					</label> 
+					<label class="label"><span class="label-text">Opis</span></label> 
 					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." maxlength=255 minlength=3></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
+					
+					<label class="label"><span class="label-text mt-2">Wykonawcy</span></label> 
+					<div class="max-h-44 overflow-y-auto">
+						<ul class="list-none">
+							<li v-for="user in users" :key="user.id" class="pl-2">
+								<div class="flex mt-4 items-center space-x-2">
+									<input @click="addOrRemoveCraftsman(user)" :checked="form.craftspeople.includes(user.id)" type="checkbox" class="checkbox checkbox-primary checkbox-xs">
+									<span class="label-text">{{ user.name }}</span> 
+								</div>
+							</li>
+						</ul>
+					</div>
+					<label v-if="form.errors.craftspeople" class="label label-text-alt text-error text-sm">{{ form.errors.craftspeople }}</label>
 
 					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 					<div v-if="url && form.image" class="mx-auto indicator mt-6">
@@ -183,12 +212,13 @@ export default defineComponent({
 	props: {
 		categories: Object,
         items: Object,
-		filters: Object
+		filters: Object,
+		users: Object
 	},
 
 	setup(props) {
 		// Show details of this item
-		const selectedItem =  ref({'photo_path':'', 'id':'', 'name':'', 'category':{}})
+		const selectedItem =  ref({'photo_path':'', 'id':'', 'name':'', 'category':{},})
 
 		// Image upload
 		const url = ref(null)
@@ -209,7 +239,8 @@ export default defineComponent({
             description: null,
             quantity: null,
             store_category_id: props.categories.length ? props.categories[0].id : 0,
-			deleteImage: false
+			deleteImage: false,
+			craftspeople: []
 		})
 
 		// Reset form
@@ -246,6 +277,7 @@ export default defineComponent({
 			form.price = row.price
 			form.store_category_id = row.store_category_id
             form.quantity = row.quantity
+			form.craftspeople = JSON.parse(row.craftspeople_array)
 
 			nextTick(() => {
 				if(document.getElementById('edit-item-name'))
@@ -287,6 +319,10 @@ export default defineComponent({
 			document.getElementById('category-image').src = "/images/default.png"
 		}
 
+		const addOrRemoveCraftsman = (user) => {
+			form.craftspeople.includes(user.id) ? form.craftspeople.splice(form.craftspeople.indexOf(user.id), 1) : form.craftspeople.push(user.id)
+		}
+
 		// Datatable columns
 		const columns = [
 			{name:'id', label:'ID', sortable: true},
@@ -313,7 +349,8 @@ export default defineComponent({
 			deleteRow,
 			previewImage,
 			removeImage,
-			columns
+			columns,
+			addOrRemoveCraftsman
 		}
 	},
 

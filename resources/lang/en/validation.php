@@ -194,7 +194,8 @@ return [
         'is_finished' => 'czy zakończono',
         'participants' => 'uczestnicy',
         'event_task_state_id' => 'ID statusu zadania',
-        'event_id' => 'ID wydarzenia'
+        'event_id' => 'ID wydarzenia',
+        'craftspeople' => 'wykonawcy'
     ],
 
 ];

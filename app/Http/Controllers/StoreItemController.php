@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StoreCategory;
 use App\Models\StoreItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -53,6 +54,11 @@ class StoreItemController extends Controller
                     'id' => $store_item->category->id,
                     'name' => $store_item->category->name,
                 ),
+                'craftspeople' => User::whereIn('id', json_decode($store_item->craftspeople))->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
+                    'id' => $user->id,
+                    'name' => $user->getFullName(),
+                ]),
+                'craftspeople_array' => $store_item->craftspeople,
             ]);
 
         $categories = StoreCategory::where('store_category_id', '!=', null)->orderBy('name')->get()->map(fn ($category) => [
@@ -60,9 +66,15 @@ class StoreItemController extends Controller
             'name' => $category->name,
         ]);
 
+        $users = User::get()->map(fn ($user) => [
+            'id' => $user->id,
+            'name' => $user->getFullName(),
+        ]);
+
         return inertia('Admin/StoreItems', [
             'items' => $items,
             'categories' => $categories,
+            'users' => $users,
             'filters' => request()->all(['search', 'field', 'direction']),
         ]);
     }
@@ -85,7 +97,9 @@ class StoreItemController extends Controller
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999'],
             'description' => ['nullable', 'min:3', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'craftspeople' => ['array', 'required'],
+            'craftspeople.*' => ['exists:users,id']
         ]);
 
         $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
@@ -96,7 +110,8 @@ class StoreItemController extends Controller
             'quantity' => $request->quantity,
             'price' => $request->price,
             'description' => $request->description,
-            'photo_path' => $image_path ? $image_path : '/images/default.png'
+            'photo_path' => $image_path ? $image_path : '/images/default.png',
+            'craftspeople' => json_encode($request->craftspeople)
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie dodano przedmiot');
@@ -125,7 +140,9 @@ class StoreItemController extends Controller
             'price' => ['required', 'numeric', 'min:0', 'max:999999'],
             'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
-            'deleteImage' => ['boolean', 'required']
+            'deleteImage' => ['boolean', 'required'],
+            'craftspeople' => ['array', 'required'],
+            'craftspeople.*' => ['exists:users,id']
         ]);
 
         $image_path = null;
@@ -146,8 +163,8 @@ class StoreItemController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'photo_path' => $image_path ? $image_path : $store_item->photo_path
-
+            'photo_path' => $image_path ? $image_path : $store_item->photo_path,
+            'craftspeople' => json_encode($request->craftspeople)
         ]);
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
