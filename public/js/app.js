@@ -24048,7 +24048,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   setup: function setup(props) {
     var filter = props.filters.filter ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.filters.filter) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    var sortLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('Nazwa');
     var showCategoriesOverlay = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var params = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
       search: props.filters.search,
@@ -24059,9 +24058,9 @@ __webpack_require__.r(__webpack_exports__);
 
     function sort(field) {
       document.getElementById('sort-ul').style.visibility = 'hidden';
-      params.field = field[0];
-      params.direction = field[1];
-      sortLabel.value = field[2];
+      params.field = field.name;
+      params.direction = field.direction;
+      sortLabel.value = field.label;
       document.getElementById('sort-icon').innerHTML = field[1] === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>';
     }
 
@@ -24074,6 +24073,26 @@ __webpack_require__.r(__webpack_exports__);
       params.filter = option.id;
     };
 
+    var frontFilters = [{
+      'name': 'name',
+      'direction': 'asc',
+      'label': 'nazwa rosnąco'
+    }, {
+      'name': 'name',
+      'direction': 'desc',
+      'label': 'nazwa malejąco'
+    }, {
+      'name': 'price',
+      'direction': 'asc',
+      'label': 'cena rosnąco'
+    }, {
+      'name': 'price',
+      'direction': 'desc',
+      'label': 'cena malejąco'
+    }];
+    var sortLabel = params.field ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(frontFilters.filter(function (item) {
+      return item.name == params.field && item.direction == params.direction;
+    })[0].label) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('nazwa malejąco');
     return {
       params: params,
       sort: sort,
@@ -24081,7 +24100,8 @@ __webpack_require__.r(__webpack_exports__);
       filterItems: filterItems,
       sortLabel: sortLabel,
       showCategoriesOverlay: showCategoriesOverlay,
-      showDropdown: showDropdown
+      showDropdown: showDropdown,
+      frontFilters: frontFilters
     };
   },
   watch: {
@@ -37321,35 +37341,12 @@ var _hoisted_11 = {
   tabindex: "0",
   "class": "p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
 };
-
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", null, "Nazwa rosnąco", -1
-/* HOISTED */
-);
-
-var _hoisted_13 = [_hoisted_12];
-
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", null, "Nazwa malejąco", -1
-/* HOISTED */
-);
-
-var _hoisted_15 = [_hoisted_14];
-
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", null, "Cena rosnąco", -1
-/* HOISTED */
-);
-
-var _hoisted_17 = [_hoisted_16];
-
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", null, "Cena malejąco", -1
-/* HOISTED */
-);
-
-var _hoisted_19 = [_hoisted_18];
-var _hoisted_20 = {
+var _hoisted_12 = ["onClick"];
+var _hoisted_13 = {
   "class": "relative"
 };
 
-var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   "class": "absolute top-0 right-0 rounded-l-none btn btn-primary hover:bg-primary cursor-default"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-lg fa-search"
@@ -37357,29 +37354,32 @@ var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Brak produktów w tej kategorii ");
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Brak produktów w tej kategorii ");
 
-var _hoisted_23 = {
+var _hoisted_16 = {
   "class": "flex flex-wrap gap-4 mt-16 justify-center"
 };
-var _hoisted_24 = ["src"];
-var _hoisted_25 = {
+var _hoisted_17 = ["src"];
+var _hoisted_18 = {
   "class": "card-body justify-between"
 };
-var _hoisted_26 = {
+var _hoisted_19 = {
   "class": "card-title"
 };
-var _hoisted_27 = {
+var _hoisted_20 = {
   "class": "text-gray-500 text-base"
 };
-var _hoisted_28 = {
+var _hoisted_21 = {
   "class": "text-2xl text-base-content mt-2"
 };
-var _hoisted_29 = {
+var _hoisted_22 = {
+  "class": "text-justify"
+};
+var _hoisted_23 = {
   "class": "card-actions"
 };
 
-var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Więcej");
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Więcej");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
@@ -37431,27 +37431,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "btn w-full md:w-auto"
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)('Sortuj: ' + _ctx.sortLabel), 1
       /* TEXT */
-      ), _hoisted_10]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
-        onClick: _cache[2] || (_cache[2] = function ($event) {
-          return _ctx.sort(['name', 'asc', 'nazwa']);
-        })
-      }, _hoisted_13), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
-        onClick: _cache[3] || (_cache[3] = function ($event) {
-          return _ctx.sort(['name', 'desc', 'nazwa']);
-        })
-      }, _hoisted_15), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
-        onClick: _cache[4] || (_cache[4] = function ($event) {
-          return _ctx.sort(['price', 'asc', 'cena']);
-        })
-      }, _hoisted_17), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
-        onClick: _cache[5] || (_cache[5] = function ($event) {
-          return _ctx.sort(['price', 'desc', 'cena']);
-        })
-      }, _hoisted_19)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+      ), _hoisted_10]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_11, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.frontFilters, function (filter) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+          onClick: function onClick($event) {
+            return _ctx.sort(filter);
+          },
+          key: filter
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(filter.label), 1
+        /* TEXT */
+        )], 8
+        /* PROPS */
+        , _hoisted_12);
+      }), 128
+      /* KEYED_FRAGMENT */
+      )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li @click=\"sort(['name', 'asc','nazwa'])\"> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <a>Nazwa rosnąco</a> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" </li>  "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li @click=\"sort(['name', 'desc', 'nazwa'])\"> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <a>Nazwa malejąco</a> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" </li>  "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li @click=\"sort(['price', 'asc', 'cena'])\"> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <a>Cena rosnąco</a> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" </li> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li @click=\"sort(['price', 'desc', 'cena'])\"> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <a>Cena malejąco</a> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" </li> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+        "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
           return _ctx.params.search = $event;
         }),
-        onClick: _cache[7] || (_cache[7] = function ($event) {
+        onClick: _cache[3] || (_cache[3] = function ($event) {
           return _ctx.params.searchField = 'name';
         }),
         placeholder: "Szukaj",
@@ -37459,36 +37456,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "text"
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.params.search]]), _hoisted_21])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Category hasn't items "), !_ctx.items.data.length && _ctx.filters.search == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.params.search]]), _hoisted_14])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Category hasn't items "), !_ctx.items.data.length && _ctx.filters.search == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         key: 0
-      }, [_hoisted_22], 2112
+      }, [_hoisted_15], 2112
       /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
       )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         key: 1
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Category has items "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.items.data, function (row) {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Category has items "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.items.data, function (row) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("article", {
           key: row.id,
-          "class": "card shadow-lg bordered rounded-lg"
+          "class": "card shadow-lg bordered rounded-lg max-w-sm"
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("figure", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
           src: row.photo_path,
           "class": "h-64 object-cover"
         }, null, 8
         /* PROPS */
-        , _hoisted_24)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.name), 1
+        , _hoisted_17)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.name), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.category.name)), 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.category.name)), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.price, "z\u0142")), 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(row.price, "z\u0142")), 1
         /* TEXT */
-        )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.description), 1
+        )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.description), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
           as: "button",
           href: _ctx.route('store.show', row.id),
           "class": "btn btn-primary w-full md:w-auto"
         }, {
           "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-            return [_hoisted_30];
+            return [_hoisted_24];
           }),
           _: 2
           /* DYNAMIC */

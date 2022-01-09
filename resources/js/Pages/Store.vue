@@ -28,18 +28,21 @@
                 <div class="dropdown">
                     <div @click="showDropdown('sort-ul')" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
                     <ul id="sort-ul" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                        <li @click="sort(['name', 'asc','nazwa'])">
-                            <a>Nazwa rosnąco</a>
-                        </li> 
-                        <li @click="sort(['name', 'desc', 'nazwa'])">
-                            <a>Nazwa malejąco</a>
-                        </li> 
-                        <li @click="sort(['price', 'asc', 'cena'])">
-                            <a>Cena rosnąco</a>
+                        <li @click="sort(filter)" v-for="filter in frontFilters" :key="filter">
+                            <a>{{ filter.label }}</a>
                         </li>
-                        <li @click="sort(['price', 'desc', 'cena'])">
-                            <a>Cena malejąco</a>
-                        </li>
+                        <!-- <li @click="sort(['name', 'asc','nazwa'])"> -->
+                            <!-- <a>Nazwa rosnąco</a> -->
+                        <!-- </li>  -->
+                        <!-- <li @click="sort(['name', 'desc', 'nazwa'])"> -->
+                            <!-- <a>Nazwa malejąco</a> -->
+                        <!-- </li>  -->
+                        <!-- <li @click="sort(['price', 'asc', 'cena'])"> -->
+                            <!-- <a>Cena rosnąco</a> -->
+                        <!-- </li> -->
+                        <!-- <li @click="sort(['price', 'desc', 'cena'])"> -->
+                            <!-- <a>Cena malejąco</a> -->
+                        <!-- </li> -->
                     </ul>
                 </div>
                 <div class="relative">
@@ -57,7 +60,7 @@
             <!-- Category has items -->
             <template v-else>
                 <div class="flex flex-wrap gap-4 mt-16 justify-center">
-                    <article v-for="row in items.data" :key="row.id" class="card shadow-lg bordered rounded-lg">
+                    <article v-for="row in items.data" :key="row.id" class="card shadow-lg bordered rounded-lg max-w-sm">
                         <figure>
                             <img :src=row.photo_path class="h-64 object-cover">
                         </figure> 
@@ -69,7 +72,7 @@
                                     <div class="text-2xl text-base-content mt-2">{{ `${row.price}zł` }}</div>
                                 </h2>
                             </div>
-                            <p>{{ row.description }}</p>
+                            <p class="text-justify">{{ row.description }}</p>
                             <div class="card-actions">
                                 <Link as="button" :href="route('store.show', row.id)" class="btn btn-primary w-full md:w-auto">Więcej</Link>
                             </div>
@@ -102,7 +105,7 @@ export default defineComponent({
 
     setup(props) {
         const filter = props.filters.filter ? ref(props.filters.filter) : ref(0)
-        const sortLabel = ref('Nazwa')
+        
         const showCategoriesOverlay = ref(false)
 
         const params = reactive({
@@ -114,9 +117,9 @@ export default defineComponent({
 
         function sort(field) {
             document.getElementById('sort-ul').style.visibility = 'hidden'
-            params.field = field[0]
-            params.direction = field[1]
-            sortLabel.value = field[2]
+            params.field = field.name
+            params.direction = field.direction
+            sortLabel.value = field.label
             document.getElementById('sort-icon').innerHTML = field[1] === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>'
 
         }
@@ -128,7 +131,16 @@ export default defineComponent({
             params.filter = option.id
         }
 
-        return { params, sort, filter, filterItems, sortLabel, showCategoriesOverlay, showDropdown }
+        const frontFilters = [
+            {'name':'name', 'direction':'asc', 'label':'nazwa rosnąco'},
+            {'name':'name', 'direction':'desc', 'label':'nazwa malejąco'},
+            {'name':'price', 'direction':'asc', 'label':'cena rosnąco'},
+            {'name':'price', 'direction':'desc', 'label':'cena malejąco'},
+        ]
+
+        const sortLabel = params.field ? ref(frontFilters.filter((item) => item.name == params.field && item.direction == params.direction)[0].label) : ref('nazwa malejąco')
+
+        return { params, sort, filter, filterItems, sortLabel, showCategoriesOverlay, showDropdown, frontFilters }
     },
 
     watch: {
