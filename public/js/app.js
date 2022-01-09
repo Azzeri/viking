@@ -24065,7 +24065,7 @@ __webpack_require__.r(__webpack_exports__);
       params.field = field.name;
       params.direction = field.direction;
       sortLabel.value = field.label;
-      document.getElementById('sort-icon').innerHTML = field[1] === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>';
+      document.getElementById('sort-icon').innerHTML = field.direction === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>';
     }
 
     var showDropdown = function showDropdown(id) {
@@ -37398,7 +37398,7 @@ var _hoisted_10 = {
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   id: "sort-icon"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "ml-1 fas fa-sort-amount-up"
+  "class": "ml-1 fas fa-sort-amount-down"
 })], -1
 /* HOISTED */
 );

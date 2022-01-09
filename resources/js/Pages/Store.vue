@@ -28,7 +28,7 @@
             <div class="flex flex-col md:flex-row gap-2 w-full">
                 <!-- Sort -->
                 <div class="dropdown">
-                    <div @click="showDropdown('sort-ul')" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-up"></i></span></div> 
+                    <div @click="showDropdown('sort-ul')" tabindex="0" class="btn w-full md:w-auto">{{ 'Sortuj: ' + sortLabel}}<span id="sort-icon"><i class="ml-1 fas fa-sort-amount-down"></i></span></div> 
                     <ul id="sort-ul" tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
                         <li @click="sort(filter)" v-for="filter in frontFilters" :key="filter">
                             <a>{{ filter.label }}</a>
@@ -110,7 +110,7 @@ export default defineComponent({
             params.field = field.name
             params.direction = field.direction
             sortLabel.value = field.label
-            document.getElementById('sort-icon').innerHTML = field[1] === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>'
+            document.getElementById('sort-icon').innerHTML = field.direction === 'asc' ? '<i class="ml-1 fas fa-sort-amount-up"></i>' : '<i class="ml-1 fas fa-sort-amount-down"></i>'
 
         }
         
