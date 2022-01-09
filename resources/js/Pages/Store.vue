@@ -15,7 +15,9 @@
                 <div id="filter-ul" tabindex="1" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
                         <template v-for="row in categories" :key="row.id">
                             <ul v-if="row.subcategories.length" class="menu">
-                                <li class="menu-title"><span>{{ row.name }}</span></li>
+                                <li class="menu-title">
+                                    <span><img :src="row.photo_path" class="w-6 h-6 mr-1 rounded-full" />{{ row.name }}</span>
+                                </li>
                                 <li v-for="sub in row.subcategories" :key="sub.id" @click="filterItems(sub)">
                                     <a>{{ sub.name }}</a>
                                 </li>
@@ -31,18 +33,6 @@
                         <li @click="sort(filter)" v-for="filter in frontFilters" :key="filter">
                             <a>{{ filter.label }}</a>
                         </li>
-                        <!-- <li @click="sort(['name', 'asc','nazwa'])"> -->
-                            <!-- <a>Nazwa rosnąco</a> -->
-                        <!-- </li>  -->
-                        <!-- <li @click="sort(['name', 'desc', 'nazwa'])"> -->
-                            <!-- <a>Nazwa malejąco</a> -->
-                        <!-- </li>  -->
-                        <!-- <li @click="sort(['price', 'asc', 'cena'])"> -->
-                            <!-- <a>Cena rosnąco</a> -->
-                        <!-- </li> -->
-                        <!-- <li @click="sort(['price', 'desc', 'cena'])"> -->
-                            <!-- <a>Cena malejąco</a> -->
-                        <!-- </li> -->
                     </ul>
                 </div>
                 <div class="relative">

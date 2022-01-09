@@ -29,6 +29,7 @@ class PhotoController extends Controller
             'id' => $category->id,
             'name' => $category->name,
             'photos' => $category->photos ? $category->photos : null,
+            'photo_path' => $category->photo_path,
             'category' => $category->parentCategory ?? null,
             'subcategories' => $category->subcategories->map(fn ($subcategory) => [
                 'id' => $subcategory->id,

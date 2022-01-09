@@ -46,6 +46,7 @@ class StoreController extends Controller
         $categories = StoreCategory::orderBy('name')->get()->map(fn ($category) => [
             'id' => $category->id,
             'name' => $category->name,
+            'photo_path' => $category->photo_path,
             'subcategories' => $category->subcategories ? $category->subcategories->map(fn ($subcategory) => [
                 'id' => $subcategory->id,
                 'name' => $subcategory->name,

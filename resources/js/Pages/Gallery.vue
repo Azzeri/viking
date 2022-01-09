@@ -16,7 +16,7 @@
                          <template v-for="row in categories" :key="row.id">
 							<ul v-if="row.subcategories.length" class="menu">
 								<li class="menu-title">
-                                    <span><img :src="row.photo_path" class="w-6 h-6 mr-1" />{{ row.name }}</span>
+                                    <span><img :src="row.photo_path" class="w-6 h-6 mr-1 rounded-full" />{{ row.name }}</span>
                                 </li>
 								<li v-for="sub in row.subcategories" :key="sub.id" @click="filterServices(sub)">
 									<a>{{ sub.name }}</a>
