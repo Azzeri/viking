@@ -17,7 +17,7 @@ class AboutController extends Controller
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
                 'role' => $user->role,
-                'photo_path' => $user->profile_photo_path
+                'profile_photo_path' => $user->profile_photo_path
             ])
         ]);
     }
