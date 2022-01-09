@@ -28,7 +28,8 @@ class UserSeeder extends Seeder
             'privilege_id' => Privilege::IS_ADMIN,
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
-            'email_verified_at' => now(),
+            'email_verified_at' => '2022-01-09 00:00:00',
+            'created_at' => '2022-01-09 00:00:00'
         ]);
 
         User::create([
@@ -42,7 +43,8 @@ class UserSeeder extends Seeder
             'privilege_id' => Privilege::IS_COORDINATOR,
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
-            'email_verified_at' => now(),
+            'email_verified_at' => '2022-01-09 00:00:00',
+            'created_at' => '2022-01-09 00:00:00'
         ]);
 
         User::create([
@@ -56,7 +58,8 @@ class UserSeeder extends Seeder
             'privilege_id' => Privilege::IS_COORDINATOR,
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
-            'email_verified_at' => now(),
+            'email_verified_at' => '2022-01-09 00:00:00',
+            'created_at' => '2022-01-09 00:00:00'
         ]);
 
         // User::create([

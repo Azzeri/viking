@@ -14,7 +14,7 @@ class PrivilegeSeeder extends Seeder
      */
     public function run()
     {
-        Privilege::create(['name' => 'Administrator']);
-        Privilege::create(['name' => 'Koordynator']);
+        Privilege::create(['name' => 'Administrator', 'created_at' => '2022-01-09 00:00:00']);
+        Privilege::create(['name' => 'Koordynator', 'created_at' => '2022-01-09 00:00:00']);
     }
 }
