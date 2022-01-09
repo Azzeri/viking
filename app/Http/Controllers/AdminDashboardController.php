@@ -30,14 +30,14 @@ class AdminDashboardController extends Controller
             ['label' => 'Umieszczonych postów', 'value' => Post::count()],
         ];
 
-        $eventTasks = EventTask::where('assigned_user', Auth::user()->id)->get()->map(fn ($task) => [
+        $eventTasks = EventTask::where('assigned_user', Auth::user()->id)->where('event_task_state_id', '!=', 4)->where('event_task_state_id', '!=', 5)->get()->map(fn ($task) => [
             'name' => $task->name,
             'date_due' => $task->date_due ? Carbon::parse($task->date_due)->toFormattedDateString() : 'Nie określono',
             'description' => $task->description,
             'event' => $task->event->name
         ]);
 
-        $inventoryTasks = InventoryService::where('assigned_user', Auth::user()->id)->get()->map(fn ($task) => [
+        $inventoryTasks = InventoryService::where('assigned_user', Auth::user()->id)->where('is_finished', false)->get()->map(fn ($task) => [
             'name' => $task->name,
             'date_due' => $task->date_due ? Carbon::parse($task->date_due)->toFormattedDateString() : 'Nie określono',
             'description' => $task->description,
