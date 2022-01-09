@@ -16,18 +16,23 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PrivilegeSeeder::class,
-            EventSeeder::class,
             UserSeeder::class,
+
             InventoryCategorySeeder::class,
-            // InventoryItemSeeder::class,
-            // InventoryServiceSeeder::class,
+            InventoryItemSeeder::class,
+            InventoryServiceSeeder::class,
+
             StoreCategorySeeder::class,
-            // StoreItemSeeder::class,
-            // StoreRequestSeeder::class,
-            EventTaskStateSeeder::class,
+            StoreItemSeeder::class,
+            StoreRequestSeeder::class,
+
+            // EventSeeder::class,
+            // EventTaskStateSeeder::class,
             // EventTaskSeeder::class,
             // EventSubTaskSeeder::class,
+
             // PostSeeder::class,
+            
             // PhotoCategorySeeder::class,
             // PhotoSeeder::class
         ]);
