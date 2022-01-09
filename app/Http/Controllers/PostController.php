@@ -47,7 +47,6 @@ class PostController extends Controller
                 'title' => strlen($post->title) > 43 ? substr($post->title, 0, 43) . '...' : $post->title,
                 'photo_path' => $post->photo_path,
                 'body' => $post->body,
-                'resource_link' => $post->resource_link,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
                 'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
                 'date_time_created_formatted' => Carbon::parse($post->created_at)->toDayDateTimeString(),
@@ -58,6 +57,7 @@ class PostController extends Controller
                     'nickname' => $post->user->nickname,
                 )
             ]);
+            
         return inertia('Admin/Posts', [
             'posts' => $posts,
             'filters' => request()->all(['search', 'field', 'direction']),
@@ -110,6 +110,8 @@ class PostController extends Controller
             'photo_path' => $post->photo_path,
             'body' => $post->body,
             'resource_link' => $post->resource_link,
+            'resource_type' => explode("/", $post->resource_link)[1],
+            'resource_id' => explode("/", $post->resource_link)[2],
             'time_created' => Carbon::parse($post->created_at)->format('H:i'),
             'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
             'date_time_created_formatted' => Carbon::parse($post->created_at)->toDayDateTimeString(),

@@ -38,9 +38,15 @@
           </div>
           <p class="text-justify">{{ post.body }}</p>
           <div class="card-actions">
-            <button v-if="post.resource_link" class="btn btn-sm btn-secondary">
-              Szczegóły
-            </button>
+            <Link
+              :href="
+                route(`admin.${post.resource_type}.show`, post.resource_id)
+              "
+              v-if="post.resource_link"
+              class="btn btn-sm btn-secondary"
+            >
+              Zobacz
+            </Link>
           </div>
         </div>
       </div>
@@ -184,9 +190,12 @@ export default defineComponent({
     };
 
     const update = (_) =>
-      form.post(route("admin.posts.update", { post:props.post.id, _method:'put' }), {
-        onSuccess: () => close(),
-      });
+      form.post(
+        route("admin.posts.update", { post: props.post.id, _method: "put" }),
+        {
+          onSuccess: () => close(),
+        }
+      );
 
     const deletePost = (_) => {
       if (!confirm("Na pewno?")) return;

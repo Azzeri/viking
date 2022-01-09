@@ -89,6 +89,11 @@
 					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required min="3" max="512"></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
 
+					<div class="flex mt-4 items-center space-x-2">
+						<input v-model="form.create_post" type="checkbox" class="checkbox checkbox-primary">
+						<span class="label-text">Utwórz post</span> 
+					</div>
+
 					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
 					<div v-if="url && form.image" class="mx-auto indicator mt-2">
 						<div class="indicator-item">
@@ -148,7 +153,9 @@ export default defineComponent({
 			addrTown:null,
 
 			description:null,
-			image:null
+			image:null,
+
+			create_post: false
 		})
 
 		// Close modal and reset form

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\EventTask;
 use App\Models\EventTaskState;
+use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,14 +84,24 @@ class EventController extends Controller
             'addrPostCode' => ['required', 'alpha_dash', 'min:3', 'max:10'],
             'addrTown' => ['required', 'min:3', 'max:64'],
             'description' => ['required', 'min:3', 'max:512'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
+            'create_post' => ['required', 'boolean']
         ]);
 
         $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
-        Event::create($validated + [
+        $event = Event::create($validated + [
             'photo_path' => $image_path ? $image_path : '/images/default.png'
         ]);
+
+        if ($request->create_post)
+            Post::create([
+                'title' => 'Nadchodzące wydarzenie: ' . request()->name,
+                'body' => request()->description,
+                'resource_link' => 'admin/events/' . $event->id,
+                'user_id' => Auth::user()->id,
+                'photo_path' => $image_path ? $image_path : '/images/default.png'
+            ]);
 
         return redirect()->back()->with('message', 'Pomyślnie utworzono wydarzenie');
     }

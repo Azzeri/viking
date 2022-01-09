@@ -19,7 +19,9 @@
                     </div>
                     <p class="text-justify">{{ post.body }}</p>
                     <div class="card-actions">
-                        <button v-if="post.resource_link" class="btn btn-sm btn-secondary">Szczegóły</button>
+                        <Link :href="route(`${post.resource_type}.show`, post.resource_id)" v-if="post.resource_link" class="btn btn-sm btn-secondary">
+                            Zobacz
+                        </Link>
                     </div>
                 </div>
             </div> 
