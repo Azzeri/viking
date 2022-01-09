@@ -14,10 +14,10 @@ class EventTaskStateSeeder extends Seeder
      */
     public function run()
     {
-        EventTaskState::create(['name' => 'niezatwierdzone']);
-        EventTaskState::create(['name' => 'niewykonane']);
-        EventTaskState::create(['name' => 'w trakcie']);
-        EventTaskState::create(['name' => 'wykonane']);
-        EventTaskState::create(['name' => 'odrzucone']);
+        EventTaskState::create(['name' => 'niezatwierdzone', 'created_at' => '2022-01-09 00:00:00']);
+        EventTaskState::create(['name' => 'niewykonane', 'created_at' => '2022-01-09 00:00:00']);
+        EventTaskState::create(['name' => 'w trakcie', 'created_at' => '2022-01-09 00:00:00']);
+        EventTaskState::create(['name' => 'wykonane', 'created_at' => '2022-01-09 00:00:00']);
+        EventTaskState::create(['name' => 'odrzucone', 'created_at' => '2022-01-09 00:00:00']);
     }
 }

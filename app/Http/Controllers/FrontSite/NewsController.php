@@ -40,8 +40,8 @@ class NewsController extends Controller
                 'photo_path' => $post->photo_path,
                 'body' => $post->body,
                 'resource_link' => $post->resource_link,
-                'resource_type' => explode("/", $post->resource_link)[1],
-                'resource_id' => explode("/", $post->resource_link)[2],
+                'resource_type' => $post->resource_link ? explode("/", $post->resource_link)[1] : null,
+                'resource_id' => $post->resource_link ? explode("/", $post->resource_link)[2] : null,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
                 'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
                 'user' => array(
