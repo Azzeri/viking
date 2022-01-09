@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
 
             PostSeeder::class,
             
-            // PhotoCategorySeeder::class,
-            // PhotoSeeder::class
+            PhotoCategorySeeder::class,
+            PhotoSeeder::class
         ]);
     }
 }

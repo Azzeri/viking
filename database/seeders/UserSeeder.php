@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
             'email_verified_at' => '2022-01-09 00:00:00',
+            'profile_photo_path' => 'https://cdn.pixabay.com/photo/2021/02/18/13/28/man-6027220_960_720.jpg',
             'created_at' => '2022-01-09 00:00:00'
         ]);
 
@@ -44,13 +45,14 @@ class UserSeeder extends Seeder
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
             'email_verified_at' => '2022-01-09 00:00:00',
+            'profile_photo_path' => 'https://cdn.pixabay.com/photo/2016/07/02/19/45/viking-1493685_960_720.jpg',
             'created_at' => '2022-01-09 00:00:00'
         ]);
 
         User::create([
-            'name' => 'Adam',
+            'name' => 'Asia',
             'surname' => 'Nowak',
-            'nickname' => 'Rollo',
+            'nickname' => 'Lagertha',
             'role' => 'Wojownik',
             'email' => 'an@viking.pl',
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
@@ -59,9 +61,10 @@ class UserSeeder extends Seeder
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10),
             'email_verified_at' => '2022-01-09 00:00:00',
+            'profile_photo_path' => 'https://cdn.pixabay.com/photo/2020/05/22/20/44/warrior-5207128_960_720.jpg',
             'created_at' => '2022-01-09 00:00:00'
         ]);
-
+        
         // User::create([
         //     'name' => '0EuuW7DJI51wKPX5zGdKdhwUdud1m2pV',
         //     'surname' => '92NOpAGuA3YmtV6h6EQnUwj7URPwum41',
