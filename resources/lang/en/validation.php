@@ -195,7 +195,9 @@ return [
         'participants' => 'uczestnicy',
         'event_task_state_id' => 'ID statusu zadania',
         'event_id' => 'ID wydarzenia',
-        'craftspeople' => 'wykonawcy'
+        'craftspeople' => 'wykonawcy',
+        'password' => 'hasło',
+        'current_password' => 'obecne hasło'
     ],
 
 ];

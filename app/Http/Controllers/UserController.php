@@ -57,7 +57,8 @@ class UserController extends Controller
                 'age' => Carbon::parse($user->date_birth)->age,
                 'role' => $user->role,
                 'privilege_id' => $user->privilege_id,
-                'description' => $user->description
+                'description' => $user->description,
+                'profile_photo_path' => $user->profile_photo_path
             ]);
 
         return inertia('Admin/Users', [

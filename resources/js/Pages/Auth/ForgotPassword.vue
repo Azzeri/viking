@@ -1,34 +1,33 @@
 <template>
-    <Head title="Forgot Password" />
+    <Head title="Nie pamietam hasła" />
+    
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content">
+            <div class="card md:w-96 shadow-2xl bg-base-100">
+                <div class="card-body">
+                    <jet-application-mark class="block h-9 w-auto mx-auto" />
+                    <h1 class="card-title text-lg text-center">Reset hasła</h1>
 
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
+                    <jet-validation-errors class="pl-1" />
+                    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                        {{ status }}
+                    </div>
 
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-        </div>
+                    <form @submit.prevent=submit>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">Email</span></label> 
+                            <input v-model=form.email type="email" placeholder="Adres email" class="input input-primary input-bordered" required autofocus autocomplete="email">
+                        </div>
+                    </form>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+                    <div class="card-actions justify-center">
+                        <button @click=submit class="btn btn-primary w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Wyślij link</button>
+                    </div>
 
-        <jet-validation-errors class="mb-4" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
+                </div>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -40,6 +39,7 @@
     import JetInput from '@/Jetstream/Input.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+    import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
     export default defineComponent({
         components: {
@@ -49,7 +49,8 @@
             JetButton,
             JetInput,
             JetLabel,
-            JetValidationErrors
+            JetValidationErrors,
+            JetApplicationMark
         },
 
         props: {

@@ -1,36 +1,42 @@
 <template>
     <Head title="Reset Password" />
 
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content">
+            <div class="card md:w-96 shadow-2xl bg-base-100">
+                <div class="card-body">
+                    <jet-application-mark class="block h-9 w-auto mx-auto" />
+                    <h1 class="card-title text-lg text-center">Reset hasła</h1>
 
-        <jet-validation-errors class="mb-4" />
+                    <jet-validation-errors class="pl-1" />
+                    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                        {{ status }}
+                    </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
+                    <form @submit.prevent=submit>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">Email</span></label> 
+                            <input v-model=form.email type="email" placeholder="Adres email" class="input input-primary input-bordered" required autofocus autocomplete="email">
+                        </div>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">Hasło</span></label> 
+                            <input v-model=form.password type="password" placeholder="Hasło" class="input input-primary input-bordered" required autocomplete="password">
+                        </div>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">Potwierdź hasło</span></label> 
+                            <input v-model=form.password_confirmation type="password" placeholder="Potwierdź hasło" class="input input-primary input-bordered" required autocomplete="new-password">
+                        </div>
+                    </form>
+
+                    <div class="card-actions justify-center">
+                        <button @click=submit class="btn btn-primary w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Zapisz</button>
+                    </div>
+
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="password_confirmation" value="Confirm Password" />
-                <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
 </template>
 
 <script>

@@ -22,7 +22,7 @@
                             <input v-model=form.role type="text" placeholder="Adres email" class="input input-primary input-bordered" required disabled="disabled">
 
                             <label class="label"><span class="label-text">Imię<span class="ml-1 text-red-500">*</span></span></label> 
-                            <input v-model=form.name type="text" placeholder="Imię" class="input input-primary input-bordered" required autofocus autocomplete="name">
+                            <input v-model=form.userName type="text" placeholder="Imię" class="input input-primary input-bordered" required autofocus autocomplete="name">
 
                             <label class="label"><span class="label-text">Nazwisko<span class="ml-1 text-red-500">*</span></span></label> 
                             <input v-model=form.surname type="text" placeholder="Nazwisko" class="input input-primary input-bordered" required autocomplete="surname">
@@ -82,7 +82,7 @@
 
         setup(props) {
             const form = useForm({
-                name: '',
+                userName: '',
                 surname: '',
                 nickname: '',
                 date_birth: '',
