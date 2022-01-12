@@ -26,7 +26,7 @@ class EventTaskController extends Controller
             })],
             'name' => ['required', 'string', 'min:3', 'max:128'],
             'description' => ['nullable', 'min:3', 'max:255'],
-            'date_due' => ['nullable', 'date', 'after_or_equal:today'],
+            'date_due' => ['nullable', 'date'],
             'event_task_state_id' => ['required', 'integer'],
             'assigned_user' => ['nullable', 'integer', 'exists:users,id']
         ]);
@@ -53,7 +53,7 @@ class EventTaskController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'min:3', 'max:128'],
                 'description' => ['nullable', 'min:3', 'max:255'],
-                'date_due' => ['nullable', 'date', 'after_or_equal:today'],
+                'date_due' => ['nullable', 'date'],
                 'event_id' => ['required', 'integer'],
                 'assigned_user' => ['nullable', 'integer', 'exists:users,id']
             ])

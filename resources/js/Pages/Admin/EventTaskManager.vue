@@ -80,7 +80,7 @@
 					<h1 class="font-bold">Termin</h1>
 				</div>
 				<h2 v-if="!taskEditMode" class="ml-6 mt-2">{{ selectedTask.date_due ? selectedTask.date_due_formatted : 'Nie określono' }}</h2>
-				<form-input-field v-else type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="input-sm ml-5 w-full max-w-sm" :label=false></form-input-field>
+				<form-input-field v-else type="date" name="Termin" :required="false" model="date_due" :form="taskForm" extraClass="input-sm ml-5 w-full max-w-sm" :label=false></form-input-field>
 				
 				<!-- Assigned user -->
 				<div class="flex items-center space-x-2 mt-3">
@@ -130,7 +130,7 @@
 			<div class="mt-2 mx-5">
 				<form v-show="subTaskCreateMode && !event.is_finished" id="create-subtask-form" class="flex flex-col sm:flex-row gap-2 w-full" @submit.prevent=storeSubTask>
 					<input id="focus-create-subtask" v-model="subTaskForm.name" type="text" class="input input-primary input-xs" required minlength="1" maxlength="128"/>
-					<input v-model="subTaskForm.date_due" type="date" :min=currentDate() class="input input-primary input-xs" />
+					<input v-model="subTaskForm.date_due" type="date" class="input input-primary input-xs" />
 					<input type="submit" class="btn btn-primary btn-xs" value="Dodaj">
 				</form>
 			</div>
@@ -150,7 +150,7 @@
 							<div v-if="subTaskEditMode && subTaskIndex == task.id" class="w-full flex flex-col space-y-2" @click.stop>
 								<form @submit.prevent="updateSubTask(task.id)" class="flex flex-col gap-2 w-full">
 									<input id="focus-edit-subtask" v-model="subTaskForm.name" type="text" class="input input-primary input-xs">
-									<input v-model="subTaskForm.date_due" type="date" :min="currentDate()" class="input input-primary input-xs w-full">
+									<input v-model="subTaskForm.date_due" type="date" class="input input-primary input-xs w-full">
 									<input type="submit" ref="updateSubtaskSubmit" class="hidden"/>
 								</form>
 								<div class="flex space-x-2">
@@ -179,7 +179,7 @@
 			<form @submit.prevent="storeTask">
 				<div class="form-control mt-4">
 					<form-input-field id="focus-create-task" type="text" name="Nazwa" :required="true" model="name" :form="taskForm" max="128" min="3"></form-input-field>
-					<form-input-field type="date" name="Termin" :required="false" model="date_due" :form="taskForm" :min="currentDate()" extraClass="w-full"></form-input-field>
+					<form-input-field type="date" name="Termin" :required="false" model="date_due" :form="taskForm" extraClass="w-full"></form-input-field>
 
 					<label class="label"><span class="label-text">Przydziel użytkownika<span class="ml-1 text-red-500">*</span></span></label> 
 					<select v-model=taskForm.assigned_user class="select select-bordered select-primary w-full">
@@ -392,9 +392,6 @@ export default defineComponent({
 			})
 		}
 
-		// Return current date
-		const currentDate = _ => new Date().toISOString().split('T')[0]
-
 		// Returned date
 		return { 
 			detailsModalOpened,
@@ -421,7 +418,6 @@ export default defineComponent({
 			startDrag, 
 			onDrop, 
 			reset, 
-			currentDate,   
 			close,  
 			changeTaskState
 		}
