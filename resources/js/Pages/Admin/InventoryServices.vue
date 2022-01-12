@@ -45,7 +45,7 @@
 
 			<template #side>
 				<div class="flex space-x-2">
-					<template v-if="isAuthAdmin || ($page.props.user.id == selectedService.created_by.id && (selectedService.assigned_user.id == null || selectedService.assigned_user.id == $page.props.user.id))">
+					<template v-if="isAuthAdmin || ($page.props.user.id == selectedService.created_by.id && (selectedService.assigned_user == null || selectedService.assigned_user.id == $page.props.user.id))">
 						<button @click="deleteRow(selectedService.id)" class="btn btn-error btn-xs">
 							<i class="fas fa-trash"></i>
 							<span class="ml-2">Usuń</span>
@@ -125,7 +125,7 @@
 			<template #footer>
 				<template v-if="!selectedService.is_finished && !editServiceMode">
 					<button v-if="!selectedService.assigned_user" @click="assignAuth(selectedService)" class="btn btn-xs btn-success" :disabled="form.processing" :class="{ 'loading': form.processing }">Przypisz mnie</button> 
-					<button v-if="isAuthAdmin || $page.props.user.id == assigned_user" @click="finishService(selectedService)" class="btn btn-xs btn-success" :disabled="form.processing" :class="{ 'loading': form.processing }">Zakończ</button>
+					<button v-if="isAuthAdmin || (selectedService.assigned_user != null && $page.props.user.id == selectedService.assigned_user.id)" @click="finishService(selectedService)" class="btn btn-xs btn-success" :disabled="form.processing" :class="{ 'loading': form.processing }">Zakończ</button>
 				</template>
 			</template>
 		</Modal>

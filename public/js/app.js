@@ -31109,7 +31109,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: 'modal-2'
       }, {
         side: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_ctx.isAuthAdmin || _ctx.$page.props.user.id == _ctx.selectedService.created_by.id && (_ctx.selectedService.assigned_user.id == null || _ctx.selectedService.assigned_user.id == _ctx.$page.props.user.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_ctx.isAuthAdmin || _ctx.$page.props.user.id == _ctx.selectedService.created_by.id && (_ctx.selectedService.assigned_user == null || _ctx.selectedService.assigned_user.id == _ctx.$page.props.user.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
             key: 0
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             onClick: _cache[1] || (_cache[1] = function ($event) {
@@ -31274,7 +31274,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             disabled: _ctx.form.processing
           }, "Przypisz mnie", 10
           /* CLASS, PROPS */
-          , _hoisted_48)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.isAuthAdmin || _ctx.$page.props.user.id == _ctx.assigned_user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+          , _hoisted_48)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.isAuthAdmin || _ctx.selectedService.assigned_user != null && _ctx.$page.props.user.id == _ctx.selectedService.assigned_user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
             key: 1,
             onClick: _cache[10] || (_cache[10] = function ($event) {
               return _ctx.finishService(_ctx.selectedService);
