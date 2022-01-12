@@ -38,7 +38,7 @@
                 {{
                   `${
                     event.time_end
-                      ? `${event.start}-${event.time_end}`
+                      ? `${event.time_start} - ${event.time_end}`
                       : `${event.time_start}`
                   }`
                 }}
