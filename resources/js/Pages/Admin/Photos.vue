@@ -24,20 +24,18 @@
 				Dodaj zdjęcie
 			</button>
 			<div class="dropdown w-full">
-				<div @click="showDropdown('filter-list')" tabindex="0" class="btn btn-sm w-full md:w-auto">
-					<span>{{ `${currentFilterLabel}` }}</span>
-				</div> 
-				<div id="filter-list" tabindex="0" class="w-full md:w-auto p-2 shadow menu dropdown-content bg-base-100 rounded-box">
-					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+				<div @click="showDropdown('drop-filter')" tabindex="0" class="btn btn-sm">{{ currentFilterLabel }}</div> 
+				<div id="drop-filter" tabindex="0" class="flex flex-wrap gap-2 shadow dropdown-content bg-base-100 rounded-box p-2 overflow-y-auto" style="max-height:80vh;">
 						<template v-for="row in categories" :key="row.id">
-							<ul v-if="row.category == null && row.subcategories.length" class="menu">
+						<ul v-if="row.subcategories.length" class="menu">
+							<li class="menu-title">
 								<span><img :src="row.photo_path" class="w-6 h-6 mr-1 rounded-full" />{{ row.name }}</span>
-								<li v-for="sub in row.subcategories" :key="sub.id" @click="filterServices(sub)">
-									<a>{{ sub.name }}</a>
-								</li>
-							</ul>
-						</template>
-					</div>
+							</li>
+							<li v-for="sub in row.subcategories" :key="sub.id" @click="filterServices(sub)">
+								<a>{{ sub.name }}</a>
+							</li>
+						</ul>
+					</template>
 				</div>
 			</div>
 		</div>
@@ -169,7 +167,7 @@ export default defineComponent({
         const filterServices = (option) => {
             params.filter = option.id
             currentFilterLabel.value = option.name
-			hideDropdown("filter-list")
+			hideDropdown("drop-filter")
         }
 
 		// Delete photo
