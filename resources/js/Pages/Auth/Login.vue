@@ -19,7 +19,7 @@
                             <input v-model=form.email type="email" placeholder="Adres email" class="input input-primary input-bordered" required autofocus autocomplete="email">
 
                             <label class="label"><span class="label-text">Hasło</span></label> 
-                            <input v-model=form.password type="password" placeholder="Hasło" class="input input-primary input-bordered" required autocomplete="current-password">
+                            <input v-model=form.password type="password" placeholder="Hasło" class="input input-primary input-bordered" required autocomplete="current-password" @keyup.enter="submit">
 
                             <!-- <label class="cursor-pointer label justify-start mt-2">
                                 <input type="checkbox" class="checkbox checkbox-primary checkbox-sm">

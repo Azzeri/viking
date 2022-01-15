@@ -1,51 +1,51 @@
 <template>
-    <Head title="Two-factor Confirmation" />
+    <Head title="Weryfikacja dwuetapowa" />
 
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content">
+            <div class="card md:w-96 shadow-2xl bg-base-100">
+                <div class="card-body">
+                    <jet-application-mark class="block h-9 w-auto mx-auto" />
+                    <h1 class="card-title text-lg text-center">Weryfikacja dwuetapowa</h1>
 
-        <div class="mb-4 text-sm text-gray-600">
-            <template v-if="! recovery">
-                Please confirm access to your account by entering the authentication code provided by your authenticator application.
-            </template>
-
-            <template v-else>
-                Please confirm access to your account by entering one of your emergency recovery codes.
-            </template>
-        </div>
-
-        <jet-validation-errors class="mb-4" />
-
-        <form @submit.prevent="submit">
-            <div v-if="! recovery">
-                <jet-label for="code" value="Code" />
-                <jet-input ref="code" id="code" type="text" inputmode="numeric" class="mt-1 block w-full" v-model="form.code" autofocus autocomplete="one-time-code" />
-            </div>
-
-            <div v-else>
-                <jet-label for="recovery_code" value="Recovery Code" />
-                <jet-input ref="recovery_code" id="recovery_code" type="text" class="mt-1 block w-full" v-model="form.recovery_code" autocomplete="one-time-code" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
                     <template v-if="! recovery">
-                        Use a recovery code
+                        Wprowadź kod logowania dostarczony przez aplikację.
                     </template>
 
                     <template v-else>
-                        Use an authentication code
+                       Wprowadź jeden ze swoich kodów dostępu.
                     </template>
-                </button>
 
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </jet-button>
+                    <form @submit.prevent="submit" class="mt-4">
+                        <div v-if="! recovery">
+                            <input type="text" id="code" ref="code" inputmode="numeric" placeholder="Kod" class="input input-primary input-bordered w-full" v-model="form.code" autofocus autocomplete="one-time-code" />
+                        </div>
+
+                        <div v-else>
+                            <input type="text" id="recovery_code" ref="recovery_code" placeholder="Kod" class="input input-primary input-bordered w-full" v-model="form.recovery_code" autocomplete="one-time-code" />
+                        </div>
+
+                        <div class="flex items-center justify-between mt-4">
+                            <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
+                                <template v-if="! recovery">
+                                    Użyj kodu dostępu
+                                </template>
+
+                                <template v-else>
+                                    Użyj kodu aplikacji
+                                </template>
+                            </button>
+
+                            <button class="ml-4 btn btn-primary" :class="{ 'loading': form.processing }" :disabled="form.processing">
+                                Zaloguj
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
-    </jet-authentication-card>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -57,6 +57,7 @@
     import JetInput from '@/Jetstream/Input.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+    import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
     export default defineComponent({
         components: {
@@ -67,6 +68,7 @@
             JetInput,
             JetLabel,
             JetValidationErrors,
+            JetApplicationMark
         },
 
         data() {

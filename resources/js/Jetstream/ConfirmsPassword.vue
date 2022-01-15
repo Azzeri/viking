@@ -13,23 +13,19 @@
                 {{ content }}
 
                 <div class="mt-4">
-                    <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
-                                ref="password"
-                                v-model="form.password"
-                                @keyup.enter="confirmPassword" />
-
+                    <input type="password" ref="password" placeholder="Hasło" class="input input-primary input-bordered block w-3/4" v-model="form.password" @keyup.enter="confirmPassword"/>
                     <jet-input-error :message="form.error" class="mt-2" />
                 </div>
             </template>
 
             <template #footer>
-                <jet-secondary-button @click="closeModal">
-                    Cancel
-                </jet-secondary-button>
+                <button class="btn" @click="closeModal">
+                    Anuluj
+                </button>
 
-                <jet-button class="ml-2" @click="confirmPassword" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <button class="ml-2 btn btn-primary" @click="confirmPassword" :class="{ 'loading': form.processing }" :disabled="form.processing">
                     {{ button }}
-                </jet-button>
+                </button>
             </template>
         </jet-dialog-modal>
     </span>
@@ -48,13 +44,13 @@
 
         props: {
             title: {
-                default: 'Confirm Password',
+                default: 'Potwierdż swoje hasło',
             },
             content: {
-                default: 'For your security, please confirm your password to continue.',
+                default: 'Ze względów bezpieczeństwa musisz potwierdzić swoje hasło.',
             },
             button: {
-                default: 'Confirm',
+                default: 'Zatwierdź',
             }
         },
 
