@@ -24,11 +24,11 @@
 
         <!-- Right side -->
         <div class="navbar-end">
-            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
+            <!-- <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
                 <button class="btn btn-square btn-ghost">
                     <i class="fas fa-moon fa-lg"></i>
                 </button>
-            </div>
+            </div> -->
             <!-- Authenticated user options -->
             <div v-if="$page.props.user != null" class=" items-center hidden lg:flex">
                 <div v-if="adminPanelLink" data-tip="Panel administracyjny" class="tooltip tooltip-bottom tooltip-primary">

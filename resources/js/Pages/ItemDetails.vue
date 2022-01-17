@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="ml-1 self-start">
+      <div class="ml-1 self-start mt-32">
         <h1 class="card-title">
           Zainteresowany? Zostaw nam swoje dane, a skontaktujemy się z Tobą!
         </h1>
