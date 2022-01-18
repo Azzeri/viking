@@ -23,7 +23,7 @@
 						<div v-if="task.event_task_state_id == state.id" @click=showTask(task) draggable=true @dragstart="startDrag($event, task)"
 						class="p-2 border bg-base-200 rounded-sm hover:bg-base-300 hover:cursor-pointer">
 							<h1>{{ task.name }}</h1>	
-							<h2 class="text-gray-500 text-xs">{{ task.date_due }}</h2>			
+							<h2 class="text-gray-500 text-xs">{{ task.date_due_formatted }}</h2>			
 							<h3 class="text-gray-500 text-xs">{{ task.assigned_user ? task.assigned_user.name : '' }}</h3>		
 						</div>
 					</template>

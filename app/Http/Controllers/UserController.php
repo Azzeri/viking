@@ -53,7 +53,7 @@ class UserController extends Controller
                 'nickname' => $user->nickname,
                 'email' => $user->email,
                 'date_birth' => $user->date_birth,
-                'date_birth_formatted' => Carbon::parse($user->date_birth)->toFormattedDateString(),
+                'date_birth_formatted' => Carbon::parse($user->date_birth)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'age' => Carbon::parse($user->date_birth)->age,
                 'role' => $user->role,
                 'privilege_id' => $user->privilege_id,

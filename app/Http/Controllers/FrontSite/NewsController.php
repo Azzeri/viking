@@ -18,7 +18,7 @@ class NewsController extends Controller
                 'body' => strlen($post->body) > 255 ? substr($post->body, 0, 255) . '...' : $post->body,
                 'resource_link' => $post->resource_link,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
-                'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+                'date_created' => Carbon::parse($post->created_at)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'user' => array(
                     'name' => $post->user->name,
                     'surname' => $post->user->surname,
@@ -43,7 +43,7 @@ class NewsController extends Controller
                 'resource_type' => $post->resource_link ? explode("/", $post->resource_link)[1] : null,
                 'resource_id' => $post->resource_link ? explode("/", $post->resource_link)[2] : null,
                 'time_created' => Carbon::parse($post->created_at)->format('H:i'),
-                'date_created' => Carbon::parse($post->created_at)->format('Y-m-d'),
+                'date_created' => Carbon::parse($post->created_at)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'user' => array(
                     'name' => $post->user->name,
                     'surname' => $post->user->surname,

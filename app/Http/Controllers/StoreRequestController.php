@@ -65,7 +65,7 @@ class StoreRequestController extends Controller
             ->through(fn ($storeRequest) => [
                 'id' => $storeRequest->id,
                 'description' => $storeRequest->description,
-                'created_at' => Carbon::parse($storeRequest->created_at)->toFormattedDateString(),
+                'created_at' => Carbon::parse($storeRequest->created_at)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'client_name' => $storeRequest->client_name,
                 'client_phone' => $storeRequest->client_phone,
                 'client_email' => $storeRequest->client_email,
@@ -74,7 +74,7 @@ class StoreRequestController extends Controller
                 'store_item_id' => $storeRequest->store_item_id,
                 'store_item_name' => $storeRequest->item->name,
                 'note' => $storeRequest->note,
-                'date_finished' => Carbon::parse($storeRequest->date_finished)->toFormattedDateString(),
+                'date_finished' => Carbon::parse($storeRequest->date_finished)->locale('pl')->isoFormat('Do MMM YYYY'),
             ]);
 
         return inertia('Admin/StoreRequests', [

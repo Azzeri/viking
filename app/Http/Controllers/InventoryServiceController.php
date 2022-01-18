@@ -69,10 +69,10 @@ class InventoryServiceController extends Controller
                 'name' => $inventoryItem->name,
                 'description' => $inventoryItem->description,
 
-                'created_at_formatted' => Carbon::parse($inventoryItem->created_at)->toFormattedDateString(),
+                'created_at_formatted' => Carbon::parse($inventoryItem->created_at)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'date_due' => $inventoryItem->date_due,
-                'date_due_formatted' => Carbon::parse($inventoryItem->date_due)->toFormattedDateString(),
-                'date_performed_formatted' => Carbon::parse($inventoryItem->date_performed)->toFormattedDateString(),
+                'date_due_formatted' => Carbon::parse($inventoryItem->date_due)->locale('pl')->isoFormat('Do MMM YYYY'),
+                'date_performed_formatted' => Carbon::parse($inventoryItem->date_performed)->locale('pl')->isoFormat('Do MMM YYYY'),
 
                 'notification' => $inventoryItem->notification,
                 'is_finished' => $inventoryItem->is_finished,

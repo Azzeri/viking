@@ -17,8 +17,8 @@ class EventsController extends Controller
                 'name' => $event->name,
                 'description' => strlen($event->description) > 255 ? substr($event->description, 0, 255) . '...' : $event->description,
                 'addrTown' => $event->addrTown,
-                'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
-                'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
+                'date_start' => Carbon::parse($event->date_start)->locale('pl')->isoFormat('Do MMM YYYY'),
+                'date_end' => Carbon::parse($event->date_end)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'is_finished' => $event->is_finished,
                 'photo_path' => $event->photo_path
             ]);
@@ -39,8 +39,8 @@ class EventsController extends Controller
             'addrNumber' => $event->addrNumber,
             'addrPostCode' => $event->addrPostCode,
             'addrTown' => $event->addrTown,
-            'date_start' => Carbon::parse($event->date_start)->toFormattedDateString(),
-            'date_end' => Carbon::parse($event->date_end)->toFormattedDateString(),
+            'date_start' => Carbon::parse($event->date_start)->locale('pl')->isoFormat('Do MMM YYYY'),
+            'date_end' => Carbon::parse($event->date_end)->locale('pl')->isoFormat('Do MMM YYYY'),
             'time_start' => substr($event->time_start, 0, 5),
             'time_end' => substr($event->time_end, 0, 5),
             'is_finished' => $event->is_finished,
