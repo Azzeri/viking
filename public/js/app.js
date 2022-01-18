@@ -28493,8 +28493,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: row.id,
           "class": ""
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-          src: _ctx.$page.props.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, "&color=7F9CF5&background=EBF4FF"),
-          alt: _ctx.$page.props.user.name,
+          src: row.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(row.name, "&color=7F9CF5&background=EBF4FF"),
+          alt: row.name,
           "class": "rounded-full"
         }, null, 8
         /* PROPS */

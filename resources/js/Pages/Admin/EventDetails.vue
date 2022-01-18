@@ -85,7 +85,7 @@
                             <div class="flex space-x-2 items-center">
                                 <div class="avatar">
                                     <div class="rounded-full w-10 h-10">
-                                        <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
+                                        <img :src="row.profile_photo_path || `https://ui-avatars.com/api/?name=${row.name}&color=7F9CF5&background=EBF4FF`" :alt="row.name" class="rounded-full">
                                     </div>
                                 </div>
                                 <span>{{ `${row.name} ${row.nickname ? `"${row.nickname}"` : ''} ${row.surname}` }}</span>

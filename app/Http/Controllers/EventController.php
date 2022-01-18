@@ -140,6 +140,7 @@ class EventController extends Controller
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
+                'profile_photo_path' => $user->profile_photo_path
             ]) : null,
         );
 
