@@ -20829,7 +20829,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var openEdit = function openEdit(_) {
-      modals.value.edit = true;
+      formEdit.name = props.event.name, formEdit.date_start = props.event.date_start, formEdit.time_start = props.event.time_start, formEdit.date_end = props.event.date_end, formEdit.time_end = props.event.time_end, formEdit.addrStreet = props.event.addrStreet, formEdit.addrNumber = props.event.addrNumber, formEdit.addrPostCode = props.event.addrPostCode, formEdit.addrTown = props.event.addrTown, formEdit.description = props.event.description, modals.value.edit = true;
       modalOpened.value = true;
     }; // Close modal and reset data
 
