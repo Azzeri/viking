@@ -32,7 +32,7 @@
         </figure>
         <div class="card-body">
           <h2 class="card-title">Wydarzenia</h2>
-          <p>
+          <p class="text-justify">
             Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
@@ -56,7 +56,7 @@
         </figure>
         <div class="card-body">
           <h2 class="card-title">Aktualności</h2>
-          <p>
+          <p class="text-justify">
             Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
@@ -74,7 +74,7 @@
       <div class="card lg:card-side w-full border">
         <div class="card-body">
           <h2 class="card-title">Nasze produkty</h2>
-          <p>
+          <p class="text-justify">
             Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
@@ -98,7 +98,7 @@
       <div class="card lg:card-side w-full border">
         <div class="card-body">
           <h2 class="card-title">Galeria zdjęć</h2>
-          <p>
+          <p class="text-justify">
             Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure
             sit necessitatibus veritatis sed molestiae voluptates incidunt iure

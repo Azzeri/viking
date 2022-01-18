@@ -18,7 +18,7 @@
               <div>{{ item.name }}</div>
               <div class="text-gray-500 text-sm">{{ item.category.name }}</div>
             </h1>
-            <p>{{ item.description }}</p>
+            <p class="text-justify">{{ item.description }}</p>
           </div>
           <div>
             <h2 class="mt-8 card-title">{{ item.price }} zł</h2>
