@@ -54,7 +54,9 @@ class EventTaskController extends Controller
                 'name' => ['required', 'string', 'min:3', 'max:128'],
                 'description' => ['nullable', 'min:3', 'max:255'],
                 'date_due' => ['nullable', 'date'],
-                'event_id' => ['required', 'integer'],
+                'event_id' => ['required', 'integer', Rule::exists('events', 'id')->where(function ($query) {
+                    return $query->where('is_finished', false);
+                })],
                 'assigned_user' => ['nullable', 'integer', 'exists:users,id']
             ])
         );

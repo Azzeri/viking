@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EventSubTask;
+use App\Models\EventTask;
 use Illuminate\Http\Request;
 
 class EventSubTaskController extends Controller
@@ -15,8 +16,10 @@ class EventSubTaskController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', EventSubTask::class);
+        $event = $request->event_task_id ? EventTask::with('event')->where('id', $request->event_task_id)->first()->event :  null;
 
+        $this->authorize('create', $event, EventSubTask::class);
+        
         EventSubTask::create(
             $request->validate([
                 'name' => ['required', 'min:1', 'max:128'],
@@ -57,8 +60,8 @@ class EventSubTaskController extends Controller
      */
     public function destroy(EventSubTask $eventSubTask)
     {
-        $this->authorize('delete', $eventSubTask, EventSubTask::class);    
-        
+        $this->authorize('delete', $eventSubTask, EventSubTask::class);
+
         $eventSubTask->delete();
 
         return redirect()->back();
