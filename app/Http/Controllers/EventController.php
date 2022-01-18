@@ -73,12 +73,14 @@ class EventController extends Controller
     {
         $this->authorize('create', Event::class);
 
+        $dates_equal = $request->date_start == $request->date_end;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:128', 'unique:events'],
             'date_start' => ['required', 'date', 'after_or_equal:today'],
             'time_start' => ['required', 'date_format:H:i'],
             'date_end' => ['required', 'date', 'after_or_equal:date_start'],
-            'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+            'time_end' => ['nullable', 'date_format:H:i', Rule::when($dates_equal, ['after_or_equal:time_start'])],
             'addrStreet' => ['required', 'min:3', 'max:64'],
             'addrNumber' => ['required', 'alpha_num', 'min:1', 'max:10'],
             'addrPostCode' => ['required', 'alpha_dash', 'min:3', 'max:10'],
@@ -215,12 +217,14 @@ class EventController extends Controller
     {
         $this->authorize('update', $event, Event::class);
 
+        $dates_equal = $request->date_start == $request->date_end;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:128', Rule::unique('events')->ignore($event)],
             'date_start' => ['required', 'date', 'after_or_equal:today'],
             'time_start' => ['required', 'date_format:H:i'],
             'date_end' => ['required', 'date', 'after_or_equal:date_start'],
-            'time_end' => ['nullable', 'date_format:H:i', 'after_or_equal:time_start'],
+            'time_end' => ['nullable', 'date_format:H:i', Rule::when($dates_equal, ['after_or_equal:time_start'])],
             'addrStreet' => ['required', 'min:3', 'max:64'],
             'addrNumber' => ['required', 'alpha_num', 'min:1', 'max:10'],
             'addrPostCode' => ['required', 'alpha_dash', 'min:3', 'max:10'],

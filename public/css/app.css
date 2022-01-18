@@ -4379,6 +4379,9 @@ html {
 .-ml-6 {
 	margin-left: -1.5rem;
 }
+.mt-32 {
+	margin-top: 8rem;
+}
 .mb-16 {
 	margin-bottom: 4rem;
 }
@@ -4390,9 +4393,6 @@ html {
 }
 .ml-7 {
 	margin-left: 1.75rem;
-}
-.mt-32 {
-	margin-top: 8rem;
 }
 .block {
 	display: block;
