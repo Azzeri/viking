@@ -27,4 +27,5 @@
             <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
         @endenv
     </body>
+    <!-- Icons imported from FontAwesome: https://fontawesome.com/license -->
 </html>
