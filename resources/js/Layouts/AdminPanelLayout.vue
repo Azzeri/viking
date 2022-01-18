@@ -5,10 +5,10 @@
     <FlashMessage></FlashMessage>
 
     <!-- Navbar -->
-    <Navbar></Navbar>
+    <Navbar @changeTheme=changeTheme></Navbar>
 
     <!-- Drawer  -->
-    <div class="shadow bg-base-100 text-base-content drawer drawer-mobile">
+    <div :data-theme="darkTheme ? 'luxury' : 'fantasy'" class="shadow bg-base-100 text-base-content drawer drawer-mobile">
         <input id="drawer-main" type="checkbox" class="drawer-toggle"> 
         
         <!-- Drawer content -->
@@ -55,12 +55,13 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
+    import { defineComponent, ref } from 'vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
     import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
     import AdminNavButton from '@/Components/AdminNavButton.vue'
     import FlashMessage from '@/Components/FlashMessage.vue'
     import Navbar from '@/Components/Navbar.vue'
+    import { useCookies } from "vue3-cookies";
 
     export default defineComponent({
         props: {
@@ -69,6 +70,18 @@
                 type:String,
                 default:'max-w-4xl'
             }
+        },
+        
+        setup() {
+            const { cookies } = useCookies();
+            const darkTheme = cookies.get("darkTheme") == 'true' ? ref(true) : ref(false)
+
+            const changeTheme = _ => {
+                cookies.set("darkTheme", cookies.get("darkTheme") == 'true' ? 'false' : 'true')
+                darkTheme.value = cookies.get("darkTheme") == 'true' ? true : false
+            }
+
+            return { changeTheme, darkTheme }
         },
 
         components: {

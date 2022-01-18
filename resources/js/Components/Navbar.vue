@@ -24,11 +24,11 @@
 
         <!-- Right side -->
         <div class="navbar-end">
-            <!-- <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
-                <button class="btn btn-square btn-ghost">
+            <div data-tip="Ciemny motyw" class="tooltip tooltip-bottom lg:tooltip-left tooltip-primary">
+                <button @click=changeTheme class="btn btn-square btn-ghost">
                     <i class="fas fa-moon fa-lg"></i>
                 </button>
-            </div> -->
+            </div>
             <!-- Authenticated user options -->
             <div v-if="$page.props.user != null" class=" items-center hidden lg:flex">
                 <div v-if="adminPanelLink" data-tip="Panel administracyjny" class="tooltip tooltip-bottom tooltip-primary">
@@ -71,15 +71,19 @@ import NavLink from '@/Components/NavLink.vue'
 import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
 
 export default defineComponent({
+    emits: ["changeTheme"],
+
     props: {
         centerLinks: Boolean,
         adminPanelLink: Boolean
     },
 
-    setup() {
+    setup(props, { emit }) {
         const logout = _ => Inertia.post(route('logout'));
+
+        const changeTheme = _ => emit("changeTheme");
         
-        return { logout }
+        return { logout, changeTheme }
     },
 
     components: { JetApplicationMark, Link, NavLink },
