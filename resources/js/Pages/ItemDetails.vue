@@ -38,7 +38,7 @@
           <div class="lg:flex lg:space-x-3 lg:w-1/2">
             <div>
               <label class="label">
-                <span class="label-text">Imię</span>
+                <span class="label-text">Imię<span class="ml-1 text-red-500">*</span></span>
               </label>
               <input
                 v-model="form.client_name"
@@ -64,7 +64,7 @@
             </div>
             <div>
               <label class="label">
-                <span class="label-text">Email</span>
+                <span class="label-text">Email<span class="ml-1 text-red-500">*</span></span>
               </label>
               <input
                 v-model="form.client_email"
