@@ -32,7 +32,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-    @apply w-3;
+    @apply w-3 h-3;
     /* width: 13px;
     height: 16px; */
 }
