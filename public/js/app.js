@@ -20230,7 +20230,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_AdminNavButton_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/AdminNavButton.vue */ "./resources/js/Components/AdminNavButton.vue");
 /* harmony import */ var _Components_FlashMessage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/FlashMessage.vue */ "./resources/js/Components/FlashMessage.vue");
 /* harmony import */ var _Components_Navbar_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Navbar.vue */ "./resources/js/Components/Navbar.vue");
-/* harmony import */ var vue3_cookies__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue3-cookies */ "./node_modules/vue3-cookies/dist/index.js");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
 
 
 
@@ -20247,19 +20247,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   setup: function setup() {
-    var _useCookies = (0,vue3_cookies__WEBPACK_IMPORTED_MODULE_6__.useCookies)(),
-        cookies = _useCookies.cookies;
-
-    var darkTheme = cookies.get("darkTheme") == 'true' ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(true) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-
-    var changeTheme = function changeTheme(_) {
-      cookies.set("darkTheme", cookies.get("darkTheme") == 'true' ? 'false' : 'true');
-      darkTheme.value = cookies.get("darkTheme") == 'true' ? true : false;
-    };
-
     return {
-      changeTheme: changeTheme,
-      darkTheme: darkTheme
+      changeTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.changeTheme,
+      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme
     };
   },
   components: {
@@ -20291,7 +20281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Navbar_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Navbar.vue */ "./resources/js/Components/Navbar.vue");
 /* harmony import */ var _Components_FlashMessage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/FlashMessage.vue */ "./resources/js/Components/FlashMessage.vue");
 /* harmony import */ var _Components_AdminNavButton_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/AdminNavButton.vue */ "./resources/js/Components/AdminNavButton.vue");
-/* harmony import */ var vue3_cookies__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue3-cookies */ "./node_modules/vue3-cookies/dist/index.js");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
 
 
 
@@ -20312,19 +20302,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   setup: function setup() {
-    var _useCookies = (0,vue3_cookies__WEBPACK_IMPORTED_MODULE_6__.useCookies)(),
-        cookies = _useCookies.cookies;
-
-    var darkTheme = cookies.get("darkTheme") == 'true' ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(true) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-
-    var changeTheme = function changeTheme(_) {
-      cookies.set("darkTheme", cookies.get("darkTheme") == 'true' ? 'false' : 'true');
-      darkTheme.value = cookies.get("darkTheme") == 'true' ? true : false;
-    };
-
     return {
-      changeTheme: changeTheme,
-      darkTheme: darkTheme
+      changeTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.changeTheme,
+      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme
     };
   },
   components: {
@@ -37856,6 +37836,37 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/shared.js":
+/*!********************************!*\
+  !*** ./resources/js/shared.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "darkTheme": () => (/* binding */ darkTheme),
+/* harmony export */   "changeTheme": () => (/* binding */ changeTheme)
+/* harmony export */ });
+/* harmony import */ var vue3_cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue3-cookies */ "./node_modules/vue3-cookies/dist/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+
+var _useCookies = (0,vue3_cookies__WEBPACK_IMPORTED_MODULE_0__.useCookies)(),
+    cookies = _useCookies.cookies;
+
+var darkTheme = cookies.get("darkTheme") == 'true' ? (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(true) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
+
+var changeTheme = function changeTheme(_) {
+  cookies.set("darkTheme", cookies.get("darkTheme") == 'true' ? 'false' : 'true');
+  darkTheme.value = cookies.get("darkTheme") == 'true' ? true : false;
+};
+
+
 
 /***/ }),
 
