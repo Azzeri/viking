@@ -4608,6 +4608,9 @@ html {
 .cursor-pointer {
 	cursor: pointer;
 }
+.cursor-not-allowed {
+	cursor: not-allowed;
+}
 .resize-none {
 	resize: none;
 }
@@ -4950,6 +4953,18 @@ html {
 .bg-primary {
 	--tw-bg-opacity: 1;
 	background-color: hsla(var(--p) / var(--tw-bg-opacity));
+}
+.bg-secondary {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--s) / var(--tw-bg-opacity));
+}
+.bg-error {
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--er) / var(--tw-bg-opacity));
+}
+.bg-gray-400 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(156, 163, 175, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;

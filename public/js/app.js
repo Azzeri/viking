@@ -20728,7 +20728,8 @@ __webpack_require__.r(__webpack_exports__);
     var links = [{
       'label': 'użytkownicy',
       'link': 'admin.users.index',
-      'icon': 'fas fa-users fa-3x'
+      'icon': 'fas fa-users fa-3x',
+      'admin': true
     }, {
       'label': 'wydarzenia',
       'link': 'admin.events.index',
@@ -20750,8 +20751,12 @@ __webpack_require__.r(__webpack_exports__);
       'link': 'admin.photos.index',
       'icon': 'fas fa-images fa-3x'
     }];
+    var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_2__.computed)(function () {
+      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.privileges.IS_ADMIN;
+    });
     return {
-      links: links
+      links: links,
+      isAuthAdmin: isAuthAdmin
     };
   },
   components: {
@@ -28021,7 +28026,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.links, function (row) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: row,
-          "class": "rounded-lg shadow-lg bg-primary text-primary-content p-4 w-full"
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["rounded-lg bg-primary shadow-lg text-primary-content p-4 w-full", {
+            'bg-gray-400': row.admin && !_ctx.isAuthAdmin
+          }])
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
           "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(row.icon)
         }, null, 2
@@ -28029,6 +28036,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
           href: _ctx.route(row.link),
           as: "button",
+          disabled: row.admin && !_ctx.isAuthAdmin,
           "class": "btn w-full btn-sm btn-ghost"
         }, {
           "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -28041,7 +28049,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
         }, 1032
         /* PROPS, DYNAMIC_SLOTS */
-        , ["href"])])]);
+        , ["href", "disabled"])])], 2
+        /* CLASS */
+        );
       }), 128
       /* KEYED_FRAGMENT */
       ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.stats, function (row) {
