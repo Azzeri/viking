@@ -20739,6 +20739,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AdminPanelLayout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AdminPanelLayout.vue */ "./resources/js/Layouts/AdminPanelLayout.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -20775,12 +20777,9 @@ __webpack_require__.r(__webpack_exports__);
       'link': 'admin.photos.index',
       'icon': 'fas fa-images fa-3x'
     }];
-    var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_2__.computed)(function () {
-      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.privileges.IS_ADMIN;
-    });
     return {
       links: links,
-      isAuthAdmin: isAuthAdmin
+      isAuthAdmin: _shared_js__WEBPACK_IMPORTED_MODULE_3__.isAuthAdmin
     };
   },
   components: {
@@ -20808,6 +20807,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AdminPanelLayout_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Layouts/AdminPanelLayout.vue */ "./resources/js/Layouts/AdminPanelLayout.vue");
 /* harmony import */ var _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/CrudModal.vue */ "./resources/js/Components/CrudModal.vue");
 /* harmony import */ var _Components_FormInputField_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/FormInputField.vue */ "./resources/js/Components/FormInputField.vue");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -20921,16 +20922,12 @@ __webpack_require__.r(__webpack_exports__);
       formEdit.image = null;
       var element = document.getElementById('event-image-update-form');
       if (element) element.src = "/images/default.png";
-    }; // Checks if authenticated user has an administrator privileges
+    }; // Returned data
 
-
-    var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
-      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.privileges.IS_ADMIN;
-    }); // Returned data
 
     return {
       formEdit: formEdit,
-      isAuthAdmin: isAuthAdmin,
+      isAuthAdmin: _shared_js__WEBPACK_IMPORTED_MODULE_6__.isAuthAdmin,
       formSummary: formSummary,
       modals: modals,
       modalOpened: modalOpened,
@@ -21581,6 +21578,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_ServicesDisplay_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/ServicesDisplay.vue */ "./resources/js/Components/ServicesDisplay.vue");
 /* harmony import */ var _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/CrudModal.vue */ "./resources/js/Components/CrudModal.vue");
 /* harmony import */ var _Components_FormInputField_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/FormInputField.vue */ "./resources/js/Components/FormInputField.vue");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -21608,11 +21607,7 @@ __webpack_require__.r(__webpack_exports__);
       'inventory_item': ''
     }); // Serivice edit mode
 
-    var editServiceMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false); // Checks if authenticated user has an administrator privileges
-
-    var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
-      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.privileges.IS_ADMIN;
-    }); // Returns current date
+    var editServiceMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false); // Returns current date
 
     var currentDate = function currentDate(_) {
       return new Date().toISOString().split('T')[0];
@@ -21663,7 +21658,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
     var store = function store(_) {
-      if (!isAuthAdmin.value) document.getElementById('auth-assign').checked ? form.assigned_user = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.id : form.assigned_user = null;
+      if (!_shared_js__WEBPACK_IMPORTED_MODULE_7__.isAuthAdmin.value) document.getElementById('auth-assign').checked ? form.assigned_user = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user.id : form.assigned_user = null;
       form.post(route('admin.inventory_services.store'), {
         onSuccess: function onSuccess() {
           return reset();
@@ -21754,7 +21749,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       assignAuth: assignAuth,
       form: form,
-      isAuthAdmin: isAuthAdmin,
+      isAuthAdmin: _shared_js__WEBPACK_IMPORTED_MODULE_7__.isAuthAdmin,
       columns: columns,
       frontFilters: frontFilters,
       createModalOpened: createModalOpened,
@@ -37849,10 +37844,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "darkTheme": () => (/* binding */ darkTheme),
-/* harmony export */   "changeTheme": () => (/* binding */ changeTheme)
+/* harmony export */   "changeTheme": () => (/* binding */ changeTheme),
+/* harmony export */   "isAuthAdmin": () => (/* binding */ isAuthAdmin)
 /* harmony export */ });
 /* harmony import */ var vue3_cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue3-cookies */ "./node_modules/vue3-cookies/dist/index.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+
 
 
 
@@ -37866,6 +37864,9 @@ var changeTheme = function changeTheme(_) {
   darkTheme.value = cookies.get("darkTheme") == 'true' ? true : false;
 };
 
+var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_1__.computed)(function () {
+  return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.usePage)().props.value.privileges.IS_ADMIN;
+});
 
 
 /***/ }),

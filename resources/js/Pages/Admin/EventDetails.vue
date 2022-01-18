@@ -203,6 +203,7 @@ import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Modal from '@/Components/CrudModal.vue'
 import FormInputField from "@/Components/FormInputField.vue";
+import { isAuthAdmin} from '@/shared.js'
 
 export default defineComponent({
 
@@ -323,8 +324,6 @@ export default defineComponent({
 			    element.src = "/images/default.png"
 		}
 
-        // Checks if authenticated user has an administrator privileges
-		const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
 
         // Returned data
 		return { 

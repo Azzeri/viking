@@ -189,6 +189,7 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import ServicesDisplay from '@/Components/ServicesDisplay.vue'
 import Modal from '@/Components/CrudModal.vue'
 import FormInputField from "@/Components/FormInputField.vue";
+import { isAuthAdmin} from '@/shared.js'
 
 export default defineComponent({
 
@@ -209,9 +210,6 @@ export default defineComponent({
 
 		// Serivice edit mode
 		const editServiceMode = ref(false)
-
-		// Checks if authenticated user has an administrator privileges
-		const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
 		
 		// Returns current date
 		const currentDate = _ => new Date().toISOString().split('T')[0]

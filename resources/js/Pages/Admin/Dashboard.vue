@@ -61,8 +61,9 @@
 
 <script>
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
-import { Link, usePage } from '@inertiajs/inertia-vue3';
-import { defineComponent, computed } from 'vue'
+import { Link } from '@inertiajs/inertia-vue3';
+import { defineComponent } from 'vue'
+import { isAuthAdmin} from '@/shared.js'
 
 export default defineComponent({
 	props: {
@@ -80,8 +81,6 @@ export default defineComponent({
 			{ 'label':'zdjęcia', 'link': 'admin.photos.index', 'icon': 'fas fa-images fa-3x' },
 		]
 
-		const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
-		
 		return { links, isAuthAdmin }
 	},
 
