@@ -20,7 +20,7 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" v-show="! photoPreview">
-                    <img :src="user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name} ${$page.props.user.surname}&color=7F9CF5&background=EBF4FF`" :alt="user.name" class="rounded-full h-20 w-20 object-cover">
+                    <img :src="profilePhotoSource(user)" :alt="user.name" class="rounded-full h-20 w-20 object-cover">
                 </div>
 
                 <!-- New Profile Photo Preview -->
@@ -127,6 +127,7 @@
     import JetLabel from '@/Jetstream/Label.vue'
     import JetActionMessage from '@/Jetstream/ActionMessage.vue'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+    import { profilePhotoSource } from '@/shared.js' 
 
     export default defineComponent({
         components: {
@@ -140,6 +141,11 @@
         },
 
         props: ['user'],
+
+        setup() {
+
+            return { profilePhotoSource }
+        },
 
         data() {
             return {
@@ -175,6 +181,7 @@
             selectNewPhoto() {
                 this.$refs.photo.click();
             },
+
 
             updatePhotoPreview() {
                 const photo = this.$refs.photo.files[0];

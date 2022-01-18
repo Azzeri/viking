@@ -135,12 +135,7 @@
           <div v-for="user in users" :key="user.id" class="flex gap-2">
             <div class="avatar">
               <div class="w-20 h-20 mask mask-squircle">
-                <img
-                  :src="
-                    user.profile_photo_path ||
-                    `https://ui-avatars.com/api/?name=${user.name} ${user.surname}&color=7F9CF5&background=EBF4FF`
-                  "
-                />
+                <img :src="profilePhotoSource(user)" />
               </div>
             </div>
             <div class="mt-2">
@@ -166,10 +161,15 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import { profilePhotoSource } from "@/shared.js";
 
 export default defineComponent({
   props: {
     users: Object,
+  },
+
+  setup() {
+    return { profilePhotoSource };
   },
 
   components: {

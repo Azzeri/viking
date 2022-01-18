@@ -44,7 +44,7 @@
                 <div data-tip="Profil" class="tooltip tooltip-bottom tooltip-primary flex items-center">
                     <Link :href="route('profile.show') " class="avatar mx-3">
                         <div class="rounded-full w-10 h-10 hover:ring ring-primary ring-offset-base-100 ring-offset-2 cursor-pointer transition">
-                            <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name} ${$page.props.user.surname}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
+                            <img :src="profilePhotoSource($page.props.user)" :alt="$page.props.user.name" class="rounded-full">
                         </div>
                     </Link>
                 </div>
@@ -69,6 +69,7 @@ import { defineComponent } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import NavLink from '@/Components/NavLink.vue'
 import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
+import { profilePhotoSource } from '@/shared.js'
 
 export default defineComponent({
     emits: ["changeTheme"],
@@ -83,7 +84,7 @@ export default defineComponent({
 
         const changeTheme = _ => emit("changeTheme");
         
-        return { logout, changeTheme }
+        return { logout, changeTheme, profilePhotoSource }
     },
 
     components: { JetApplicationMark, Link, NavLink },

@@ -39,7 +39,7 @@
                     <div class="flex">
                         <Link :href="route('profile.show')" class="avatar z-50">
                             <div class="rounded-full w-12 h-12 cursor-pointer transition">
-                                <img :src="$page.props.user.profile_photo_path || `https://ui-avatars.com/api/?name=${$page.props.user.name}&color=7F9CF5&background=EBF4FF`" :alt="$page.props.user.name" class="rounded-full">
+                                <img :src="profilePhotoSource($page.props.user)" :alt="$page.props.user.name" class="rounded-full">
                             </div>
                         </Link>
                         <Link as="button" class="btn btn-primary rounded-l-none pl-10 justify-start -ml-6" style="width:200px;">
@@ -61,7 +61,7 @@
     import AdminNavButton from '@/Components/AdminNavButton.vue'
     import FlashMessage from '@/Components/FlashMessage.vue'
     import Navbar from '@/Components/Navbar.vue'
-    import { darkTheme, changeTheme} from '@/shared.js'
+    import { darkTheme, changeTheme, profilePhotoSource } from '@/shared.js'
 
     export default defineComponent({
         props: {
@@ -73,7 +73,7 @@
         },
         
         setup() {    
-            return { changeTheme, darkTheme }
+            return { changeTheme, darkTheme, profilePhotoSource }
         },
 
         components: {

@@ -19474,6 +19474,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
 /* harmony import */ var _Components_NavLink_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/NavLink.vue */ "./resources/js/Components/NavLink.vue");
 /* harmony import */ var _Jetstream_ApplicationMark_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/ApplicationMark.vue */ "./resources/js/Jetstream/ApplicationMark.vue");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -19498,7 +19500,8 @@ __webpack_require__.r(__webpack_exports__);
 
     return {
       logout: logout,
-      changeTheme: changeTheme
+      changeTheme: changeTheme,
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_5__.profilePhotoSource
     };
   },
   components: {
@@ -20249,7 +20252,8 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup() {
     return {
       changeTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.changeTheme,
-      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme
+      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme,
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_6__.profilePhotoSource
     };
   },
   components: {
@@ -20304,7 +20308,8 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup() {
     return {
       changeTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.changeTheme,
-      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme
+      darkTheme: _shared_js__WEBPACK_IMPORTED_MODULE_6__.darkTheme,
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_6__.profilePhotoSource
     };
   },
   components: {
@@ -20478,12 +20483,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Layouts/AppLayout.vue */ "./resources/js/Layouts/AppLayout.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   props: {
     users: Object
+  },
+  setup: function setup() {
+    return {
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_3__.profilePhotoSource
+    };
   },
   components: {
     AppLayout: _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -20942,7 +20954,8 @@ __webpack_require__.r(__webpack_exports__);
       openEdit: openEdit,
       url: url,
       previewImage: previewImage,
-      removeImage: removeImage
+      removeImage: removeImage,
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_6__.profilePhotoSource
     };
   },
   components: {
@@ -22551,6 +22564,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_DataTable_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/DataTable.vue */ "./resources/js/Components/DataTable.vue");
 /* harmony import */ var _Components_CrudModal_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/CrudModal.vue */ "./resources/js/Components/CrudModal.vue");
 /* harmony import */ var _Components_FormInputField_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/FormInputField.vue */ "./resources/js/Components/FormInputField.vue");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -22703,7 +22718,8 @@ __webpack_require__.r(__webpack_exports__);
       edit: edit,
       update: update,
       currentDate: currentDate,
-      deleteRow: deleteRow
+      deleteRow: deleteRow,
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_7__.profilePhotoSource
     };
   },
   components: {
@@ -23907,6 +23923,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_Label_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Jetstream/Label.vue */ "./resources/js/Jetstream/Label.vue");
 /* harmony import */ var _Jetstream_ActionMessage_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Jetstream/ActionMessage.vue */ "./resources/js/Jetstream/ActionMessage.vue");
 /* harmony import */ var _Jetstream_SecondaryButton_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Jetstream/SecondaryButton.vue */ "./resources/js/Jetstream/SecondaryButton.vue");
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/shared.js */ "./resources/js/shared.js");
+
 
 
 
@@ -23926,6 +23944,11 @@ __webpack_require__.r(__webpack_exports__);
     JetSecondaryButton: _Jetstream_SecondaryButton_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: ['user'],
+  setup: function setup() {
+    return {
+      profilePhotoSource: _shared_js__WEBPACK_IMPORTED_MODULE_8__.profilePhotoSource
+    };
+  },
   data: function data() {
     return {
       form: this.$inertia.form({
@@ -24953,7 +24976,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-        src: _ctx.$page.props.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, " ").concat(_ctx.$page.props.user.surname, "&color=7F9CF5&background=EBF4FF"),
+        src: _ctx.profilePhotoSource(_ctx.$page.props.user),
         alt: _ctx.$page.props.user.name,
         "class": "rounded-full"
       }, null, 8
@@ -26272,7 +26295,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-        src: _ctx.$page.props.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, "&color=7F9CF5&background=EBF4FF"),
+        src: _ctx.profilePhotoSource(_ctx.$page.props.user),
         alt: _ctx.$page.props.user.name,
         "class": "rounded-full"
       }, null, 8
@@ -26449,7 +26472,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-        src: _ctx.$page.props.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, "&color=7F9CF5&background=EBF4FF"),
+        src: _ctx.profilePhotoSource(_ctx.$page.props.user),
         alt: _ctx.$page.props.user.name,
         "class": "rounded-full"
       }, null, 8
@@ -27219,7 +27242,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: user.id,
           "class": "flex gap-2"
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-          src: user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(user.name, " ").concat(user.surname, "&color=7F9CF5&background=EBF4FF")
+          src: _ctx.profilePhotoSource(user)
         }, null, 8
         /* PROPS */
         , _hoisted_41)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat(user.name, " ").concat(user.nickname ? "\"".concat(user.nickname, "\"") : "", " ").concat(user.surname)), 1
@@ -28542,7 +28565,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: row.id,
           "class": ""
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-          src: row.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(row.name, "&color=7F9CF5&background=EBF4FF"),
+          src: _ctx.profilePhotoSource(row),
           alt: row.name,
           "class": "rounded-full"
         }, null, 8
@@ -33872,7 +33895,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           var _ctx$selectedUser$rol;
 
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-            src: _ctx.selectedUser.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.selectedUser.name, " ").concat(_ctx.selectedUser.surname, "&color=7F9CF5&background=EBF4FF"),
+            src: _ctx.profilePhotoSource(_ctx.selectedUser),
             alt: _ctx.selectedUser.surname,
             "class": "block h-24 w-24 object-cover mask mask-squircle"
           }, null, 8
@@ -37144,7 +37167,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "for": "photo",
         value: "Zdjęcie profilowe"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Current Profile Photo "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-        src: _ctx.user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(_ctx.$page.props.user.name, " ").concat(_ctx.$page.props.user.surname, "&color=7F9CF5&background=EBF4FF"),
+        src: _ctx.profilePhotoSource(_ctx.user),
         alt: _ctx.user.name,
         "class": "rounded-full h-20 w-20 object-cover"
       }, null, 8
@@ -37845,7 +37868,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "darkTheme": () => (/* binding */ darkTheme),
 /* harmony export */   "changeTheme": () => (/* binding */ changeTheme),
-/* harmony export */   "isAuthAdmin": () => (/* binding */ isAuthAdmin)
+/* harmony export */   "isAuthAdmin": () => (/* binding */ isAuthAdmin),
+/* harmony export */   "profilePhotoSource": () => (/* binding */ profilePhotoSource)
 /* harmony export */ });
 /* harmony import */ var vue3_cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue3-cookies */ "./node_modules/vue3-cookies/dist/index.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
@@ -37867,6 +37891,11 @@ var changeTheme = function changeTheme(_) {
 var isAuthAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_1__.computed)(function () {
   return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.usePage)().props.value.user.privilege_id == (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.usePage)().props.value.privileges.IS_ADMIN;
 });
+
+var profilePhotoSource = function profilePhotoSource(user) {
+  return user.profile_photo_path || "https://ui-avatars.com/api/?name=".concat(user.name, " ").concat(user.surname, "&color=7F9CF5&background=EBF4FF");
+};
+
 
 
 /***/ }),

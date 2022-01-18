@@ -85,7 +85,7 @@
                             <div class="flex space-x-2 items-center">
                                 <div class="avatar">
                                     <div class="rounded-full w-10 h-10">
-                                        <img :src="row.profile_photo_path || `https://ui-avatars.com/api/?name=${row.name}&color=7F9CF5&background=EBF4FF`" :alt="row.name" class="rounded-full">
+                                        <img :src="profilePhotoSource(row)" :alt="row.name" class="rounded-full">
                                     </div>
                                 </div>
                                 <span>{{ `${row.name} ${row.nickname ? `"${row.nickname}"` : ''} ${row.surname}` }}</span>
@@ -203,7 +203,7 @@ import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Modal from '@/Components/CrudModal.vue'
 import FormInputField from "@/Components/FormInputField.vue";
-import { isAuthAdmin} from '@/shared.js'
+import { isAuthAdmin, profilePhotoSource } from '@/shared.js'
 
 export default defineComponent({
 
@@ -343,7 +343,8 @@ export default defineComponent({
             openEdit, 
             url,
             previewImage,
-            removeImage
+            removeImage,
+            profilePhotoSource
         }
 	},
 

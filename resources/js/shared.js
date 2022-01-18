@@ -13,4 +13,6 @@ const changeTheme = _ => {
 
 const isAuthAdmin = computed(() => usePage().props.value.user.privilege_id == usePage().props.value.privileges.IS_ADMIN)
 
-export { darkTheme, changeTheme, isAuthAdmin }
+const profilePhotoSource = (user) => user.profile_photo_path || `https://ui-avatars.com/api/?name=${user.name} ${user.surname}&color=7F9CF5&background=EBF4FF`
+
+export { darkTheme, changeTheme, isAuthAdmin, profilePhotoSource }

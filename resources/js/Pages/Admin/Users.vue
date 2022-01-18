@@ -75,10 +75,7 @@
       <template v-if="!editMode" #content>
         <div class="mt-4 flex space-x-2">
           <img
-            :src="
-              selectedUser.profile_photo_path ||
-              `https://ui-avatars.com/api/?name=${selectedUser.name} ${selectedUser.surname}&color=7F9CF5&background=EBF4FF`
-            "
+            :src="profilePhotoSource(selectedUser)"
             :alt="selectedUser.surname"
             class="block h-24 w-24 object-cover mask mask-squircle"
           />
@@ -256,6 +253,7 @@ import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import DataTable from "@/Components/DataTable.vue";
 import Modal from "@/Components/CrudModal.vue";
 import FormInputField from "@/Components/FormInputField.vue";
+import { profilePhotoSource } from "@/shared.js"
 
 export default defineComponent({
   props: {
@@ -392,6 +390,7 @@ export default defineComponent({
       update,
       currentDate,
       deleteRow,
+      profilePhotoSource
     };
   },
 
