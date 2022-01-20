@@ -34,7 +34,9 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             
             PhotoCategorySeeder::class,
-            PhotoSeeder::class
+            PhotoSeeder::class,
+
+            GroupInfoSeeder::class
         ]);
     }
 }

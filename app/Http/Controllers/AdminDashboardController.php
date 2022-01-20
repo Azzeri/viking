@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\StoreRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -44,6 +45,8 @@ class AdminDashboardController extends Controller
             'item' => $task->item->name
         ]);
 
-        return inertia('Admin/Dashboard', ['stats' => $stats, 'eventTasks' => $eventTasks, 'inventoryTasks' => $inventoryTasks]);
+        $groupInfo = DB::table('group_info')->first();
+
+        return inertia('Admin/Dashboard', ['stats' => $stats, 'eventTasks' => $eventTasks, 'inventoryTasks' => $inventoryTasks, 'groupInfo' => $groupInfo]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -55,31 +56,36 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'groupInfo' => [
-                'name' => 'Barbarian',
-                'motto' => 'Wykuj z nami swoje marzenia',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                'name' => DB::table('group_info')->first()->short_name,
+                'motto' => DB::table('group_info')->first()->motto,
+                'description' => DB::table('group_info')->first()->description,
 
-                'full_name' => 'Kuźnia Barbarian',
-                'street' => 'Sezamkowa',
-                'building' => '56',
-                'appartment' => '3',
-                'postal' => '48-330',
-                'city' => 'Nysa',
+                'full_name' => DB::table('group_info')->first()->full_name,
+                'addr_street' => DB::table('group_info')->first()->addr_street,
+                'addr_number' => DB::table('group_info')->first()->addr_number,
+                'addr_postCode' => DB::table('group_info')->first()->addr_postCode,
+                'addr_town' => DB::table('group_info')->first()->addr_town,
 
-                'phone' => '661 661 661',
-                'email' => 'jkowalski@gmail.com'
+                'phone' => DB::table('group_info')->first()->phone,
+                'email' => DB::table('group_info')->first()->email,
             ],
 
             'footerOthers' => [
-                ['label' => 'Wilki', 'link' => 'dashboard'],
-                ['label' => 'Bobry', 'link' => 'dashboard'],
-                ['label' => 'Zające', 'link' => 'dashboard'],
+                ['label' => DB::table('group_info')->first()->link1_label, 'link' => DB::table('group_info')->first()->link1_url],
+                ['label' => DB::table('group_info')->first()->link2_label, 'link' => DB::table('group_info')->first()->link2_url],
+                ['label' => DB::table('group_info')->first()->link3_label, 'link' => DB::table('group_info')->first()->link3_url],
+                ['label' => DB::table('group_info')->first()->link4_label, 'link' => DB::table('group_info')->first()->link4_url],
+                ['label' => DB::table('group_info')->first()->link5_label, 'link' => DB::table('group_info')->first()->link5_url],
+                ['label' => DB::table('group_info')->first()->link6_label, 'link' => DB::table('group_info')->first()->link6_url],
             ],
 
             'footerSocials' => [
-                ['icon' => 'fab fa-instagram-square fa-2x', 'link' => 'dashboard'],
-                ['icon' => 'fab fa-facebook-f fa-2x', 'link' => 'dashboard'],
-                ['icon' => 'fab fa-twitter fa-2x', 'link' => 'dashboard'],
+                ['icon' => 'fab fa-instagram-square fa-2x', 'link' => DB::table('group_info')->first()->instagram],
+                ['icon' => 'fab fa-facebook-f fa-2x', 'link' => DB::table('group_info')->first()->facebook],
+                ['icon' => 'fab fa-twitter fa-2x', 'link' => DB::table('group_info')->first()->twitter],
+                ['icon' => 'fab fa-tiktok fa-2x', 'link' => DB::table('group_info')->first()->tiktok],
+                ['icon' => 'fab fa-youtube fa-2x', 'link' => DB::table('group_info')->first()->youtube],
+
             ],
         ]);
     }

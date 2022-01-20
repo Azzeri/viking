@@ -197,7 +197,16 @@ return [
         'event_id' => 'ID wydarzenia',
         'craftspeople' => 'wykonawcy',
         'password' => 'hasło',
-        'current_password' => 'obecne hasło'
+        'current_password' => 'obecne hasło',
+        'short_name' => 'skrócona nazwa',
+        'full_name' => 'pełna nazwa',
+        'motto' => 'motto',
+        'addr_street' => 'ulica',
+        'addr_number' => 'numer',
+        'addr_postCode' => 'kod pocztowy',
+        'addr_town' => 'miejscowość',
+        'phone' => 'nr telefonu',
+
     ],
 
 ];

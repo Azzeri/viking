@@ -19,6 +19,7 @@ use App\Http\Controllers\StoreItemController;
 use App\Http\Controllers\StoreRequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\GroupInfoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -121,4 +122,7 @@ Route::middleware('adminPanel')->prefix('admin')->name('admin.')->group(function
     // User
     Route::post('/users/generate_link', [UserController::class, 'generateLink'])->name('users.generate_link');
     Route::resource('/users', UserController::class)->except(['create', 'edit']);
+
+    // GroupInfo
+    Route::put('/update_group_info', [GroupInfoController::class, '__invoke'])->name('groupInfo.update');
 });

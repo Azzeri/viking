@@ -24,10 +24,10 @@
       <span class="footer-title">Kontakt</span>
       <span>{{ $page.props.groupInfo.full_name }}</span>
       <span>{{
-        `${$page.props.groupInfo.street} ${$page.props.groupInfo.building} ${$page.props.groupInfo.appartment}`
+        `${$page.props.groupInfo.addr_street} ${$page.props.groupInfo.addr_number}`
       }}</span>
       <span>{{
-        `${$page.props.groupInfo.postal} ${$page.props.groupInfo.city}`
+        `${$page.props.groupInfo.addr_postCode} ${$page.props.groupInfo.addr_town}`
       }}</span>
       <span></span>
       <div class="flex space-x-2 items-center">
@@ -41,25 +41,24 @@
     </div>
     <div>
       <span class="footer-title">Inne</span>
-      <Link
-        v-for="row in $page.props.footerOthers"
-        :key="row"
-        :href="route(row.link)"
-        class="link link-hover"
-      >
-        {{ row.label }}
-      </Link>
+      <template v-for="row in $page.props.footerOthers" :key="row">
+        <Link
+          v-if="row.link && row.label"
+          :href="row.link"
+          class="link link-hover"
+        >
+          {{ row.label }}
+        </Link>
+      </template>
     </div>
     <div>
       <span class="footer-title">Social media</span>
       <div class="grid grid-flow-col gap-4">
-        <Link
-          v-for="row in $page.props.footerSocials"
-          :key="row"
-          :href="route(row.link)"
-        >
-          <i :class="row.icon"></i>
-        </Link>
+        <template v-for="row in $page.props.footerSocials" :key="row">
+          <Link v-if="row.link" :href="row.link">
+            <i :class="row.icon"></i>
+          </Link>
+        </template>
       </div>
     </div>
   </footer>
