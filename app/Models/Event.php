@@ -27,6 +27,7 @@ class Event extends Model
         'is_finished',
         'photo_path',
         'participants',
+        'is_public'
     ];
     
     public function tasks() {

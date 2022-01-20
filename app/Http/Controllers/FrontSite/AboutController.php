@@ -22,7 +22,7 @@ class AboutController extends Controller
                 'profile_photo_path' => $user->profile_photo_path
             ]),
 
-            'events' => Event::orderBy('created_at', 'desc')->limit(3)->get()->map(fn ($event) => [
+            'events' => Event::orderBy('created_at', 'desc')->where('is_public', true)->limit(3)->get()->map(fn ($event) => [
                 'label' => $event->name,
                 'photo' => $event->photo_path
             ]),

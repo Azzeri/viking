@@ -26,7 +26,7 @@ class EventController extends Controller
 
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:id,name,addrTown,date_start'],
+            'field' => ['in:id,name,addrTown,date_start,is_public'],
             'filter' => ['in:0,1']
         ]);
 
@@ -50,11 +50,12 @@ class EventController extends Controller
         $events = $query->paginate()->withQueryString()
             ->through(fn ($event) => [
                 'id' => $event->id,
-                'name' => strlen($event->name) > 43 ? substr($event->name, 0, 43) . '...' : $event->name,
+                'name' => strlen($event->name) > 36 ? substr($event->name, 0, 36) . '...' : $event->name,
                 'addrTown' => $event->addrTown,
                 'date_start' => Carbon::parse($event->date_start)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'date_end' => Carbon::parse($event->date_end)->locale('pl')->isoFormat('Do MMM YYYY'),
                 'is_finished' => $event->is_finished,
+                'is_public' => $event->is_public ? 'Publiczne' : 'Niepubliczne'
             ]);
 
         return inertia('Admin/Events', [
@@ -87,7 +88,8 @@ class EventController extends Controller
             'addrTown' => ['required', 'min:3', 'max:64'],
             'description' => ['required', 'min:3', 'max:512'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
-            'create_post' => ['required', 'boolean']
+            'create_post' => ['required', 'boolean'],
+            'is_public' => ['required', 'boolean']
         ]);
 
         $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
@@ -142,6 +144,7 @@ class EventController extends Controller
                 'nickname' => $user->nickname,
                 'profile_photo_path' => $user->profile_photo_path
             ]) : null,
+            'is_public' => $event->is_public
         );
 
         return inertia('Admin/EventDetails', [
@@ -232,7 +235,8 @@ class EventController extends Controller
             'addrTown' => ['required', 'min:3', 'max:64'],
             'description' => ['required', 'min:3', 'max:512'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
-            'deleteImage' => ['boolean', 'required']
+            'deleteImage' => ['boolean', 'required'],
+            'is_public' => ['required', 'boolean']
         ]);
 
         $image_path = null;

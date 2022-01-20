@@ -27,6 +27,7 @@
 					<td>{{ row.name }}</td>
 					<td>{{ row.addrTown }}</td>
 					<td>{{ `${row.date_start} - ${row.date_end}` }}</td>
+					<td>{{ row.is_public }}</td>
 					<td><Link :href="route('admin.events.show', row.id)" class="btn btn-primary btn-xs">Szczegóły</Link></td>
 				</tr>
 			</template>
@@ -89,9 +90,16 @@
 					<textarea v-model=form.description class="textarea h-24 textarea-bordered textarea-primary resize-none" placeholder="Opis..." required min="3" max="512"></textarea>
 					<label v-if="form.errors.description" class="label label-text-alt text-error text-sm">{{ form.errors.description }}</label>
 
-					<div class="flex mt-4 items-center space-x-2">
-						<input v-model="form.create_post" type="checkbox" class="checkbox checkbox-primary">
-						<span class="label-text">Utwórz post</span> 
+					<div class="flex gap-2">
+						<div class="flex mt-4 items-center space-x-2">
+							<input v-model="form.create_post" type="checkbox" class="checkbox checkbox-primary">
+							<span class="label-text">Utwórz post</span> 
+						</div>
+
+						<div class="flex mt-4 items-center space-x-2">
+							<input v-model="form.is_public" type="checkbox" class="checkbox checkbox-primary">
+							<span class="label-text">Publiczne</span> 
+						</div>
 					</div>
 
 					<input type="file" id="upload-file-store" @change="previewImage" ref="photo" accept="image/*" @input="form.image = $event.target.files[0]" class="hidden" />
@@ -155,7 +163,8 @@ export default defineComponent({
 			description:null,
 			image:null,
 
-			create_post: false
+			create_post: false,
+			is_public: true
 		})
 
 		// Close modal and reset form
@@ -193,6 +202,7 @@ export default defineComponent({
 			{name:'name', label:'Nazwa', sortable: true},
 			{name:'addrTown', label:'Miejscowość', sortable: true},
 			{name:'date_start', label:'Termin', sortable: true},
+			{name:'is_public', label:'Widoczność', sortable: true},
 			{name:'actions', label:'Działania'},
         ]
 

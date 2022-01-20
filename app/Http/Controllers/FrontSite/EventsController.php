@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\FrontSite;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Carbon\Carbon;
@@ -11,7 +10,7 @@ class EventsController extends Controller
 {
     public function index()
     {
-        $events = Event::orderBy('date_start', 'desc')->paginate(30)
+        $events = Event::orderBy('date_start', 'desc')->where('is_public', true)->paginate(30)
             ->through(fn ($event) => [
                 'id' => $event->id,
                 'name' => $event->name,
@@ -30,6 +29,9 @@ class EventsController extends Controller
 
     public function show(Event $event)
     {
+        if ($event->is_public == false)
+            abort(403);
+
         $mapped = array(
             'id' => $event->id,
             'name' => $event->name,

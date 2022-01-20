@@ -32,6 +32,7 @@
                 <div class="pt-8 pl-8">
                     <div class="card-title sticky top-0 mb-0">
                         <h1>{{ event.name }}</h1>
+                        <h2 class="text-sm text-gray-500">{{ event.is_public ? 'Publiczne' : 'Niepubliczne' }}</h2>
                     </div>
                 </div>
                 <div class="card-body pt-6 pl-10">
@@ -161,6 +162,11 @@
                                 </div>
                             </div>
 
+                            <div class="flex mt-4 items-center space-x-2">
+                                <input v-model="formEdit.is_public" type="checkbox" class="checkbox checkbox-primary">
+                                <span class="label-text">Publiczne</span> 
+                            </div>
+
                             <label class="label mt-4">
                                 <span class="label-text">Opis wydarzenia<span class="ml-1 text-red-500">*</span></span>
                             </label> 
@@ -197,8 +203,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
-import { Link, useForm, usePage } from '@inertiajs/inertia-vue3'
+import { defineComponent, ref } from "vue";
+import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
 import Modal from '@/Components/CrudModal.vue'
@@ -234,7 +240,9 @@ export default defineComponent({
 
 			description:props.event.description,
             image: null,
-            deleteImage:false
+            deleteImage:false,
+
+            is_public:props.event.is_public
 		})
 
         // Summary form
@@ -263,6 +271,7 @@ export default defineComponent({
 			formEdit.addrTown = props.event.addrTown,
 
 			formEdit.description = props.event.description,
+            formEdit.is_public = props.event.is_public
 
             modals.value.edit = true
             modalOpened.value = true
