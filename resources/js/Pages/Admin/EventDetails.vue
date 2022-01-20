@@ -111,7 +111,7 @@
                 <template v-if="modals.summary">
                     <form @submit.prevent=finish>
                         <div class="form-control mt-4">
-					        <textarea v-model=formSummary.description_summary class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Podsumowanie..." minlength="3" maxlength="512"></textarea>
+					        <textarea id="focus-summary" v-model=formSummary.description_summary class="textarea h-44 textarea-bordered textarea-primary resize-none" placeholder="Podsumowanie..." minlength="3" maxlength="512"></textarea>
 					        <label v-if="formSummary.errors.description_summary" class="label label-text-alt text-error text-sm">{{ formSummary.errors.description_summary }}</label>
                         </div> 
                         <input type="submit" ref="finishEventSubmit" class="hidden" />
@@ -203,7 +203,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import AdminPanelLayout from "@/Layouts/AdminPanelLayout.vue";
@@ -255,6 +255,11 @@ export default defineComponent({
         const openSummary = _ => {
             modals.value.summary = true
             modalOpened.value = true
+
+            nextTick(() => {
+				if(document.getElementById('focus-summary'))
+					document.getElementById('focus-summary').focus()
+			}) 
         }
 
         const openEdit = _ => {

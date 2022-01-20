@@ -20899,6 +20899,9 @@ __webpack_require__.r(__webpack_exports__);
     var openSummary = function openSummary(_) {
       modals.value.summary = true;
       modalOpened.value = true;
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)(function () {
+        if (document.getElementById('focus-summary')) document.getElementById('focus-summary').focus();
+      });
     };
 
     var openEdit = function openEdit(_) {
@@ -28570,6 +28573,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               return _ctx.finish && _ctx.finish.apply(_ctx, arguments);
             }, ["prevent"]))
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+            id: "focus-summary",
             "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
               return _ctx.formSummary.description_summary = $event;
             }),
