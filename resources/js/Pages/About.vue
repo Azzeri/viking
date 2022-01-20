@@ -1,126 +1,52 @@
 <template>
-  <app-layout title="O nas">
-    <div class="flex-col hero-content mx-auto self-start mt-16 space-y-16">
-      <!-- Group info -->
-      <div class="card lg:card-side w-full border">
-        <div class="card-body">
-          <h1 class="text-5xl font-bold">
+  <app-layout title="O nas" :displayNavbar="false">
+    <div class="flex-col hero-content mx-auto self-start mt-16 space-y-24">
+      <div
+        class="
+          flex flex-col
+          md:flex-row-reverse
+          gap-4
+          w-full
+          items-center
+          justify-center
+        "
+      >
+        <div class="md:w-2/3">
+          <img
+            class="object-cover rounded-lg md:mask md:mask-squircle"
+            src="https://images.unsplash.com/photo-1554540908-8f02b631026b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          />
+        </div>
+        <div class="md:w-1/3 flex flex-col">
+          <h1 class="text-5xl lg:text-7xl" style="font-family: montserrat">
             {{ $page.props.groupInfo.name }}
           </h1>
-          <h2 class="mt-2 text-2xl font-bold text-gray-500">
+          <h2
+            class="mt-2 text-2xl text-gray-500"
+            style="font-family: montserrat"
+          >
             {{ $page.props.groupInfo.motto }}
           </h2>
-          <p class="mt-5 text-justify">
+          <p class="mt-5 text-justify lg:text-lg">
             {{ $page.props.groupInfo.description }}
           </p>
         </div>
-        <figure>
-          <img
-            class="h-96 object-cover"
-            src="https://images.unsplash.com/photo-1620306521121-3a55af2cd05b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
-          />
-        </figure>
       </div>
 
-      <!-- Events -->
-      <div class="card lg:card-side w-full border">
-        <figure>
-          <img
-            class="h-72 object-cover"
-            src="https://images.unsplash.com/photo-1554540908-8f02b631026b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">Wydarzenia</h2>
-          <p class="text-justify">
-            Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sapiente.
-          </p>
-          <div class="card-actions">
-            <Link :href="route('events.index')" class="btn btn-primary"
-              >Zobacz</Link
-            >
-          </div>
-        </div>
-      </div>
+      <AboutCards title="Aktualności" :data="news" link="news.index" />
 
-      <!-- News -->
-      <div class="card lg:card-side w-full border">
-        <figure>
-          <img
-            class="h-72 object-cover"
-            src="https://images.unsplash.com/photo-1559552440-8e17304991e1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80"
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">Aktualności</h2>
-          <p class="text-justify">
-            Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sapiente.
-          </p>
-          <div class="card-actions">
-            <Link :href="route('news.index')" class="btn btn-primary"
-              >Zobacz</Link
-            >
-          </div>
-        </div>
-      </div>
+      <AboutCards title="Wydarzenia" :data="events" link="events.index" />
 
-      <!-- Store -->
-      <div class="card lg:card-side w-full border">
-        <div class="card-body">
-          <h2 class="card-title">Nasze produkty</h2>
-          <p class="text-justify">
-            Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sapiente.
-          </p>
-          <div class="card-actions">
-            <Link :href="route('store.index')" class="btn btn-primary"
-              >Zobacz</Link
-            >
-          </div>
-        </div>
-        <figure>
-          <img
-            class="h-72 object-cover"
-            src="https://images.unsplash.com/photo-1564598522417-e9ac1425d7c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-          />
-        </figure>
-      </div>
+      <AboutCards title="Sklep" :data="store" link="store.index" />
 
-      <!-- Gallery -->
-      <div class="card lg:card-side w-full border">
-        <div class="card-body">
-          <h2 class="card-title">Galeria zdjęć</h2>
-          <p class="text-justify">
-            Rerum reiciendis beatae tenetur excepturi aut pariatur est eos. Sit
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sit necessitatibus veritatis sed molestiae voluptates incidunt iure
-            sapiente.
-          </p>
-          <div class="card-actions">
-            <Link :href="route('gallery.index')" class="btn btn-primary"
-              >Zobacz</Link
-            >
-          </div>
-        </div>
-        <figure>
-          <img
-            class="h-72 object-cover"
-            src="https://images.unsplash.com/photo-1609894851180-7be27983da7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-          />
-        </figure>
-      </div>
+      <AboutCards title="Galeria" :data="gallery" link="gallery.index" />
 
       <!-- Group Members -->
       <div class="w-full">
-        <h1 class="card-title">Nasi członkowie</h1>
+        <h1 class="text-2xl" style="font-family: montserrat">
+          Nasi członkowie
+        </h1>
+
         <div
           class="
             grid
@@ -160,12 +86,17 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import AboutCards from "@/Components/AboutCards.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { profilePhotoSource } from "@/shared.js";
 
 export default defineComponent({
   props: {
     users: Object,
+    events: Object,
+    gallery: Object,
+    news: Object,
+    store: Object,
   },
 
   setup() {
@@ -175,6 +106,7 @@ export default defineComponent({
   components: {
     AppLayout,
     Link,
+    AboutCards,
   },
 });
 </script>
