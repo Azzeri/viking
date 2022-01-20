@@ -21,7 +21,6 @@ class CreateStoreItemsTable extends Migration
             $table->unsignedSmallInteger('quantity')->default(0);
             $table->decimal('price')->default(0);
             $table->foreignId('store_category_id')->constrained();
-            $table->json('craftspeople');
             $table->timestamps();
             $table->softDeletes();
         });

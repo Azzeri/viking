@@ -22315,7 +22315,7 @@ __webpack_require__.r(__webpack_exports__);
       form.price = row.price;
       form.store_category_id = row.store_category_id;
       form.quantity = row.quantity;
-      form.craftspeople = JSON.parse(row.craftspeople_array);
+      form.craftspeople = row.craftspeople_array;
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)(function () {
         if (document.getElementById('edit-item-name')) document.getElementById('edit-item-name').focus();
       });
@@ -22367,7 +22367,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var addOrRemoveCraftsman = function addOrRemoveCraftsman(user) {
-      form.craftspeople.includes(user.id) ? form.craftspeople.splice(form.craftspeople.indexOf(user.id), 1) : form.craftspeople.push(user.id);
+      return form.craftspeople.includes(user.id) ? form.craftspeople.splice(form.craftspeople.indexOf(user.id), 1) : form.craftspeople.push(user.id);
     }; // Datatable columns
 
 

@@ -32,7 +32,6 @@ class CreateEventsTable extends Migration
 
             $table->boolean('is_finished')->default('false');
             $table->string('photo_path')->default('/images/default.png');
-            $table->json('participants')->nullable();
             $table->boolean('is_public')->default(true);
 
             $table->timestamps();

@@ -54,11 +54,11 @@ class StoreItemController extends Controller
                     'id' => $store_item->category->id,
                     'name' => $store_item->category->name,
                 ),
-                'craftspeople' => User::whereIn('id', json_decode($store_item->craftspeople))->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
+                'craftspeople' => $store_item->craftspeople()->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
                     'id' => $user->id,
                     'name' => $user->getFullName(),
                 ]),
-                'craftspeople_array' => $store_item->craftspeople,
+                'craftspeople_array' => $store_item->craftspeople->pluck('id')
             ]);
 
         $categories = StoreCategory::where('store_category_id', '!=', null)->orderBy('name')->get()->map(fn ($category) => [
@@ -104,7 +104,7 @@ class StoreItemController extends Controller
 
         $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
 
-        StoreItem::create([
+        $store_item = StoreItem::create([
             'name' => $request->name,
             'store_category_id' => $request->store_category_id,
             'quantity' => $request->quantity,
@@ -113,6 +113,8 @@ class StoreItemController extends Controller
             'photo_path' => $image_path ? $image_path : '/images/default.png',
             'craftspeople' => json_encode($request->craftspeople)
         ]);
+
+        $store_item->craftspeople()->attach(User::find($request->craftspeople));
 
         return redirect()->back()->with('message', 'Pomyślnie dodano przedmiot');
     }
@@ -164,8 +166,9 @@ class StoreItemController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
             'photo_path' => $image_path ? $image_path : $store_item->photo_path,
-            'craftspeople' => json_encode($request->craftspeople)
         ]);
+
+        $store_item->craftspeople()->sync(User::find($request->craftspeople));
 
         return redirect()->back()->with('message', 'Pomyślnie zaktualizowano przedmiot');
     }
@@ -180,6 +183,7 @@ class StoreItemController extends Controller
     {
         $this->authorize('delete', $store_item, StoreItem::class);
 
+        $store_item->craftspeople()->detach();
         $store_item->delete();
         Storage::delete('public/' . ltrim($store_item->photo_path, '/storage'));
 

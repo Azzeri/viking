@@ -268,6 +268,7 @@ class EventController extends Controller
     {
         $this->authorize('delete', $event, Event::class);
 
+        $event->participants()->detach();
         $event->delete();
         Storage::delete('public/' . ltrim($event->photo_path, '/storage'));
 

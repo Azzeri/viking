@@ -277,7 +277,7 @@ export default defineComponent({
 			form.price = row.price
 			form.store_category_id = row.store_category_id
             form.quantity = row.quantity
-			form.craftspeople = JSON.parse(row.craftspeople_array)
+			form.craftspeople = row.craftspeople_array
 
 			nextTick(() => {
 				if(document.getElementById('edit-item-name'))
@@ -319,9 +319,7 @@ export default defineComponent({
 			document.getElementById('category-image').src = "/images/default.png"
 		}
 
-		const addOrRemoveCraftsman = (user) => {
-			form.craftspeople.includes(user.id) ? form.craftspeople.splice(form.craftspeople.indexOf(user.id), 1) : form.craftspeople.push(user.id)
-		}
+		const addOrRemoveCraftsman = (user) => form.craftspeople.includes(user.id) ? form.craftspeople.splice(form.craftspeople.indexOf(user.id), 1) : form.craftspeople.push(user.id)
 
 		// Datatable columns
 		const columns = [
