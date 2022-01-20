@@ -26,11 +26,16 @@ class Event extends Model
         'time_end',
         'is_finished',
         'photo_path',
-        'participants',
         'is_public'
     ];
     
-    public function tasks() {
+    public function tasks() 
+    {
         return $this->hasMany(EventTask::class);
+    }
+
+    public function participants()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

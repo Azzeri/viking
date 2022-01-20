@@ -137,13 +137,13 @@ class EventController extends Controller
             'time_end' => substr($event->time_end, 0, 5),
             'is_finished' => $event->is_finished,
             'photo_path' => $event->photo_path,
-            'participants' => $event->participants ? User::whereIn('id', json_decode($event->participants))->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
+            'participants' => $event->participants()->withTrashed()->orderBy('name')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'nickname' => $user->nickname,
                 'profile_photo_path' => $user->profile_photo_path
-            ]) : null,
+            ]),
             'is_public' => $event->is_public
         );
 
@@ -306,19 +306,13 @@ class EventController extends Controller
     {
         $this->authorize('update', $event, Event::class);
 
-        $participants = $event->participants ? json_decode($event->participants) : array();
-
-        if (!in_array(Auth::user()->id, $participants)) {
+        if ($event->participants()->where('user_id', Auth::user()->id)->count() == 0) {
             $message = 'Potwierdzono Twój udział w wydarzeniu';
-            array_push($participants, Auth::user()->id);
+            $event->participants()->attach(User::find(Auth::user()->id));
         } else {
             $message = 'Wypisano Cię z wydarzenia';
-            unset($participants[array_search(Auth::user()->id, $participants)]);
+            $event->participants()->detach(User::find(Auth::user()->id));
         }
-
-        $event->update([
-            'participants' => $participants
-        ]);
 
         return redirect()->back()->with('message', $message);
     }
