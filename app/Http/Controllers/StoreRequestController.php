@@ -57,8 +57,9 @@ class StoreRequestController extends Controller
             $query->orderBy('created_at', 'desc');
 
         if (Auth::user()->privilege_id != Privilege::IS_ADMIN)
+            
             $query->whereHas('item', function ($q) {
-                $q->whereJsonContains('craftspeople', Auth::user()->id);
+                $q->whereRelation('craftspeople', 'user_id', '=', Auth::user()->id);
             });
 
         $requests = $query->paginate(10)->withQueryString()
