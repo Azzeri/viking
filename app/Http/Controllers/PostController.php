@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Post\StorePostAction;
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
@@ -57,7 +59,7 @@ class PostController extends Controller
                     'nickname' => $post->user->nickname,
                 )
             ]);
-            
+
         return inertia('Admin/Posts', [
             'posts' => $posts,
             'filters' => request()->all(['search', 'field', 'direction']),
@@ -69,29 +71,18 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * 
+     * @author Mariusz Waloszczyk <artess2698@gmail.com>
      */
-    public function store(Request $request)
-    {
-        $this->authorize('create', Post::class);
-
-        $request->validate([
-            'title' => ['required', 'min:3', 'max:128', 'string'],
-            'body' => ['required', 'min:3', 'max:2048'],
-            'resource_link' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
-        ]);
-
-        $image_path = $request->hasFile('image') ? '/storage/' . $request->file('image')->store('image', 'public') : null;
-
-        Post::create([
-            'title' => request()->title,
-            'body' => request()->body,
-            'resource_link' => request()->resource_link,
-            'user_id' => Auth::user()->id,
-            'photo_path' => $image_path ? $image_path : '/images/default.png'
-        ]);
-
-        return redirect()->back()->with('message', 'Pomyślnie dodano post');
+    public function store(
+        StorePostRequest $request,
+        StorePostAction $storePostAction
+    ) {
+        $storePostAction->execute($request);
+        
+        return redirect()
+            ->back()
+            ->with('message', 'Pomyślnie dodano post');
     }
 
     /**
