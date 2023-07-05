@@ -32,8 +32,8 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'description' => $this->faker->optional()->realText($maxNbChars = 255, $indexSize = 2),
             'date_birth' => $this->faker->date(),
-            'role' => $this->faker->optional()->jobTitle(),
-            'privilege_id' => $this->faker->numberBetween(2,2),
+            'role' => $this->faker->jobTitle(),
+            'privilege_id' => $this->faker->numberBetween(1,2),
             'email_verified_at' => now(),
             'password' => Hash::make('qwerty'),
             'remember_token' => Str::random(10)

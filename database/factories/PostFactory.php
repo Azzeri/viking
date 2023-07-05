@@ -24,7 +24,7 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->words(5, true),
             'body' => $this->faker->realText($maxNbChars = 2048, $indexSize = 2),
-            'user_id' => $this->faker->numberBetween(1, 5),
+            'user_id' => 1,
         ];
     }
 }

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Post\StorePostAction;
+use App\Actions\Post\UpdatePostAction;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use App\Http\Traits\PostTrait;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    use PostTrait;
     /**
      * Display a listing of the resource.
      *
@@ -81,7 +85,7 @@ class PostController extends Controller
         $storePostAction->execute($request);
         
         return redirect()
-            ->back()
+            ->route('admin.posts.index')
             ->with('message', 'Pomyślnie dodano post');
     }
 
@@ -126,32 +130,16 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
-    {
-        $this->authorize('update', $post, Post::class);
+    public function update(
+        UpdatePostRequest $request,
+        UpdatePostAction $updatePostAction,
+        Post $post
+    ) {
+        $updatePostAction->execute($request, $post);
 
-        $request->validate([
-            'title' => ['required', 'min:3', 'max:128', 'string'],
-            'body' => ['required', 'min:3', 'max:2048'],
-            'resource_link' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048']
-        ]);
-
-        $image_path = null;
-        if ($request->hasFile('image')) {
-            $image_path =  '/storage/' . $request->file('image')->store('image', 'public');
-            if ($post->photo_path != '/images/default.png')
-                Storage::delete('public/' . ltrim($post->photo_path, '/storage'));
-        }
-
-        $post->update([
-            'title' => $request->title,
-            'body' => $request->body,
-            'resource_link' => $request->resource_link,
-            'photo_path' => $image_path ? $image_path : $post->photo_path
-        ]);
-
-        return redirect()->back()->with('message', 'Pomyślnie zaktualizowano post');
+        return redirect()
+            ->back()
+            ->with('message', 'Pomyślnie zaktualizowano post');
     }
 
     /**

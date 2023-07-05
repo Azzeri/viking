@@ -19,7 +19,7 @@ class PostPolicy
      */
     public function viewAny(User $user)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $this->isAdminOrCoordinator($user);
     }
 
     /**
@@ -31,7 +31,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $this->isAdminOrCoordinator($user);
     }
 
     /**
@@ -42,19 +42,18 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $this->isAdminOrCoordinator($user);
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Post $post)
+    public function update(User $user)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $this->isAdminOrCoordinator($user);
     }
 
     /**
@@ -66,6 +65,17 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return in_array($user->privilege_id, [Privilege::IS_ADMIN, Privilege::IS_COORDINATOR]);
+        return $this->isAdminOrCoordinator($user);
+    }
+
+    private function isAdminOrCoordinator($user)
+    {
+        return in_array(
+            $user->privilege_id,
+            [
+                Privilege::IS_ADMIN,
+                Privilege::IS_COORDINATOR
+            ]
+        );
     }
 }

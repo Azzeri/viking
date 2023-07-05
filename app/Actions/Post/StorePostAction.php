@@ -14,7 +14,7 @@ class StorePostAction
   {
     $image_path = $this->generateImagePath($request);
 
-    Post::create([
+    return Post::create([
       'title' => $request->title,
       'body' => $request->body,
       'resource_link' => $request->resource_link,
